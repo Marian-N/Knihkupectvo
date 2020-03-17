@@ -1,7 +1,11 @@
-create table CUSTOMER (
-    CustomerID int primary key not null,
-    CustomerFirstName varchar(255) not null,
-    CustomerLastName varchar(255) not null,
-    TelephoneNumber varchar(50) not null,
-    CustomerMail varchar(255) not null
+CREATE TABLE customers (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    phone VARCHAR(50),
+    mail VARCHAR(255) NOT NULL,
+    state VARCHAR(50),
+    city VARCHAR(50),
+    zip VARCHAR(15),
+    address VARCHAR(255)
 );
