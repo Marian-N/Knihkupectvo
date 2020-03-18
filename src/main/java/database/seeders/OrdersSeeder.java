@@ -15,7 +15,6 @@ public class OrdersSeeder {
         RandomGenerator generator = RandomGenerator.getInstance();
         databaseUtils.emptyTable(connection, "orders");
         List<Integer> IDs = databaseUtils.getTableIDs(connection, "customers");
-
         for(int i = 0; i < count; i++) {
             statement = connection.prepareStatement("INSERT INTO orders " +
                     "(date, price, status, customer_id) VALUES (?, ?, ?, ?)");

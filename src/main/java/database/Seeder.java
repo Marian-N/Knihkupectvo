@@ -1,10 +1,7 @@
 package database;
 
 import com.github.javafaker.Faker;
-import database.seeders.BooksSeeder;
-import database.seeders.CustomersSeeder;
-import database.seeders.OrdersSeeder;
-import database.seeders.PublishersSeeder;
+import database.seeders.*;
 import utils.Configuration;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,6 +21,7 @@ public class Seeder {
             OrdersSeeder.run(connection, 100, faker);
             PublishersSeeder.run(connection, 100, faker);
             BooksSeeder.run(connection, 200, faker);
+            OrderBookSeeder.run(connection, 150, faker);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
