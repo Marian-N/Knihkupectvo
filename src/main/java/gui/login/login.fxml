@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<?import com.jfoenix.controls.JFXPasswordField?>
+<AnchorPane fx:id="loginScene" prefHeight="500.0" prefWidth="900.0" stylesheets="@login-style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.login.LoginController">
+    <children>
+        <JFXTextField fx:id="nameLogin" focusColor="darkorange" layoutX="362.0" layoutY="214.0" prefHeight="36.0" prefWidth="177.0" promptText="Name" />
+        <JFXPasswordField fx:id="passwordLogin" focusColor="darkorange" layoutX="362.0" layoutY="262.0" prefHeight="36.0" prefWidth="177.0" promptText="Password" />
+        <JFXButton fx:id="loginButton" layoutX="389.0" layoutY="324.0" onAction="#handleLogin" prefHeight="36.0" prefWidth="123.0" ripplerFill="darkorange" text="Login" textFill="WHITE" />
+        <Label layoutX="281.0" layoutY="149.0" text="Welcome to test GUI. Please continue" />
+        <!--<ImageView fitHeight="36.0" fitWidth="45.0" layoutX="300.0" layoutY="214.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@Icons/user-48.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="36.0" fitWidth="29.0" layoutX="304.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@Icons/lock-7-48.png" />
+            </image>
+        </ImageView>-->
+        <Label fx:id="wrongInfo" layoutX="375.0" layoutY="375.0" styleClass="wrong-info-label" text="Wrong Name or Password" />
+    </children>
+</AnchorPane>
