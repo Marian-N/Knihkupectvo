@@ -2,6 +2,7 @@ package database;
 
 import com.github.javafaker.Faker;
 import database.seeders.CustomersSeeder;
+import database.seeders.OrdersSeeder;
 import database.seeders.PublishersSeeder;
 import utils.Configuration;
 import java.sql.Connection;
@@ -18,8 +19,9 @@ public class Seeder {
                          .getConnection(configuration.databaseUrl, configuration.databaseUser,
                                  configuration.databasePassword);
             Faker faker = new Faker(new Locale("sk_SK"));
-            PublishersSeeder.run(connection, 100, faker);
             CustomersSeeder.run(connection,100, faker);
+            OrdersSeeder.run(connection, 100, faker);
+            PublishersSeeder.run(connection, 100, faker);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
