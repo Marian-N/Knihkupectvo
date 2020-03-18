@@ -8,8 +8,8 @@ public class Migration {
         Configuration configuration = Configuration.getInstance();
         Flyway flyway = Flyway.configure().dataSource(Configuration.databaseUrl,
                 Configuration.databaseUser, Configuration.databasePassword).load();
-        System.out.println("Updating database.");
         flyway.migrate();
+        System.out.println("Database migrated to newest version.");
     }
 }
 
