@@ -23,6 +23,7 @@ public class Seeder {
             BooksSeeder.run(connection, 200, faker);
             OrderBookSeeder.run(connection);
             AuthorsSeeder.run(connection, 150, faker);
+            AuthorBook.run(connection);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
