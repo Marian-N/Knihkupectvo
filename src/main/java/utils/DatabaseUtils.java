@@ -6,20 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseUtils {
-    static private final DatabaseUtils _instance = new DatabaseUtils();
-    public DatabaseUtils(){}
-
     public static int getRowsCount(Connection connection, String tableName) throws SQLException {
         String query = String.format("SELECT count(*) FROM %s", tableName);
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         resultSet.next();
-        Integer numberOfRows = resultSet.getInt(1);
-        return numberOfRows;
+        return resultSet.getInt(1);
     }
 
     public static double getOrderPrice(Connection connection, int ID) throws SQLException {
-        List<Integer> IDs = new ArrayList();
+        ArrayList<Integer> IDs = new ArrayList<>();
         String query = String.format("SELECT book_id FROM order_book WHERE order_id=%s", ID);
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
@@ -50,9 +46,5 @@ public class DatabaseUtils {
         resultSet.close();
         statement.close();
         return IDs;
-    }
-
-    public static DatabaseUtils getInstance(){
-        return _instance;
     }
 }

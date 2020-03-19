@@ -9,18 +9,18 @@ import java.util.List;
 
 public class OrderBookSeeder {
     public static void run(Connection connection) throws SQLException {
-        PreparedStatement statement = null;
-        DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
-        RandomGenerator generator = RandomGenerator.getInstance();
-        databaseUtils.emptyTable(connection, "order_book");
-        List<Integer> bookIDs = databaseUtils.getTableIDs(connection, "books");
-        int numberOfOrders = databaseUtils.getRowsCount(connection, "orders");
-        statement = connection.prepareStatement("INSERT INTO order_book (quantity, book_id, order_id) VALUES (?, ?, ?)");
+        String query = "INSERT INTO order_book (quantity, book_id, order_id) VALUES (?, ?, ?)";
+        PreparedStatement statement = connection.prepareStatement(query);
+        DatabaseUtils.emptyTable(connection, "order_book");
+        List<Integer> bookIDs = DatabaseUtils.getTableIDs(connection, "books");
+        int numberOfOrders = DatabaseUtils.getRowsCount(connection, "orders");
         for(int i = 1; i <= numberOfOrders; i++) {
-            int numberOfBooksInOrder = generator.getRandomIntFromInterval(1, 7);
+            int numberOfBooksInOrder = RandomGenerator.getRandomIntFromInterval(1, 7);
             while(numberOfBooksInOrder-- > 0){
-                statement.setInt(1, generator.getRandomIntFromInterval(1, 10));
-                statement.setInt(2, bookIDs.get(generator.getRandomIntFromInterval(0, bookIDs.size() - 1)));
+                int bookQuantity = RandomGenerator.getRandomIntFromInterval(1, 5);
+                statement.setInt(1, bookQuantity);
+                int randomIndex = RandomGenerator.getRandomIntFromInterval(0, bookIDs.size() - 1);
+                statement.setInt(2, bookIDs.get(randomIndex));
                 statement.setInt(3, i);
                 statement.executeUpdate();
             }

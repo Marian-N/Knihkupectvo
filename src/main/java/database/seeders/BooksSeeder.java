@@ -10,20 +10,20 @@ import java.util.List;
 
 public class BooksSeeder {
     public static void run(Connection connection, Integer count, Faker faker) throws SQLException {
-        PreparedStatement statement = null;
-        RandomGenerator generator = RandomGenerator.getInstance();
-        DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
-        databaseUtils.emptyTable(connection, "books");
-        List<Integer> IDs = databaseUtils.getTableIDs(connection, "publishers");
-        statement = connection.prepareStatement("INSERT INTO books " +
-                "(title, price, stock_quantity, publication_year, description, publisher_id) VALUES (?, ?, ?, ?, ?, ?)");
-        for(int i = 0; i < count; i++) {
+        String query = "INSERT INTO books " +
+                "(title, price, stock_quantity, publication_year, description, publisher_id)" +
+                " VALUES (?, ?, ?, ?, ?, ?)";
+        PreparedStatement statement = connection.prepareStatement(query);
+        DatabaseUtils.emptyTable(connection, "books");
+        List<Integer> IDs = DatabaseUtils.getTableIDs(connection, "publishers");
+        while(count-- > 0) {
             statement.setString(1, faker.book().title());
-            statement.setDouble(2, generator.getRandomPrice());
-            statement.setInt(3, generator.getRandomIntFromInterval(0, 100));
-            statement.setDate(4, generator.getRandomDate(1920, 2019));
+            statement.setDouble(2, RandomGenerator.getRandomPrice());
+            statement.setInt(3, RandomGenerator.getRandomIntFromInterval(0, 100));
+            statement.setDate(4, RandomGenerator.getRandomDate(1920, 2019));
             statement.setString(5, faker.backToTheFuture().quote());
-            statement.setInt(6, IDs.get(generator.getRandomIntFromInterval(0, IDs.size() - 1)));
+            int randomIndex = RandomGenerator.getRandomIntFromInterval(0, IDs.size() - 1);
+            statement.setInt(6, IDs.get(randomIndex));
             statement.executeUpdate();
         }
         statement.close();

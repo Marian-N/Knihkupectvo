@@ -5,13 +5,10 @@ import java.time.LocalDate;
 import java.util.Random;
 
 public class RandomGenerator {
-    static private final RandomGenerator _instance = new RandomGenerator();
     static private Random random = new Random();
 
-    public RandomGenerator(){ }
-
     public static String getRandomStatus(){
-        String statuses[] = {"nevybavená", "vybavená", "zamietnutá"};
+        String[] statuses = {"nevybavená", "vybavená", "zamietnutá"};
         int randomIndex = random.nextInt(statuses.length);
         return statuses[randomIndex];
     }
@@ -29,11 +26,6 @@ public class RandomGenerator {
 
     public static Double getRandomPrice(){
         int number = random.nextInt(9999); //Generates random number
-        double result = number / 100.0;              //Makes it decimal
-        return result;
-    }
-
-    public static RandomGenerator getInstance(){
-        return _instance;
+        return number / 100.0;
     }
 }

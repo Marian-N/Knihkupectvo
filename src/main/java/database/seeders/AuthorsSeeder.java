@@ -6,13 +6,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class PublishersSeeder {
+public class AuthorsSeeder {
     public static void run(Connection connection, Integer count, Faker faker) throws SQLException {
-        String query = "INSERT INTO publishers (name) VALUES (?)";
+        String query = "INSERT INTO authors (name) VALUES (?)";
         PreparedStatement statement = connection.prepareStatement(query);
-        DatabaseUtils.emptyTable(connection, "publishers");
+        DatabaseUtils.emptyTable(connection, "authors");
         while(count-- > 0) {
-            statement.setString(1, faker.book().publisher());
+            statement.setString(1, faker.book().author());
             statement.executeUpdate();
         }
         statement.close();
