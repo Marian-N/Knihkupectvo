@@ -12,8 +12,8 @@ public class PublishersSeeder {
         PreparedStatement statement = null;
         DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
         databaseUtils.emptyTable(connection, "publishers");
+        statement = connection.prepareStatement("INSERT INTO publishers (name) VALUES (?)");
         for(int i = 0; i < count; i++) {
-            statement = connection.prepareStatement("INSERT INTO publishers (name) VALUES (?)");
             statement.setString(1, faker.book().publisher());
             statement.executeUpdate();
         }

@@ -15,9 +15,9 @@ public class BooksSeeder {
         DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
         databaseUtils.emptyTable(connection, "books");
         List<Integer> IDs = databaseUtils.getTableIDs(connection, "publishers");
+        statement = connection.prepareStatement("INSERT INTO books " +
+                "(title, price, stock_quantity, publication_year, description, publisher_id) VALUES (?, ?, ?, ?, ?, ?)");
         for(int i = 0; i < count; i++) {
-            statement = connection.prepareStatement("INSERT INTO books " +
-                    "(title, price, stock_quantity, publication_year, description, publisher_id) VALUES (?, ?, ?, ?, ?, ?)");
             statement.setString(1, faker.book().title());
             statement.setDouble(2, generator.getRandomPrice());
             statement.setInt(3, generator.getRandomIntFromInterval(0, 100));

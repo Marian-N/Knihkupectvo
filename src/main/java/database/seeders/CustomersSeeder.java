@@ -12,9 +12,9 @@ public class CustomersSeeder {
         PreparedStatement statement = null;
         DatabaseUtils databaseUtils = DatabaseUtils.getInstance();
         databaseUtils.emptyTable(connection, "customers");
+        statement = connection.prepareStatement("INSERT INTO customers " +
+                "(first_name, last_name, mail, city, zip, address) VALUES (?, ?, ?, ?, ?, ?)");
         for(int i = 0; i < count; i++) {
-            statement = connection.prepareStatement("INSERT INTO customers " +
-                    "(first_name, last_name, mail, city, zip, address) VALUES (?, ?, ?, ?, ?, ?)");
             statement.setString(1, faker.name().firstName());
             statement.setString(2, faker.name().lastName());
             statement.setString(3, faker.internet().emailAddress());
