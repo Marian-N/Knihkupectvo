@@ -17,11 +17,11 @@ public class Seeder {
                          .getConnection(configuration.databaseUrl, configuration.databaseUser,
                                  configuration.databasePassword);
             Faker faker = new Faker(new Locale("sk_SK"));
-            CustomersSeeder.run(connection,100, faker);
-            OrdersSeeder.run(connection, 100, faker);
+            CustomersSeeder.run(connection,200, faker);
+            OrdersSeeder.run(connection, 150);
             PublishersSeeder.run(connection, 100, faker);
             BooksSeeder.run(connection, 200, faker);
-            OrderBookSeeder.run(connection, 150, faker);
+            OrderBookSeeder.run(connection);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

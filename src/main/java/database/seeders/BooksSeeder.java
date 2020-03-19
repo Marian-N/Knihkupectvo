@@ -23,7 +23,7 @@ public class BooksSeeder {
             statement.setInt(3, generator.getRandomIntFromInterval(0, 100));
             statement.setDate(4, generator.getRandomDate(1920, 2019));
             statement.setString(5, faker.backToTheFuture().quote());
-            statement.setInt(6, IDs.get(generator.getRandomIntFromInterval(1, IDs.size())));
+            statement.setInt(6, IDs.get(generator.getRandomIntFromInterval(0, IDs.size() - 1)));
             statement.executeUpdate();
         }
         statement.close();

@@ -9,17 +9,39 @@ public class DatabaseUtils {
     static private final DatabaseUtils _instance = new DatabaseUtils();
     public DatabaseUtils(){}
 
-    public static void emptyTable(Connection connection, String table_name) throws SQLException {
-        String query = String.format("TRUNCATE %s RESTART IDENTITY CASCADE;", table_name);
+    public static int getRowsCount(Connection connection, String tableName) throws SQLException {
+        String query = String.format("SELECT count(*) FROM %s", tableName);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+        resultSet.next();
+        Integer numberOfRows = resultSet.getInt(1);
+        return numberOfRows;
+    }
+
+    public static double getOrderPrice(Connection connection, int ID) throws SQLException {
+        List<Integer> IDs = new ArrayList();
+        String query = String.format("SELECT book_id FROM order_book WHERE order_id=%s", ID);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+        while(resultSet.next()) {
+            IDs.add(resultSet.getInt("id"));
+        }
+        System.out.println(IDs);
+        resultSet.close();
+        statement.close();
+        return 0.2;
+    }
+
+    public static void emptyTable(Connection connection, String tableName) throws SQLException {
+        String query = String.format("TRUNCATE %s RESTART IDENTITY CASCADE;", tableName);
         PreparedStatement statement = connection.prepareStatement(query);
         statement.executeUpdate();
         statement.close();
     }
 
-    public static List getTableIDs(Connection connection, String table_name) throws SQLException {
-        List<Integer> IDs = new ArrayList();
-        int counter = 0;
-        String query = String.format("SELECT id FROM %s", table_name);
+    public static List<Integer> getTableIDs(Connection connection, String tableName) throws SQLException {
+        List<Integer> IDs = new ArrayList<>();
+        String query = String.format("SELECT id FROM %s", tableName);
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         while(resultSet.next()) {
@@ -27,7 +49,6 @@ public class DatabaseUtils {
         }
         resultSet.close();
         statement.close();
-
         return IDs;
     }
 
