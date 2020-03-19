@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class AuthorBook {
+public class AuthorBookSeeder {
     public static void run(Connection connection) throws SQLException {
         String query = "INSERT INTO author_book (author_id, book_id) VALUES (?, ?)";
         PreparedStatement statement = connection.prepareStatement(query);
