@@ -1,0 +1,38 @@
+/*@font-face {
+    font-family: 'Roboto', sans-serif;
+    src: url('Roboto-Bold.ttf');
+}*/
+
+.root{
+    -fx-background-color: #383838;
+    /*-fx-font-family: 'Roboto';*/
+}
+
+.text-field{
+    -fx-text-fill: #a4a4a4;
+    -fx-background-radius: 0;
+}
+
+.label{
+    -fx-text-fill: #a4a4a4;
+    -fx-font-size: 20;
+}
+
+.button{
+    -fx-border-color: #a4a4a4;
+    -fx-text-fill: #a4a4a4;
+}
+.button:hover{
+    -fx-background-color: #424242;
+}
+
+
+.wrong-info{
+    -fx-prompt-text-fill: #ff7961;
+    -fx-opacity: 0.3;
+}
+.wrong-info-label{
+    -fx-opacity: 0;
+    -fx-font-size: 13;
+    -fx-text-fill: #ff7961;
+}

@@ -1,0 +1,97 @@
+/*@font-face {
+    font-family: 'Roboto', sans-serif;
+    src: url('Roboto-Bold.ttf');
+}*/
+
+.root{
+    -fx-background-color: #383838;
+/*    -fx-font-family: 'Roboto';*/
+}
+
+.button{
+    -fx-text-fill: #a4a4a4;
+    -fx-font-size: 20;
+    -fx-background-color: #383838;
+    -fx-background-radius: 0;
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: #424242;
+}
+
+.button:hover{
+    -fx-background-color: #424242;
+}
+.exit-button{
+    -fx-pref-height: 80;
+    -fx-pref-width: 80;
+}
+
+.tab{
+    -fx-background-color: #383838;
+    -fx-text-fill: #a4a4a4;
+    -fx-pref-height: 80;
+    -fx-pref-width: 200;
+}
+.tab-header-background{
+    -fx-background-color: #383838;
+}
+.tab:hover{
+    -fx-background-color: #424242;
+}
+
+.text-field{
+    -fx-text-fill: #a4a4a4;
+}
+
+/*.table-view{
+    -fx-background-color: #383838;
+    -fx-text-fill: #a4a4a4;
+    -fx-border-width: 0;
+    -fx-border-color: #424242;;
+}*/
+
+.table-view .table-cell{
+    -fx-text-fill: #eeeeee;
+    -fx-background-color: #383838;
+    -fx-border-width: 0;
+}
+.table-row-cell:even{
+    -fx-background-color: #484848;
+}
+
+.table-row-cell:hover .table-cell{
+    -fx-background-color: #424242;
+    -fx-text-fill: #a4a4a4;
+
+}
+.table-row-cell:selected .table-cell {
+    -fx-background-color: #ffa726;
+    -fx-text-fill: #383838;
+}
+
+.table-view .column-header, .table-view .column-header .filler, .table-view .column-header-background .filler {
+    -fx-background-color: #383838;
+}
+.table-view .column-header .label{
+    -fx-text-fill: #eeeeee;
+    -fx-cell-size: 40px;
+
+}
+.table-row-cell {
+    -fx-cell-size: 30px;
+}
+
+.table-view .scroll-bar:horizontal .track,
+.table-view .scroll-bar:vertical .track{
+    -fx-background-color: #383838;
+    -fx-border-color:#383838;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.table-view .scroll-bar:horizontal .thumb,
+.table-view .scroll-bar:vertical .thumb {
+    -fx-background-color: #a4a4a4;
+    -fx-background-insets: 0, 0, 0;
+    -fx-background-radius: 0;
+
+}
