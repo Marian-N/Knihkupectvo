@@ -1,7 +1,7 @@
 package database.seeders;
 
 import com.github.javafaker.Faker;
-import utils.DatabaseUtils;
+import database.Database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -12,7 +12,7 @@ public class CustomersSeeder {
                 "(first_name, last_name, mail, city, zip, address) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement statement = connection.prepareStatement(query);
-        DatabaseUtils.emptyTable(connection, "customers");
+        Database.emptyTable("customers");
         while(count-- > 0) {
             statement.setString(1, faker.name().firstName());
             statement.setString(2, faker.name().lastName());

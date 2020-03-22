@@ -1,6 +1,6 @@
 package database.seeders;
 
-import utils.DatabaseUtils;
+import database.Database;
 import utils.RandomGenerator;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,9 +11,9 @@ public class OrderBookSeeder {
     public static void run(Connection connection) throws SQLException {
         String query = "INSERT INTO order_book (quantity, book_id, order_id) VALUES (?, ?, ?)";
         PreparedStatement statement = connection.prepareStatement(query);
-        DatabaseUtils.emptyTable(connection, "order_book");
-        List<Integer> bookIDs = DatabaseUtils.getTableIDs(connection, "books");
-        int numberOfOrders = DatabaseUtils.getRowsCount(connection, "orders");
+        Database.emptyTable("order_book");
+        List<Integer> bookIDs = Database.getTableIDs("books");
+        int numberOfOrders = Database.getRowsCount("orders");
         for(int i = 1; i <= numberOfOrders; i++) {
             int numberOfBooksInOrder = RandomGenerator.getRandomIntFromInterval(1, 7);
             while(numberOfBooksInOrder-- > 0){

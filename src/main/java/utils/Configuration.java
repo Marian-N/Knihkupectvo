@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public final class Configuration {
-    static private final Configuration _instance = new Configuration();
+    static private Configuration _instance = null;
     static public String databaseUser;
     static public String databasePassword;
     static public String databaseUrl;
@@ -26,6 +26,8 @@ public final class Configuration {
     }
 
     public static Configuration getInstance(){
+        if(_instance == null)
+            _instance = new Configuration();
         return _instance;
     }
 }

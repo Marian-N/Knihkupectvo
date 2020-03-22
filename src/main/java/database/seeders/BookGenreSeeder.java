@@ -1,6 +1,6 @@
 package database.seeders;
 
-import utils.DatabaseUtils;
+import database.Database;
 import utils.RandomGenerator;
 
 import java.sql.Connection;
@@ -12,10 +12,10 @@ public class BookGenreSeeder {
     public static void run(Connection connection) throws SQLException {
         String query = "INSERT INTO book_genre (genre_id, book_id) VALUES (?, ?)";
         PreparedStatement statement = connection.prepareStatement(query);
-        DatabaseUtils.emptyTable(connection, "book_genre");
-        List<Integer> genreIDs = DatabaseUtils.getTableIDs(connection, "genres");
-        List<Integer> bookIDs = DatabaseUtils.getTableIDs(connection, "books");
-        int numberOfBooks = DatabaseUtils.getRowsCount(connection, "books");
+        Database.emptyTable("book_genre");
+        List<Integer> genreIDs = Database.getTableIDs("genres");
+        List<Integer> bookIDs = Database.getTableIDs("books");
+        int numberOfBooks = Database.getRowsCount("books");
         for(int i = 1; i <= numberOfBooks; i++) {
             int numberOfGenres = RandomGenerator.getRandomIntFromInterval(1, 2);
             while(numberOfGenres-- > 0){
@@ -25,7 +25,7 @@ public class BookGenreSeeder {
                 statement.executeUpdate();
             }
         }
-        int numberOfGenres = DatabaseUtils.getRowsCount(connection, "genres");
+        int numberOfGenres = Database.getRowsCount("genres");
         for(int i = 1; i <= numberOfGenres; i++){
             int randomIndex = RandomGenerator.getRandomIntFromInterval(0, bookIDs.size() - 1);
             statement.setInt(1, i);

@@ -1,7 +1,7 @@
 package database.seeders;
 
 import com.github.javafaker.Faker;
-import utils.DatabaseUtils;
+import database.Database;
 import utils.RandomGenerator;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,8 +14,8 @@ public class BooksSeeder {
                 "(title, price, stock_quantity, publication_date, description, publisher_id)" +
                 " VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement statement = connection.prepareStatement(query);
-        DatabaseUtils.emptyTable(connection, "books");
-        List<Integer> IDs = DatabaseUtils.getTableIDs(connection, "publishers");
+        Database.emptyTable("books");
+        List<Integer> IDs = Database.getTableIDs("publishers");
         while(count-- > 0) {
             statement.setString(1, faker.book().title());
             statement.setDouble(2, RandomGenerator.getRandomPrice());
