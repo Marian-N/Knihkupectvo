@@ -11,6 +11,16 @@ public class Book {
     private int publisherID;
     private String description;
 
+    public Book(int ID, String title, double price, int stockQuantity, Date publicationDate, int publisherID, String description) {
+        this.ID = ID;
+        this.title = title;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        this.publicationDate = publicationDate;
+        this.publisherID = publisherID;
+        this.description = description;
+    }
+
     public int getID() {
         return ID;
     }

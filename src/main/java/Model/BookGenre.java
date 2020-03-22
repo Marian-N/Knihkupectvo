@@ -4,6 +4,11 @@ public class BookGenre {
     private int genreID;
     private int bookID;
 
+    public BookGenre(int genreID, int bookID) {
+        this.genreID = genreID;
+        this.bookID = bookID;
+    }
+
     public int getGenreID() {
         return genreID;
     }

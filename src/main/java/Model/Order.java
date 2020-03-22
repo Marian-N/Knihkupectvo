@@ -9,6 +9,14 @@ public class Order {
     private double price;
     private String status;
 
+    public Order(int ID, Date date, int customerID, double price, String status) {
+        this.ID = ID;
+        this.date = date;
+        this.customerID = customerID;
+        this.price = price;
+        this.status = status;
+    }
+
     public int getID() {
         return ID;
     }

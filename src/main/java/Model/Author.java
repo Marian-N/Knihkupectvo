@@ -4,6 +4,11 @@ public class Author {
     private int ID;
     private String name;
 
+    public Author(int ID, String name) {
+        this.ID = ID;
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

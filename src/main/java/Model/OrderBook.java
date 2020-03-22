@@ -5,6 +5,12 @@ public class OrderBook {
     private int bookID;
     private int quantity;
 
+    public OrderBook(int orderID, int bookID, int quantity) {
+        this.orderID = orderID;
+        this.bookID = bookID;
+        this.quantity = quantity;
+    }
+
     public int getOrderID() {
         return orderID;
     }
