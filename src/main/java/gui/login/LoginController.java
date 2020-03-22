@@ -54,7 +54,7 @@ public class LoginController implements Initializable {
 
     //zmeni scenu na admin
     private void loadMainAdminScene(javafx.event.ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("../adminmain/mainAdmin.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/gui/adminmain/admin_main.fxml"));
         Scene mainScene = new Scene(root);
         //dostanem informaciu o stage == magia
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
@@ -65,7 +65,7 @@ public class LoginController implements Initializable {
 
     //zavola zmenu sceny na usera
     private void loadMainUserScene(javafx.event.ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("mainUser.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("main-user.fxml"));
         Scene mainScene = new Scene(root);
         //dostanem informaciu o stage == magia
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();

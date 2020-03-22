@@ -4,6 +4,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -13,10 +14,10 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 900, 500));
         primaryStage.setResizable(false);
         primaryStage.show();
+
     }
 
     public static void main(String[] args){
-        //System.out.println("Test  = "+Main.class.getClassLoader().getResource("src/main/java/gui/login/login.fxml"));
         launch(args);
     }
 }
