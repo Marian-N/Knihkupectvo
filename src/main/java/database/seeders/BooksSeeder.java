@@ -11,7 +11,7 @@ import java.util.List;
 public class BooksSeeder {
     public static void run(Connection connection, Integer count, Faker faker) throws SQLException {
         String query = "INSERT INTO books " +
-                "(title, price, stock_quantity, publication_year, description, publisher_id)" +
+                "(title, price, stock_quantity, publication_date, description, publisher_id)" +
                 " VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement statement = connection.prepareStatement(query);
         DatabaseUtils.emptyTable(connection, "books");
