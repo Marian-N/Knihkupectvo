@@ -34,7 +34,7 @@ public class AuthorsController {
         return _instance;
     }
 
-    public ObservableMap<Integer, Author> getBooks() {
+    public ObservableMap<Integer, Author> getAuthors() {
         return authors;
     }
 }
