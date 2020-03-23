@@ -2,7 +2,7 @@ package controller;
 
 import database.Database;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import model.Book;
 import java.sql.Connection;
 import java.sql.Date;
@@ -13,7 +13,7 @@ public class BooksController {
     private static BooksController _instance = null;
     private Database database;
     private Connection connection;
-    private ObservableList<Book> books = FXCollections.observableArrayList();
+    private ObservableMap<Integer, Book> books = FXCollections.observableHashMap();
 
     public BooksController() throws SQLException, ClassNotFoundException {
         database = Database.get_instance();
@@ -29,7 +29,7 @@ public class BooksController {
             int publisherID = resultSet.getInt("publisher_id");
             String description = resultSet.getString("description");
             Book book = new Book(id, title, price, stockQuantity, publicationDate, publisherID, description);
-            books.add(book);
+            books.put(id, book);
         }
     }
 
@@ -39,7 +39,7 @@ public class BooksController {
         return _instance;
     }
 
-    public ObservableList<Book> getBooks() {
+    public ObservableMap<Integer, Book> getBooks() {
         return books;
     }
 }
