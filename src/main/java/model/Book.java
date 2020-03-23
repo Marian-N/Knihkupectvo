@@ -8,17 +8,25 @@ public class Book {
     private double price;
     private int stockQuantity;
     private Date publicationDate;
-    private int publisherID;
     private String description;
+    private Publisher publisher;
 
-    public Book(int ID, String title, double price, int stockQuantity, Date publicationDate, int publisherID, String description) {
+    public Book(int ID, String title, double price, int stockQuantity, Publisher publisher, Date publicationDate, String description) {
         this.ID = ID;
         this.title = title;
         this.price = price;
         this.stockQuantity = stockQuantity;
+        this.publisher = publisher;
         this.publicationDate = publicationDate;
-        this.publisherID = publisherID;
         this.description = description;
+    }
+
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 
     public int getID() {
@@ -59,14 +67,6 @@ public class Book {
 
     public void setPublicationDate(Date publicationDate) {
         this.publicationDate = publicationDate;
-    }
-
-    public int getPublisherID() {
-        return publisherID;
-    }
-
-    public void setPublisherID(int publisherID) {
-        this.publisherID = publisherID;
     }
 
     public String getDescription() {
