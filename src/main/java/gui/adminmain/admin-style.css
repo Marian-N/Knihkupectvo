@@ -41,22 +41,33 @@
 .text-field{
     -fx-text-fill: #a4a4a4;
 }
-
-/*.table-view{
+/*change background and horizontal borders*/
+.table-view .cell{
+    -fx-font-size: 13px;
+    -fx-cell-size: 35;
+    -fx-alignment: center-right;
     -fx-background-color: #383838;
-    -fx-text-fill: #a4a4a4;
-    -fx-border-width: 0;
-    -fx-border-color: #424242;;
-}*/
+    -fx-border-color: #29292D;
+    -fx-text-fill: lightgray;
+    -fx-border-width: 0.15;
+    -fx-alignment: CENTER_LEFT; /*CENTER_LEFT*/
+}
 
-.table-view .table-cell{
-    -fx-text-fill: #eeeeee;
-    -fx-background-color: #383838;
-    -fx-border-width: 0;
+.table-view .column-header .label{
+    -fx-font-size: 15px;
+    -fx-cell-size: 35;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
 }
-.table-row-cell:even{
-    -fx-background-color: #484848;
-}
+
+/* vertical border*/
+/*.table-view .table-cell{*/
+/*    -fx-text-fill: #eeeeee;*/
+/*    -fx-background-color: #383838;*/
+/*    -fx-border-width: 0;*/
+/*}*/
+
 
 .table-row-cell:hover .table-cell{
     -fx-background-color: #424242;

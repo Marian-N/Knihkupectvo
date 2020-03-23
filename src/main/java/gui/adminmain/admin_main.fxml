@@ -33,10 +33,12 @@
                                     <children>
                                         <TableView fx:id="bookOverviewTable" prefHeight="713.0" prefWidth="1173.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
                                             <columns>
-                                                <TableColumn fx:id="bookNameColumn" prefWidth="393.0" text="Book name" />
-                                                <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="408.0" text="Author" />
-                                                <TableColumn fx:id="genreColumn" prefWidth="232.0" text="Genre" />
-                                                <TableColumn fx:id="yearColumn" minWidth="0.0" prefWidth="209.0" text="Year" />
+                                                <TableColumn fx:id="bookNameColumn" styleClass="name-table" prefWidth="300.0" text="Book name" />
+                                                <TableColumn fx:id="genreColumn" minWidth="0.0" prefWidth="200.0" text="Genre" />
+                                                <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="200.0" text="Author" />
+                                                <TableColumn fx:id="publisherColumn" prefWidth="200.0" text="Publisher" />
+                                                <TableColumn fx:id="priceColumn" prefWidth="100.0" text="Price" />
+                                                <TableColumn fx:id="yearColumn" minWidth="0.0" prefWidth="100.0" text="Date" />
                                             </columns>
                                         </TableView>
                                     </children>
