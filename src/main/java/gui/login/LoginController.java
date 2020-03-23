@@ -19,8 +19,6 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //tu sa dava, ak chcem nieco spravit pri zacati programu, nampr nacitanie z databazi
-        System.out.println("Loading user data...");
     }
 
     @FXML
@@ -52,22 +50,22 @@ public class LoginController implements Initializable {
 //        }
     }
 
-    //zmeni scenu na admin
+    //change scene to admin
     private void loadMainAdminScene(javafx.event.ActionEvent event) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/gui/adminmain/admin_main.fxml"));
         Scene mainScene = new Scene(root);
-        //dostanem informaciu o stage == magia
+        //get info about stage
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
         window.setScene(mainScene);
         window.setResizable(false);
         window.show();
     }
 
-    //zavola zmenu sceny na usera
+    // cgange scene to user
     private void loadMainUserScene(javafx.event.ActionEvent event) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("main-user.fxml"));
         Scene mainScene = new Scene(root);
-        //dostanem informaciu o stage == magia
+
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
         window.setScene(mainScene);
         window.setResizable(false);
