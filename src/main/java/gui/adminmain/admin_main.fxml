@@ -24,7 +24,7 @@
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
                                 <JFXTextField fx:id="searchBookText" focusColor="darkorange" layoutX="12.0" layoutY="62.0" prefHeight="40.0" prefWidth="219.0" promptText="Search" />
-                                <JFXButton fx:id="searchBookButton" layoutX="75.0" layoutY="128.0" prefHeight="40.0" prefWidth="100.0" ripplerFill="darkorange" text="Search" />
+                                <JFXButton fx:id="searchBookButton" onAction="#handleSearchBook" layoutX="75.0" layoutY="128.0" prefHeight="40.0" prefWidth="100.0" ripplerFill="darkorange" text="Search" />
                                 <GridPane layoutX="250.0" prefHeight="713.0" prefWidth="1245.0" translateX="1.0" translateY="1.0" translateZ="1.0">
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -46,8 +46,8 @@
                                     </children>
                                 </GridPane>
                                 <JFXTextArea fx:id="synopsisText" editable="false" focusColor="darkorange" focusTraversable="false" layoutX="18.0" layoutY="213.0" mouseTransparent="true" prefHeight="323.0" prefWidth="211.0" />
-                                <JFXButton fx:id="changeBookButton" layoutX="72.0" layoutY="567.0" prefHeight="40.0" prefWidth="100.0" ripplerFill="darkorange" text="Change" />
-                                <JFXButton fx:id="deleteBookButton" layoutX="72.0" layoutY="634.0" prefHeight="40.0" prefWidth="100.0" ripplerFill="darkorange" text="Delete" />
+                                <JFXButton fx:id="changeBookButton" onAction="#handleChangeBook" layoutX="72.0" layoutY="567.0" prefHeight="40.0" prefWidth="100.0" ripplerFill="darkorange" text="Change" />
+                                <JFXButton fx:id="deleteBookButton" onAction="#handleDeleteBook" layoutX="72.0" layoutY="634.0" prefHeight="40.0" prefWidth="100.0" ripplerFill="darkorange" text="Delete" />
                             </children></AnchorPane>
                     </content>
                 </Tab>
