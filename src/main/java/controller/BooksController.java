@@ -31,6 +31,7 @@ public class BooksController {
             Book book = new Book(id, title, price, stockQuantity, publicationDate, publisherID, description);
             books.put(id, book);
         }
+        resultSet.close();
     }
 
     public static BooksController getInstance() throws SQLException, ClassNotFoundException {
