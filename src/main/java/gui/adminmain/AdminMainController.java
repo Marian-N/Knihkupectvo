@@ -2,8 +2,11 @@ package gui.adminmain;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
+import controller.AuthorBookController;
+import controller.AuthorsController;
 import controller.BooksController;
 import gui.adminchangebook.ChangeBookController;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -20,13 +23,18 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import model.Author;
 import model.Book;
+import model.Genre;
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.ResourceBundle;
 
@@ -45,9 +53,9 @@ public class AdminMainController implements Initializable {
     @FXML
     private TableColumn<Book, String> bookNameColumn;
     @FXML
-    private TableColumn<Book, String> genreColumn;
+    private TableColumn<Genre, String> genreColumn;
     @FXML
-    private TableColumn<Book, String> authorColumn;
+    private TableColumn<Author, String> authorColumn;
     @FXML
     private TableColumn<Book, Integer> publisherColumn;
     @FXML
@@ -56,7 +64,11 @@ public class AdminMainController implements Initializable {
     private TableColumn<Book, Date> yearColumn;
 
     private BooksController booksController = BooksController.getInstance();
+    private AuthorBookController authorBookController = AuthorBookController.getInstance();
+    private AuthorsController authorsController = AuthorsController.getInstance();
+
     ObservableMap<Integer, Book> booksFromMap = FXCollections.observableHashMap();
+    ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
 
 
     public AdminMainController() throws SQLException, ClassNotFoundException {
@@ -67,12 +79,24 @@ public class AdminMainController implements Initializable {
         booksFromMap = booksController.getBooks();
         ObservableList<Book> books = FXCollections.observableArrayList(booksFromMap.values());
 
+//        ObservableList<List<Integer>> authorBook = FXCollections.observableArrayList();
+//
+//        for (Book book : books){
+//            try {
+//                authorBook.add(AuthorBookController.getAuthors(book.getID()));
+//            } catch (SQLException e) {
+//            }
+//        }
+
+
         bookNameColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         publisherColumn.setCellValueFactory(new PropertyValueFactory<>("publisherID"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("publicationDate"));
+        //authorColumn.setCellValueFactory();
 
         bookOverviewTable.setItems(books);
+
     }
 
     public void handleExit(javafx.event.ActionEvent actionEvent) {
@@ -80,12 +104,26 @@ public class AdminMainController implements Initializable {
         stage.close();
     }
 
-    public void handleBookSelected(MouseEvent mouseEvent) {
+    public void handleBookSelected(MouseEvent mouseEvent) throws SQLException {
         Book book = bookOverviewTable.getSelectionModel().getSelectedItem();
+
+        List<Integer> authorId = authorBookController.getAuthors(book.getID());
+        authorsFromMap = authorsController.getAuthors();
+        List<String> authorName = new ArrayList<>();
+
+        for (Integer id : authorId){
+            authorName.add(authorsFromMap.get(id).getName());
+        }
         if(book != null){
-            synopsisText.setText("Synopsis\n\n");
+            synopsisText.setText("Authors: ");
+            synopsisText.appendText(String.join(", ", authorName));
+        }
+
+        if(book != null){
+            synopsisText.appendText("\n\nSynopsis\n\n");
             synopsisText.appendText(book.getDescription());
         }
+
 
     }
 

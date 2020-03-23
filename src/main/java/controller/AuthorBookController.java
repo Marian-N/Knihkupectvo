@@ -23,7 +23,7 @@ public class AuthorBookController {
         String query = String.format("SELECT author_id FROM author_book WHERE book_id = %s", bookID);
         ResultSet resultSet = connection.createStatement().executeQuery(query);
         while(resultSet.next()) {
-            IDs.add(resultSet.getInt("book_id"));
+            IDs.add(resultSet.getInt("author_id"));
         }
         resultSet.close();
         return IDs;
@@ -34,7 +34,7 @@ public class AuthorBookController {
         String query = String.format("SELECT book_id FROM author_book WHERE author_id = %s", authorID);
         ResultSet resultSet = connection.createStatement().executeQuery(query);
         while(resultSet.next()) {
-            IDs.add(resultSet.getInt("author_id"));
+            IDs.add(resultSet.getInt("book_id"));
         }
         resultSet.close();
         return IDs;
