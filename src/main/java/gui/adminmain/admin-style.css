@@ -25,6 +25,15 @@
     -fx-pref-width: 80;
 }
 
+.text-area{
+    -fx-text-fill: lightgray;
+}
+
+.label{
+    -fx-text-fill: #a4a4a4;
+    -fx-font-size: 20;
+}
+
 .tab{
     -fx-background-color: #383838;
     -fx-text-fill: #a4a4a4;

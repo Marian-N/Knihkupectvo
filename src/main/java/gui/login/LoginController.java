@@ -19,8 +19,6 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //tu sa dava, ak chcem nieco spravit pri zacati programu, nampr nacitanie z databazi
-        System.out.println("Loading user data...");
     }
 
     @FXML
