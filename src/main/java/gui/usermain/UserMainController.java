@@ -151,28 +151,13 @@ public class UserMainController implements Initializable {
         stage.close();
     }
 
-    public void handleBookSelected(MouseEvent mouseEvent) throws SQLException {
+    public void handleBookSelected(MouseEvent mouseEvent){
         Book book = bookOverviewTable.getSelectionModel().getSelectedItem();
-        //all authors ids
-        List<Integer> authorId = authorBookController.getAuthors(book.getID());
-        //all authors with their ids as keys
-        authorsFromMap = authorsController.getAuthors();
-        List<String> authorName = new ArrayList<>();
-        //taking only names from hashmap
-        for (Integer id : authorId){
-            authorName.add(authorsFromMap.get(id).getName());
-        }
-        if(book != null){
-            synopsisText.setText("Authors: ");
-            synopsisText.appendText(String.join(", ", authorName));
-        }
 
         if(book != null){
-            synopsisText.appendText("\n\nSynopsis\n\n");
+            synopsisText.setText("Synopsis\n\n");
             synopsisText.appendText(book.getDescription());
         }
-
-
     }
 
     public void handleOrderBook(ActionEvent actionEvent) {
