@@ -187,11 +187,6 @@ public class AdminMainController implements Initializable {
 
     }
 
-    public void handleSearchBook(ActionEvent actionEvent) {
-        String searchName =  searchBookText.getText();
-        System.out.println(searchName);
-        bookOverviewTable.getItems().stream().filter(item -> item.getTitle()==searchName).findAny();
-    }
 
     public void handleChangeBook(javafx.event.ActionEvent event) throws IOException {
 
