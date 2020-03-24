@@ -34,12 +34,13 @@ public class LoginController implements Initializable {
     @FXML
     private void handleLogin(javafx.event.ActionEvent event) throws Exception {
 
-        if(true){
-            loadMainAdminScene(event);
-        }
-        else {
+        if(nameLogin.getText().contentEquals("user")){
             loadMainUserScene(event);
         }
+        else if(nameLogin.getText().contentEquals("admin")){
+            loadMainAdminScene(event);
+        }
+
 //        else{
 //            nameLogin.clear();
 //            passwordLogin.clear();
@@ -63,7 +64,7 @@ public class LoginController implements Initializable {
 
     // cgange scene to user
     private void loadMainUserScene(javafx.event.ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("main-user.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/gui/usermain/user_main.fxml"));
         Scene mainScene = new Scene(root);
 
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();

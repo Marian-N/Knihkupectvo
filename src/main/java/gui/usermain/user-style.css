@@ -1,11 +1,5 @@
-/*@font-face {
-    font-family: 'Roboto', sans-serif;
-    src: url('Roboto-Bold.ttf');
-}*/
-
 .root{
     -fx-background-color: #383838;
-/*    -fx-font-family: 'Roboto';*/
 }
 
 .button{
@@ -43,13 +37,11 @@
 .tab-header-background{
     -fx-background-color: #383838;
 }
-.tab:hover{
-    -fx-background-color: #424242;
-}
-
 .text-field{
     -fx-text-fill: #a4a4a4;
 }
+
+
 /*change background and horizontal borders*/
 .table-view .cell{
     -fx-font-size: 13px;
@@ -70,35 +62,16 @@
     -fx-alignment: CENTER_LEFT;
 }
 
-/* vertical border*/
-/*.table-view .table-cell{*/
-/*    -fx-text-fill: #eeeeee;*/
-/*    -fx-background-color: #383838;*/
-/*    -fx-border-width: 0;*/
-/*}*/
-
-
 .table-row-cell:hover .table-cell{
     -fx-background-color: #424242;
     -fx-text-fill: #a4a4a4;
 }
+
 .table-row-cell:selected .table-cell {
     -fx-background-color: #ffa726;
     -fx-text-fill: #383838;
 }
-
-.table-view .column-header, .table-view .column-header .filler, .table-view .column-header-background .filler {
-    -fx-background-color: #383838;
-}
-.table-view .column-header .label{
-    -fx-text-fill: #eeeeee;
-    -fx-cell-size: 40px;
-
-}
-.table-row-cell {
-    -fx-cell-size: 30px;
-}
-
+/*scrollbars*/
 .table-view .scroll-bar:horizontal .track,
 .table-view .scroll-bar:vertical .track{
     -fx-background-color: #383838;
@@ -112,4 +85,8 @@
     -fx-background-color: #a4a4a4;
     -fx-background-insets: 0, 0, 0;
     -fx-background-radius: 0;
+}
+/*header of tableview background*/
+.table-view .column-header, .table-view .column-header .filler, .table-view .column-header-background .filler {
+    -fx-background-color: #383838;
 }
