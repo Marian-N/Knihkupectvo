@@ -2,6 +2,7 @@ package gui.adminmain;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 import controller.*;
 import gui.adminchangebook.ChangeBookController;
 import javafx.beans.property.SimpleObjectProperty;
@@ -10,6 +11,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -37,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 public class AdminMainController implements Initializable {
 
@@ -48,6 +52,8 @@ public class AdminMainController implements Initializable {
     private JFXButton deleteBookButton;
     @FXML
     private JFXTextArea synopsisText;
+    @FXML
+    private JFXTextField searchBookText;
     @FXML
     private TableView<Book> bookOverviewTable;
     @FXML
@@ -72,6 +78,7 @@ public class AdminMainController implements Initializable {
     ObservableMap<Integer, Book> booksFromMap = FXCollections.observableHashMap();
     ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
     ObservableMap<Integer, Genre> genresFromMap = FXCollections.observableHashMap();
+
 
 
     public AdminMainController() throws SQLException, ClassNotFoundException {
@@ -129,6 +136,26 @@ public class AdminMainController implements Initializable {
         });
         bookOverviewTable.setItems(books);
 
+        //search
+        FilteredList<Book> filteredList = new FilteredList<>(books, e -> true);
+        searchBookText.setOnKeyReleased(e ->{
+            searchBookText.textProperty().addListener((v, oldValue, newValue) -> {
+                filteredList.setPredicate(book ->{
+                    if (newValue == null || newValue.isEmpty()){
+                        return true;
+                    }
+                    String lowerCaseFilter = newValue.toLowerCase();
+                    if (book.getTitle().toLowerCase().contains(newValue)){
+                        return true;
+                    }
+                    return false;
+                });
+            });
+            SortedList<Book> sortList = new SortedList<>(filteredList);
+            sortList.comparatorProperty().bind(bookOverviewTable.comparatorProperty());
+            bookOverviewTable.setItems(sortList);
+        });
+
     }
 
     public void handleExit(javafx.event.ActionEvent actionEvent) {
@@ -161,7 +188,9 @@ public class AdminMainController implements Initializable {
     }
 
     public void handleSearchBook(ActionEvent actionEvent) {
-
+        String searchName =  searchBookText.getText();
+        System.out.println(searchName);
+        bookOverviewTable.getItems().stream().filter(item -> item.getTitle()==searchName).findAny();
     }
 
     public void handleChangeBook(javafx.event.ActionEvent event) throws IOException {
