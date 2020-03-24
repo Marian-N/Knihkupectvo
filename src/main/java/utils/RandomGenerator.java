@@ -25,7 +25,7 @@ public class RandomGenerator {
     }
 
     public static Double getRandomPrice(){
-        int number = random.nextInt(9999); //Generates random number
+        int number = random.nextInt(6666); //Generates random number
         return number / 100.0;
     }
 }

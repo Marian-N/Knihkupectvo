@@ -17,13 +17,10 @@ public class BookGenreSeeder {
         List<Integer> bookIDs = Database.getTableIDs("books");
         int numberOfBooks = Database.getRowsCount("books");
         for(int i = 1; i <= numberOfBooks; i++) {
-            int numberOfGenres = RandomGenerator.getRandomIntFromInterval(1, 2);
-            while(numberOfGenres-- > 0){
-                int randomIndex = RandomGenerator.getRandomIntFromInterval(0, genreIDs.size() - 1);
-                statement.setInt(1, genreIDs.get(randomIndex));
-                statement.setInt(2, i);
-                statement.executeUpdate();
-            }
+            int randomIndex = RandomGenerator.getRandomIntFromInterval(0, genreIDs.size() - 1);
+            statement.setInt(1, genreIDs.get(randomIndex));
+            statement.setInt(2, i);
+            statement.executeUpdate();
         }
         int numberOfGenres = Database.getRowsCount("genres");
         for(int i = 1; i <= numberOfGenres; i++){

@@ -15,7 +15,7 @@ public class OrderBookSeeder {
         List<Integer> bookIDs = Database.getTableIDs("books");
         int numberOfOrders = Database.getRowsCount("orders");
         for(int i = 1; i <= numberOfOrders; i++) {
-            int numberOfBooksInOrder = RandomGenerator.getRandomIntFromInterval(1, 7);
+            int numberOfBooksInOrder = RandomGenerator.getRandomIntFromInterval(1, 4);
             while(numberOfBooksInOrder-- > 0){
                 int bookQuantity = RandomGenerator.getRandomIntFromInterval(1, 5);
                 statement.setInt(1, bookQuantity);

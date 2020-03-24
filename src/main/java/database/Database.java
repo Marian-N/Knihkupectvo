@@ -22,7 +22,7 @@ public class Database {
         Class.forName("org.postgresql.Driver");
     }
 
-    public static Database get_instance() throws SQLException, ClassNotFoundException {
+    public static Database getInstance() throws SQLException, ClassNotFoundException {
         if(_instance == null)
             _instance = new Database();
         return _instance;

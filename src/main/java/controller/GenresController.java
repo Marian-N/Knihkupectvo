@@ -16,7 +16,7 @@ public class GenresController {
     private ObservableMap<Integer, Genre> genres = FXCollections.observableHashMap();
 
     public GenresController() throws SQLException, ClassNotFoundException {
-        database = Database.get_instance();
+        database = Database.getInstance();
         connection = database.getConnection();
         String query = "SELECT * from genres";
         ResultSet resultSet = connection.createStatement().executeQuery(query);

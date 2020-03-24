@@ -15,7 +15,7 @@ public class AuthorsController {
     private ObservableMap<Integer, Author> authors = FXCollections.observableHashMap();
 
     public AuthorsController() throws SQLException, ClassNotFoundException {
-        database = Database.get_instance();
+        database = Database.getInstance();
         connection = database.getConnection();
         String query = "SELECT * from authors";
         ResultSet resultSet = connection.createStatement().executeQuery(query);

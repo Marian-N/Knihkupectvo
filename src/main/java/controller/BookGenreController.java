@@ -14,7 +14,7 @@ public class BookGenreController {
     private static Connection connection;
 
     public BookGenreController() throws SQLException, ClassNotFoundException {
-        database = Database.get_instance();
+        database = Database.getInstance();
         connection = database.getConnection();
     }
 

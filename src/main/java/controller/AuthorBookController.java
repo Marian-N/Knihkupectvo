@@ -13,7 +13,7 @@ public class AuthorBookController {
     private static Connection connection;
 
     public AuthorBookController() throws SQLException, ClassNotFoundException {
-        database = Database.get_instance();
+        database = Database.getInstance();
         connection = database.getConnection();
     }
 
