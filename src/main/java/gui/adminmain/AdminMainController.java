@@ -6,6 +6,8 @@ import controller.AuthorBookController;
 import controller.AuthorsController;
 import controller.BooksController;
 import gui.adminchangebook.ChangeBookController;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,6 +29,7 @@ import javafx.util.Callback;
 import model.Author;
 import model.Book;
 import model.Genre;
+import model.Publisher;
 
 import java.awt.*;
 import java.io.IOException;
@@ -55,9 +58,9 @@ public class AdminMainController implements Initializable {
     @FXML
     private TableColumn<Genre, String> genreColumn;
     @FXML
-    private TableColumn<Author, String> authorColumn;
+    private TableColumn<Book, List<String>> authorColumn;
     @FXML
-    private TableColumn<Book, Integer> publisherColumn;
+    private TableColumn<Book, String> publisherColumn;
     @FXML
     private TableColumn<Book, Double> priceColumn;
     @FXML
@@ -79,21 +82,33 @@ public class AdminMainController implements Initializable {
         booksFromMap = booksController.getBooks();
         ObservableList<Book> books = FXCollections.observableArrayList(booksFromMap.values());
 
-//        ObservableList<List<Integer>> authorBook = FXCollections.observableArrayList();
-//
-//        for (Book book : books){
-//            try {
-//                authorBook.add(AuthorBookController.getAuthors(book.getID()));
-//            } catch (SQLException e) {
-//            }
-//        }
-
-
         bookNameColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        publisherColumn.setCellValueFactory(new PropertyValueFactory<>("publisherID"));
+        publisherColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Book, String> param) {
+                return new SimpleStringProperty(param.getValue().getPublisher().getName());
+            }
+        });
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("publicationDate"));
-        //authorColumn.setCellValueFactory();
+        authorColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, List<String>>, ObservableValue<List<String>>>() {
+            @Override
+            public ObservableValue<List<String>> call(TableColumn.CellDataFeatures<Book, List<String>> param) {
+                List<Integer> authorId = null;
+                try {
+                    authorId = authorBookController.getAuthors(param.getValue().getID());
+                } catch (SQLException e) {
+                }
+                //all authors with their ids as keys
+                authorsFromMap = authorsController.getAuthors();
+                List<String> authorName = new ArrayList<>();
+                //taking only names from hashmap
+                for (Integer id : authorId){
+                    authorName.add(authorsFromMap.get(id).getName());
+                }
+                return new SimpleObjectProperty(String.join(", ", authorName));
+            }
+        });
 
         bookOverviewTable.setItems(books);
 
@@ -106,11 +121,12 @@ public class AdminMainController implements Initializable {
 
     public void handleBookSelected(MouseEvent mouseEvent) throws SQLException {
         Book book = bookOverviewTable.getSelectionModel().getSelectedItem();
-
+        //all authors ids
         List<Integer> authorId = authorBookController.getAuthors(book.getID());
+        //all authors with their ids as keys
         authorsFromMap = authorsController.getAuthors();
         List<String> authorName = new ArrayList<>();
-
+        //taking only names from hashmap
         for (Integer id : authorId){
             authorName.add(authorsFromMap.get(id).getName());
         }
