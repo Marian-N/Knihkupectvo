@@ -2,9 +2,7 @@ package gui.adminmain;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
-import controller.AuthorBookController;
-import controller.AuthorsController;
-import controller.BooksController;
+import controller.*;
 import gui.adminchangebook.ChangeBookController;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -29,7 +27,6 @@ import javafx.util.Callback;
 import model.Author;
 import model.Book;
 import model.Genre;
-import model.Publisher;
 
 import java.awt.*;
 import java.io.IOException;
@@ -56,7 +53,7 @@ public class AdminMainController implements Initializable {
     @FXML
     private TableColumn<Book, String> bookNameColumn;
     @FXML
-    private TableColumn<Genre, String> genreColumn;
+    private TableColumn<Book, List<String>> genreColumn;
     @FXML
     private TableColumn<Book, List<String>> authorColumn;
     @FXML
@@ -69,9 +66,12 @@ public class AdminMainController implements Initializable {
     private BooksController booksController = BooksController.getInstance();
     private AuthorBookController authorBookController = AuthorBookController.getInstance();
     private AuthorsController authorsController = AuthorsController.getInstance();
+    private BookGenreController bookGenreController = BookGenreController.getInstance();
+    private GenresController genresController = GenresController.getInstance();
 
     ObservableMap<Integer, Book> booksFromMap = FXCollections.observableHashMap();
     ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
+    ObservableMap<Integer, Genre> genresFromMap = FXCollections.observableHashMap();
 
 
     public AdminMainController() throws SQLException, ClassNotFoundException {
@@ -109,7 +109,24 @@ public class AdminMainController implements Initializable {
                 return new SimpleObjectProperty(String.join(", ", authorName));
             }
         });
-
+        genreColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, List<String>>, ObservableValue<List<String>>>() {
+            @Override
+            public ObservableValue<List<String>> call(TableColumn.CellDataFeatures<Book, List<String>> param) {
+                List<Integer> genreId = null;
+                try {
+                    genreId = bookGenreController.getGenres(param.getValue().getID());
+                } catch (SQLException e) {
+                }
+                //all genres with their ids as keys
+                genresFromMap = genresController.getGenres();
+                List<String> genreName = new ArrayList<>();
+                //taking only names from hashmap
+                for (Integer id : genreId){
+                    genreName.add(genresFromMap.get(id).getName());
+                }
+                return new SimpleObjectProperty(String.join(", ", genreName));
+            }
+        });
         bookOverviewTable.setItems(books);
 
     }
