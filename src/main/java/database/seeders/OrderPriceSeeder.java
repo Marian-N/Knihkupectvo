@@ -8,6 +8,7 @@ import model.Book;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 public class OrderPriceSeeder {
@@ -26,7 +27,9 @@ public class OrderPriceSeeder {
             }
             orderPrice = (double) Math.round(orderPrice * 100) / 100;
             String query = String.format("UPDATE orders SET price = %s WHERE id = %s", orderPrice, order);
-            connection.createStatement().executeUpdate(query);
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+            statement.close();
         }
     }
 }

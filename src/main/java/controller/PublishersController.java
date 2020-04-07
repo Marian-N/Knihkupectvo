@@ -8,24 +8,25 @@ import model.Publisher;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class PublishersController {
     private static PublishersController _instance = null;
-    private Database database;
     private Connection connection;
     private ObservableMap<Integer, Publisher> publishers = FXCollections.observableHashMap();
 
-    public PublishersController() throws SQLException, ClassNotFoundException {
-        database = Database.getInstance();
-        connection = database.getConnection();
+    private PublishersController() throws SQLException, ClassNotFoundException {
+        connection = Database.getInstance().getConnection();
         String query = "SELECT * from publishers";
-        ResultSet resultSet = connection.createStatement().executeQuery(query);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
         while(resultSet.next()){
             int id = resultSet.getInt("id");
             String name = resultSet.getString("name");
             Publisher publisher = new Publisher(id, name);
             publishers.put(id, publisher);
         }
+        statement.close();
         resultSet.close();
     }
 

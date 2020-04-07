@@ -8,24 +8,25 @@ import model.Genre;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class GenresController {
     private static GenresController _instance = null;
-    private Database database;
     private Connection connection;
     private ObservableMap<Integer, Genre> genres = FXCollections.observableHashMap();
 
-    public GenresController() throws SQLException, ClassNotFoundException {
-        database = Database.getInstance();
-        connection = database.getConnection();
+    private GenresController() throws SQLException, ClassNotFoundException {
+        connection = Database.getInstance().getConnection();
         String query = "SELECT * from genres";
-        ResultSet resultSet = connection.createStatement().executeQuery(query);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
         while(resultSet.next()){
             int id = resultSet.getInt("id");
             String name = resultSet.getString("name");
             Genre genre = new Genre(id, name);
             genres.put(id, genre);
         }
+        statement.close();
         resultSet.close();
     }
 

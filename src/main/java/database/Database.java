@@ -14,11 +14,11 @@ public class Database {
         return connection;
     }
 
-    public Database() throws SQLException, ClassNotFoundException {
-        Configuration configuration = Configuration.getInstance();
-        this.connection = DriverManager
-                .getConnection(configuration.databaseUrl, configuration.databaseUser,
-                        configuration.databasePassword);
+    private Database() throws SQLException, ClassNotFoundException {
+
+        connection = DriverManager
+                .getConnection(Configuration.getDatabaseUrl(), Configuration.getDatabaseUser(),
+                        Configuration.getDatabasePassword());
         Class.forName("org.postgresql.Driver");
     }
 
@@ -33,6 +33,7 @@ public class Database {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         resultSet.next();
+        statement.close();
         return resultSet.getInt(1);
     }
 
@@ -52,9 +53,17 @@ public class Database {
 
     public static void emptyTable(String tableName) throws SQLException {
         String query = String.format("TRUNCATE %s RESTART IDENTITY CASCADE;", tableName);
-        PreparedStatement statement = connection.prepareStatement(query);
-        statement.executeUpdate();
-        statement.close();
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(query);
+            statement.executeUpdate();
+        }
+        catch(SQLException e){
+            System.out.println("Failed to empty" + tableName + "table.\n");
+        }
+        finally {
+            if(statement != null) statement.close();
+        }
     }
 
     public static List<Integer> getTableIDs(String tableName) throws SQLException {

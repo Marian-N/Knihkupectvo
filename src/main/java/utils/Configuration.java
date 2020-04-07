@@ -7,18 +7,18 @@ import java.util.Properties;
 
 public final class Configuration {
     static private Configuration _instance = null;
-    static public String databaseUser;
-    static public String databasePassword;
-    static public String databaseUrl;
+    static private String databaseUser = null;
+    static private String databasePassword = null;
+    static private String databaseUrl = null;
 
-    public Configuration(){
+    private Configuration(){
         try {
             InputStream configuration_file = new FileInputStream(new File("src/main/resources/configuration.properties"));
             Properties configuration = new Properties();
             configuration.load(configuration_file);
-            databaseUser = configuration.getProperty("databaseUser");
-            databasePassword = configuration.getProperty("databasePassword");
-            databaseUrl = configuration.getProperty("databaseUrl");
+            _instance.databaseUser = configuration.getProperty("databaseUser");
+            _instance.databasePassword = configuration.getProperty("databasePassword");
+            _instance.databaseUrl = configuration.getProperty("databaseUrl");
         }
         catch(Exception e){
             System.out.println("Configuration file not found");
@@ -29,5 +29,23 @@ public final class Configuration {
         if(_instance == null)
             _instance = new Configuration();
         return _instance;
+    }
+
+    public static String getDatabaseUser() {
+        if(_instance == null)
+            _instance = new Configuration();
+        return databaseUser;
+    }
+
+    public static String getDatabasePassword() {
+        if(_instance == null)
+            _instance = new Configuration();
+        return databasePassword;
+    }
+
+    public static String getDatabaseUrl() {
+        if(_instance == null)
+            _instance = new Configuration();
+        return databaseUrl;
     }
 }

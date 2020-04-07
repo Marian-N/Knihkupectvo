@@ -17,7 +17,7 @@ public class Book {
         this.price = price;
         this.stockQuantity = stockQuantity;
         this.publisher = publisher;
-        this.publicationDate = publicationDate;
+        this.publicationDate = new Date(publicationDate.getTime());
         this.description = description;
     }
 
@@ -62,11 +62,11 @@ public class Book {
     }
 
     public Date getPublicationDate() {
-        return publicationDate;
+        return new Date(publicationDate.getTime());
     }
 
     public void setPublicationDate(Date publicationDate) {
-        this.publicationDate = publicationDate;
+        this.publicationDate = new Date(publicationDate.getTime());
     }
 
     public String getDescription() {

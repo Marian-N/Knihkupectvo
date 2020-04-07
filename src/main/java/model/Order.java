@@ -11,7 +11,7 @@ public class Order {
 
     public Order(int ID, Date date, int customerID, double price, String status) {
         this.ID = ID;
-        this.date = date;
+        this.date = new Date(date.getTime());
         this.customerID = customerID;
         this.price = price;
         this.status = status;
@@ -26,11 +26,11 @@ public class Order {
     }
 
     public Date getDate() {
-        return date;
+        return new Date(date.getTime());
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.date = new Date(date.getTime());
     }
 
     public int getCustomerID() {

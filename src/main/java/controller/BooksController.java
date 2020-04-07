@@ -6,22 +6,18 @@ import javafx.collections.ObservableMap;
 import model.Book;
 import model.Publisher;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class BooksController {
     private static BooksController _instance = null;
-    private Database database;
     private Connection connection;
     private ObservableMap<Integer, Book> books = FXCollections.observableHashMap();
 
-    public BooksController() throws SQLException, ClassNotFoundException {
-        database = Database.getInstance();
-        connection = Database.getConnection();
+    private BooksController() throws SQLException, ClassNotFoundException {
+        connection = Database.getInstance().getConnection();
         String query = "SELECT * from books";
-        ResultSet resultSet = connection.createStatement().executeQuery(query);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
         PublishersController publishersController = PublishersController.getInstance();
         ObservableMap<Integer, Publisher> publishers = publishersController.getPublishers();
         while(resultSet.next()){
@@ -36,6 +32,7 @@ public class BooksController {
             Book book = new Book(id, title, price, stockQuantity, publisher, publicationDate, description);
             books.put(id, book);
         }
+        statement.close();
         resultSet.close();
     }
 

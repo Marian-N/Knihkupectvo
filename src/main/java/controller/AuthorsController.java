@@ -7,24 +7,25 @@ import model.Author;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class AuthorsController {
     private static AuthorsController _instance = null;
-    private Database database;
     private Connection connection;
     private ObservableMap<Integer, Author> authors = FXCollections.observableHashMap();
 
-    public AuthorsController() throws SQLException, ClassNotFoundException {
-        database = Database.getInstance();
-        connection = database.getConnection();
+    private AuthorsController() throws SQLException, ClassNotFoundException {
+        connection = Database.getInstance().getConnection();
         String query = "SELECT * from authors";
-        ResultSet resultSet = connection.createStatement().executeQuery(query);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
         while(resultSet.next()){
             int id = resultSet.getInt("id");
             String name = resultSet.getString("name");
             Author author = new Author(id, name);
             authors.put(id, author);
         }
+        statement.close();
         resultSet.close();
     }
 
