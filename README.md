@@ -38,9 +38,9 @@ Knihy si môžu zoradiť podľa názvu, vydavateľa, dátumu vydania, ceny ale v
 Po vybraní knihy sa im ukáže jej popis, autori a žáner.<br>
 Výber kníh<br>
 (a) **Zákaznikom** - 
-zobrazí sa mu jej popis a následne bude vedieť prejsť na jej objednanie ([Scenár 3](objednanie-knihy)). <br>
+zobrazí sa mu jej popis a následne bude vedieť prejsť na jej objednanie ([Scenár 3](#objednanie-knihy)). <br>
 (b) **Adminstrátorom** - 
-bude si ju vedieť takisto pozrieť ale ju aj spravovať ([Scenár 2](sprava-knih))
+bude si ju vedieť takisto pozrieť ale ju aj spravovať ([Scenár 2](#sprava-knih))
 2. **Správa kníh** <br> <a name="sprava-knih"></a>
 K tomuto vie pristúpiť iba administrátor. <br>
 Knihu vie: <br>
