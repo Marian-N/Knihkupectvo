@@ -38,10 +38,10 @@ Knihy si môžu zoradiť podľa názvu, vydavateľa, dátumu vydania, ceny ale v
 Po vybraní knihy sa im ukáže jej popis, autori a žáner.<br>
 Výber kníh<br>
 (a) **Zákaznikom** - 
-zobrazí sa mu jej popis a následne bude vedieť prejsť na jej objednanie ([Scenár 3](3.)). <br>
+zobrazí sa mu jej popis a následne bude vedieť prejsť na jej objednanie ([Scenár 3](objednanie-knihy)). <br>
 (b) **Adminstrátorom** - 
-bude si ju vedieť takisto pozrieť ale ju aj spravovať ([Scenár 2](2.))
-2. **Správa kníh** <br> <a name="2."></a>
+bude si ju vedieť takisto pozrieť ale ju aj spravovať ([Scenár 2](sprava-knih))
+2. **Správa kníh** <br> <a name="sprava-knih"></a>
 K tomuto vie pristúpiť iba administrátor. <br>
 Knihu vie: <br>
 (a) **Pridať** -
@@ -49,7 +49,7 @@ pre pridanie bude musieť vyplniť potrebné informácie – názov, cenu, poče
 Vydavateľa aj autora si bude vedieť vybrať z dostupných alebo pridať nového.<br>
 (b) **Odobrať** - odobratie knihy ju vymaže z databázy. <br>
 (c) **Upraviť** - pri úprave bude môcť zmeniť jej množstvo alebo cenu.
-3. **Objednanie knihy**<br> <a name="3."></a>
+3. **Objednanie knihy**<br> <a name="objednanie-knihy"></a>
 Objednať knihu si vie zákazník. Ku objednávke pristúpi po vybraní knihy zo zoznamu.
 Vyplní jej množstvo a potvrdí objednanie.
 Následne sa objednávka zaradí do histórie jeho objednávok a bude si vedieť pozrieť jej informácie – číslo, dátum, cenu, stav.
