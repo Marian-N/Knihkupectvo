@@ -33,8 +33,9 @@ public class Database {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         resultSet.next();
+        int count = resultSet.getInt(1);
         statement.close();
-        return resultSet.getInt(1);
+        return count;
     }
 
     public static double getOrderPrice(int ID) throws SQLException {

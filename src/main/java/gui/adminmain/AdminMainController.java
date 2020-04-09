@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controller.*;
+import database.Database;
 import gui.adminchangebook.ChangeBookController;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -14,6 +15,7 @@ import javafx.collections.ObservableMap;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,6 +23,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -47,6 +50,8 @@ public class AdminMainController implements Initializable {
     @FXML
     private JFXButton exitButton;
     @FXML
+    private Pagination paginationBooks;
+    @FXML
     private JFXButton changeBookButton;
     @FXML
     private JFXButton deleteBookButton;
@@ -69,6 +74,7 @@ public class AdminMainController implements Initializable {
     @FXML
     private TableColumn<Book, Date> yearColumn;
 
+
     private BooksController booksController = BooksController.getInstance();
     private AuthorBookController authorBookController = AuthorBookController.getInstance();
     private AuthorsController authorsController = AuthorsController.getInstance();
@@ -79,13 +85,19 @@ public class AdminMainController implements Initializable {
     ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
     ObservableMap<Integer, Genre> genresFromMap = FXCollections.observableHashMap();
 
-
-
     public AdminMainController() throws SQLException, ClassNotFoundException {
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        fillTable();
+        findBook();
+        paginationBooks.setPageCount(1000);
+        paginationBooks.setPageFactory(this::createBooksPage);
+    }
+
+    public ObservableList<Book> fillTable(){
         booksFromMap = booksController.getBooks();
         ObservableList<Book> books = FXCollections.observableArrayList(booksFromMap.values());
 
@@ -105,6 +117,7 @@ public class AdminMainController implements Initializable {
                 try {
                     authorId = authorBookController.getAuthors(param.getValue().getID());
                 } catch (SQLException e) {
+                    return new SimpleObjectProperty("-");
                 }
                 //all authors with their ids as keys
                 authorsFromMap = authorsController.getAuthors();
@@ -123,7 +136,9 @@ public class AdminMainController implements Initializable {
                 try {
                     genreId = bookGenreController.getGenres(param.getValue().getID());
                 } catch (SQLException e) {
+                    return new SimpleObjectProperty("-");
                 }
+
                 //all genres with their ids as keys
                 genresFromMap = genresController.getGenres();
                 List<String> genreName = new ArrayList<>();
@@ -134,9 +149,13 @@ public class AdminMainController implements Initializable {
                 return new SimpleObjectProperty(String.join(", ", genreName));
             }
         });
-        bookOverviewTable.setItems(books);
+        //bookOverviewTable.setItems(books);
+        return books; //bookOverviewTable.setItems(books);
+    }
 
+    private void findBook(){
         //search
+        ObservableList<Book> books = FXCollections.observableArrayList(booksFromMap.values());
         FilteredList<Book> filteredList = new FilteredList<>(books, e -> true);
         searchBookText.setOnKeyReleased(e ->{
             searchBookText.textProperty().addListener((v, oldValue, newValue) -> {
@@ -155,7 +174,25 @@ public class AdminMainController implements Initializable {
             sortList.comparatorProperty().bind(bookOverviewTable.comparatorProperty());
             bookOverviewTable.setItems(sortList);
         });
+    }
 
+    private Node createBooksPage(int pageNum){
+        ObservableList<Book> books = fillTable();
+
+        int bookNum;
+        try {
+            bookNum = Database.getInstance().getRowsCount("books");
+        } catch (SQLException e) {
+            bookNum = 0;
+        } catch (ClassNotFoundException e) {
+            bookNum = 0;
+        }
+
+        int startNum = pageNum * bookNum/1000;
+        int endNum = Math.min(startNum + bookNum/1000, bookNum);
+        //System.out.println(books.get(1));
+        bookOverviewTable.setItems(FXCollections.observableArrayList(books.subList(startNum, endNum)));
+        return bookOverviewTable;
     }
 
     public void handleExit(javafx.event.ActionEvent actionEvent) {
@@ -177,6 +214,18 @@ public class AdminMainController implements Initializable {
     }
 
     public void handleDeleteBook(ActionEvent actionEvent) {
+
+    }
+
+    public void hidePagination(Event event) {
+        paginationBooks.setVisible(false);
+    }
+    public void showPagination(Event event) {
+
+        if(paginationBooks != null){
+            paginationBooks.setVisible(true);
+        }
+
 
     }
 }

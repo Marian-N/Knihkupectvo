@@ -20,40 +20,39 @@
     <children>
         <JFXTabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <tabs>
-                <Tab text="Books">
+                <Tab id="booksTab" onSelectionChanged="#showPagination" text="Books">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
                                 <JFXTextField fx:id="searchBookText" focusColor="darkorange" layoutX="12.0" layoutY="62.0" prefHeight="40.0" prefWidth="219.0" promptText="Search" />
                                 <!--<JFXButton fx:id="searchBookButton" onAction="#handleSearchBook" layoutX="75.0" layoutY="128.0" prefHeight="40.0" prefWidth="100.0" ripplerFill="darkorange" text="Search" />-->
                                 <Label fx:id="searchBookLabel" layoutX="80.0" layoutY="128.0" prefHeight="40.0" prefWidth="100.0" text="Search" />
-                                <GridPane layoutX="250.0" prefHeight="713.0" prefWidth="1245.0" translateX="1.0" translateY="1.0" translateZ="1.0">
+                                <GridPane layoutX="254.0" prefHeight="629.0" prefWidth="1241.0" translateX="1.0" translateY="1.0" translateZ="1.0">
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     </columnConstraints>
                                     <rowConstraints>
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
-                                    <children>
-                                        <TableView fx:id="bookOverviewTable" onMouseClicked="#handleBookSelected" prefHeight="713.0" prefWidth="1173.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
-                                            <columns>
-                                                <TableColumn fx:id="bookNameColumn" prefWidth="300.0" styleClass="name-table" text="Book name" />
-                                                <TableColumn fx:id="genreColumn" minWidth="0.0" prefWidth="300.0" text="Genre" />
-                                                <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="250.0" text="Author" />
-                                                <TableColumn fx:id="publisherColumn" prefWidth="200.0" text="Publisher" />
-                                                <TableColumn fx:id="priceColumn" prefWidth="88.0" text="Price" />
-                                                <TableColumn fx:id="yearColumn" minWidth="0.0" prefWidth="100.0" text="Date" />
-                                            </columns>
-                                        </TableView>
-                                    </children>
                                 </GridPane>
                                 <JFXTextArea fx:id="synopsisText" editable="false" focusColor="darkorange" focusTraversable="false" layoutX="18.0" layoutY="213.0" mouseTransparent="true" prefHeight="323.0" prefWidth="211.0" />
                                 <JFXButton fx:id="changeBookButton" layoutX="72.0" layoutY="567.0" onAction="#handleChangeBook" prefHeight="40.0" prefWidth="100.0" ripplerFill="darkorange" text="Change" />
                                 <JFXButton fx:id="deleteBookButton" layoutX="72.0" layoutY="634.0" onAction="#handleDeleteBook" prefHeight="40.0" prefWidth="100.0" ripplerFill="darkorange" text="Delete" />
+                        <Pagination fx:id="paginationBooks" layoutX="247.0" prefHeight="720.0" prefWidth="1253.0" />
+                                  <TableView fx:id="bookOverviewTable" layoutX="253.0" layoutY="1.0" onMouseClicked="#handleBookSelected" prefHeight="638.0" prefWidth="1245.0">
+                                      <columns>
+                                          <TableColumn fx:id="bookNameColumn" prefWidth="300.0" styleClass="name-table" text="Book name" />
+                                          <TableColumn fx:id="genreColumn" minWidth="0.0" prefWidth="300.0" text="Genre" />
+                                          <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="250.0" text="Author" />
+                                          <TableColumn fx:id="publisherColumn" prefWidth="200.0" text="Publisher" />
+                                          <TableColumn fx:id="priceColumn" prefWidth="88.0" text="Price" />
+                                          <TableColumn fx:id="yearColumn" minWidth="0.0" prefWidth="100.0" text="Date" />
+                                      </columns>
+                                  </TableView>
                             </children></AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Add book">
+                <Tab id="addBookTab" onSelectionChanged="#hidePagination" text="Add book">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -75,15 +74,38 @@
                      </children></AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Orders">
+                <Tab id="ordersTab" onSelectionChanged="#hidePagination" text="Orders">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <AnchorPane prefHeight="720.0" prefWidth="1500.0">
+                           <children>
+                              <TableView layoutX="602.0" layoutY="-1.0" prefHeight="625.0" prefWidth="898.0">
+                                <columns>
+                                  <TableColumn prefWidth="255.0" text="Customer" />
+                                  <TableColumn prefWidth="140.0" text="Order id" />
+                                    <TableColumn minWidth="0.0" prefWidth="140.0" text="Price" />
+                                    <TableColumn prefWidth="170.0" text="Date" />
+                                    <TableColumn prefWidth="190.0" text="Status" />
+                                </columns>
+                              </TableView>
+                              <TableView layoutX="55.0" layoutY="101.0" prefHeight="572.0" prefWidth="485.0">
+                                <columns>
+                                  <TableColumn prefWidth="271.0" text="Book" />
+                                  <TableColumn prefWidth="111.0" text="Quantity" />
+                                    <TableColumn prefWidth="102.0" text="Price" />
+                                </columns>
+                              </TableView>
+                              <Label layoutX="244.0" layoutY="43.0" text="Order detail" />
+                              <Pagination layoutX="783.0" layoutY="624.0" prefHeight="84.0" prefWidth="537.0" />
+                           </children>
+                        </AnchorPane>
+                     </children></AnchorPane>
                     </content>
                 </Tab>
             </tabs></JFXTabPane>
         <HBox AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="1.0">
             <children>
-            <Pagination fx:id="paginationBooks" prefWidth="632.0" />
                 <JFXButton fx:id="exitButton" mnemonicParsing="false" onAction="#handleExit" prefHeight="77.0" prefWidth="88.0" text="Exit" />
             </children></HBox>
     </children>

@@ -74,6 +74,10 @@ public class UserMainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        fillTable();
+    }
+
+    public void fillTable(){
         booksFromMap = booksController.getBooks();
         ObservableList<Book> books = FXCollections.observableArrayList(booksFromMap.values());
 
@@ -93,6 +97,7 @@ public class UserMainController implements Initializable {
                 try {
                     authorId = authorBookController.getAuthors(param.getValue().getID());
                 } catch (SQLException e) {
+                    return new SimpleObjectProperty("-");
                 }
                 //all authors with their ids as keys
                 authorsFromMap = authorsController.getAuthors();
@@ -111,6 +116,7 @@ public class UserMainController implements Initializable {
                 try {
                     genreId = bookGenreController.getGenres(param.getValue().getID());
                 } catch (SQLException e) {
+                    return new SimpleObjectProperty("-");
                 }
                 //all genres with their ids as keys
                 genresFromMap = genresController.getGenres();
@@ -143,7 +149,6 @@ public class UserMainController implements Initializable {
             sortList.comparatorProperty().bind(bookOverviewTable.comparatorProperty());
             bookOverviewTable.setItems(sortList);
         });
-
     }
 
     public void handleExit(javafx.event.ActionEvent actionEvent) {

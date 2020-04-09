@@ -69,6 +69,10 @@
     -fx-font-weight: bold;
     -fx-alignment: CENTER_LEFT;
 }
+.table-view{
+    -fx-background-color: transparent;
+}
+
 
 /* vertical border*/
 /*.table-view .table-cell{*/
