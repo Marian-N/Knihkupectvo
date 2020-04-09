@@ -99,7 +99,7 @@ public class AdminMainController implements Initializable {
     private BookGenreController bookGenreController = BookGenreController.getInstance();
     private GenresController genresController = GenresController.getInstance();
 
-    ObservableMap<Integer, Book> booksFromMap = FXCollections.observableHashMap();
+    ObservableList<Book> books = FXCollections.observableArrayList();
     ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
     ObservableMap<Integer, Genre> genresFromMap = FXCollections.observableHashMap();
 
@@ -112,7 +112,7 @@ public class AdminMainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         createBooksTable();
-        findBook();
+        //findBook();
         paginationBooks.setPageCount(1000);
         //paginationBooks.setPageFactory(this::createBooksPage);
         paginationBooks.setPageFactory(new Callback<Integer, Node>() {
@@ -176,57 +176,38 @@ public class AdminMainController implements Initializable {
         //return books; //bookOverviewTable.setItems(books);
     }
 
-    private void findBook(){
-        //search
-        ObservableList<Book> books = FXCollections.observableArrayList(booksFromMap.values());
-        FilteredList<Book> filteredList = new FilteredList<>(books, e -> true);
-        searchBookText.setOnKeyReleased(e ->{
-            searchBookText.textProperty().addListener((v, oldValue, newValue) -> {
-                filteredList.setPredicate(book ->{
-                    if (newValue == null || newValue.isEmpty()){
-                        return true;
-                    }
-                    String lowerCaseFilter = newValue.toLowerCase();
-                    if (book.getTitle().toLowerCase().contains(newValue)){
-                        return true;
-                    }
-                    return false;
-                });
-            });
-            SortedList<Book> sortList = new SortedList<>(filteredList);
-            sortList.comparatorProperty().bind(bookOverviewTable.comparatorProperty());
-            bookOverviewTable.setItems(sortList);
-        });
-    }
+//    private void findBook(){
+//        //search
+//        ObservableList<Book> books = ;
+//        FilteredList<Book> filteredList = new FilteredList<>(books, e -> true);
+//        searchBookText.setOnKeyReleased(e ->{
+//            searchBookText.textProperty().addListener((v, oldValue, newValue) -> {
+//                filteredList.setPredicate(book ->{
+//                    if (newValue == null || newValue.isEmpty()){
+//                        return true;
+//                    }
+//                    String lowerCaseFilter = newValue.toLowerCase();
+//                    if (book.getTitle().toLowerCase().contains(newValue)){
+//                        return true;
+//                    }
+//                    return false;
+//                });
+//            });
+//            SortedList<Book> sortList = new SortedList<>(filteredList);
+//            sortList.comparatorProperty().bind(bookOverviewTable.comparatorProperty());
+//            bookOverviewTable.setItems(sortList);
+//        });
+//    }
 
     private Node createBooksPage(int pageNum){
         try {
-            booksFromMap = booksController.getBooks(pageNum, "id");
-            System.out.println(booksController.getBooks(2, "id").keySet());
-           // System.out.println(pageNum);
+            books = booksController.getBooks(pageNum, "id");
         } catch (SQLException e) {
-            booksFromMap = null;
+            books = null;
         } catch (ClassNotFoundException e) {
-            booksFromMap = null;
+            books = null;
         }
 
-        ObservableList<Book> books = FXCollections.observableArrayList(booksFromMap.values());
-
-
-        //ObservableList<Book> books = fillTable(paginationBooks.getCurrentPageIndex());
-
-//        int bookNum;
-//        try {
-//            bookNum = Database.getInstance().getRowsCount("books");
-//        } catch (SQLException e) {
-//            bookNum = 0;
-//        } catch (ClassNotFoundException e) {
-//            bookNum = 0;
-//        }
-//        System.out.println(paginationBooks.getCurrentPageIndex());
-//        int startNum = pageNum * bookNum/1000;
-//        int endNum = Math.min(startNum + bookNum/1000, bookNum);
-//        //System.out.println(books.get(1));
         bookOverviewTable.setItems(books);
         return bookOverviewTable;
     }
