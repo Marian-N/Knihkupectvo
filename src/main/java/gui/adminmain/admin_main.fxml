@@ -20,7 +20,7 @@
     <children>
         <JFXTabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <tabs>
-                <Tab id="booksTab" onSelectionChanged="#showPagination" text="Books">
+                <Tab id="booksTab" text="Books">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -52,7 +52,7 @@
                             </children></AnchorPane>
                     </content>
                 </Tab>
-                <Tab id="addBookTab" onSelectionChanged="#hidePagination" text="Add book">
+                <Tab id="addBookTab" text="Add book">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -74,30 +74,30 @@
                      </children></AnchorPane>
                     </content>
                 </Tab>
-                <Tab id="ordersTab" onSelectionChanged="#hidePagination" text="Orders">
+                <Tab id="ordersTab" text="Orders" onSelectionChanged="#loadOrders">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <AnchorPane prefHeight="720.0" prefWidth="1500.0">
                            <children>
-                              <TableView layoutX="602.0" layoutY="-1.0" prefHeight="625.0" prefWidth="898.0">
+                              <TableView fx:id="orderOverviewTable" layoutX="602.0" layoutY="-1.0" prefHeight="625.0" prefWidth="898.0">
                                 <columns>
-                                  <TableColumn prefWidth="255.0" text="Customer" />
-                                  <TableColumn prefWidth="140.0" text="Order id" />
-                                    <TableColumn minWidth="0.0" prefWidth="140.0" text="Price" />
-                                    <TableColumn prefWidth="170.0" text="Date" />
-                                    <TableColumn prefWidth="190.0" text="Status" />
+                                  <TableColumn fx:id="orderCustomerColumn" prefWidth="255.0" text="Customer" />
+                                  <TableColumn fx:id="orderIDColumn" prefWidth="140.0" text="Order id" />
+                                    <TableColumn fx:id="orderPriceColumn" minWidth="0.0" prefWidth="140.0" text="Price" />
+                                    <TableColumn fx:id="orderDateColumn" prefWidth="170.0" text="Date" />
+                                    <TableColumn fx:id="orderStatusColumn" prefWidth="190.0" text="Status" />
                                 </columns>
                               </TableView>
-                              <TableView layoutX="55.0" layoutY="101.0" prefHeight="572.0" prefWidth="485.0">
+                              <TableView fx:id="orderDetailTable" layoutX="55.0" layoutY="101.0" prefHeight="572.0" prefWidth="485.0">
                                 <columns>
-                                  <TableColumn prefWidth="271.0" text="Book" />
-                                  <TableColumn prefWidth="111.0" text="Quantity" />
-                                    <TableColumn prefWidth="102.0" text="Price" />
+                                  <TableColumn fx:id="orderDetailCBookColumn" prefWidth="271.0" text="Book" />
+                                  <TableColumn fx:id="orderDetailQuantityColumn" prefWidth="111.0" text="Quantity" />
+                                    <TableColumn fx:id="orderDetailPriceColumn" prefWidth="102.0" text="Price" />
                                 </columns>
                               </TableView>
                               <Label layoutX="244.0" layoutY="43.0" text="Order detail" />
-                              <Pagination layoutX="783.0" layoutY="624.0" prefHeight="84.0" prefWidth="537.0" />
+                              <Pagination fx:id="paginationOrders" layoutX="783.0" layoutY="624.0" prefHeight="84.0" prefWidth="537.0" />
                            </children>
                         </AnchorPane>
                      </children></AnchorPane>

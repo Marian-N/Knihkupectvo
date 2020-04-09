@@ -13,7 +13,7 @@
         <JFXTextField fx:id="nameLogin" focusColor="darkorange" layoutX="362.0" layoutY="214.0" prefHeight="36.0" prefWidth="177.0" promptText="Name" />
         <JFXPasswordField fx:id="passwordLogin" focusColor="darkorange" layoutX="362.0" layoutY="262.0" prefHeight="36.0" prefWidth="177.0" promptText="Password" />
         <JFXButton fx:id="loginButton" layoutX="389.0" layoutY="324.0" onAction="#handleLogin" prefHeight="36.0" prefWidth="123.0" ripplerFill="darkorange" text="Login" textFill="WHITE" />
-        <Label layoutX="281.0" layoutY="149.0" text="Welcome to test GUI. Please continue" />
+        <Label layoutX="380.0" layoutY="149.0" text="Book Store login" />
         <!--<ImageView fitHeight="36.0" fitWidth="45.0" layoutX="300.0" layoutY="214.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@Icons/user-48.png" />

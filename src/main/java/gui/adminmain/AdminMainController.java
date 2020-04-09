@@ -30,9 +30,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import model.Author;
-import model.Book;
-import model.Genre;
+import model.*;
 
 import java.awt.*;
 import java.io.IOException;
@@ -73,6 +71,26 @@ public class AdminMainController implements Initializable {
     private TableColumn<Book, Double> priceColumn;
     @FXML
     private TableColumn<Book, Date> yearColumn;
+    @FXML
+    private TableView<Order> OrderOverviewTable;
+    @FXML
+    private TableColumn<Order, Integer> orderIDColumn;
+    @FXML
+    private TableColumn<Order, String> orderCustomerColumn;
+    @FXML
+    private TableColumn<Order, Integer> orderPriceColumn;
+    @FXML
+    private TableColumn<Order, Date> orderDateColumn;
+    @FXML
+    private TableColumn<Order, String> orderStatusColumn;
+    @FXML
+    private TableView<Order> OrderDetailTable;
+    @FXML
+    private TableColumn<Order, String> orderDetailBookColumn;
+    @FXML
+    private TableColumn<Order, Integer> orderDetailQuantityColumn;
+    @FXML
+    private TableColumn<Order, Integer> orderDetailPriceColumn;
 
 
     private BooksController booksController = BooksController.getInstance();
@@ -85,22 +103,27 @@ public class AdminMainController implements Initializable {
     ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
     ObservableMap<Integer, Genre> genresFromMap = FXCollections.observableHashMap();
 
+
+
     public AdminMainController() throws SQLException, ClassNotFoundException {
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        fillTable();
+        createBooksTable();
         findBook();
         paginationBooks.setPageCount(1000);
-        paginationBooks.setPageFactory(this::createBooksPage);
+        //paginationBooks.setPageFactory(this::createBooksPage);
+        paginationBooks.setPageFactory(new Callback<Integer, Node>() {
+            @Override
+            public Node call(Integer pageIndex) {
+                 return createBooksPage(pageIndex);
+            }
+        });
     }
 
-    public ObservableList<Book> fillTable(){
-        booksFromMap = booksController.getBooks();
-        ObservableList<Book> books = FXCollections.observableArrayList(booksFromMap.values());
-
+    public void createBooksTable(){
         bookNameColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         publisherColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, String>, ObservableValue<String>>() {
             @Override
@@ -150,7 +173,7 @@ public class AdminMainController implements Initializable {
             }
         });
         //bookOverviewTable.setItems(books);
-        return books; //bookOverviewTable.setItems(books);
+        //return books; //bookOverviewTable.setItems(books);
     }
 
     private void findBook(){
@@ -177,21 +200,34 @@ public class AdminMainController implements Initializable {
     }
 
     private Node createBooksPage(int pageNum){
-        ObservableList<Book> books = fillTable();
-
-        int bookNum;
         try {
-            bookNum = Database.getInstance().getRowsCount("books");
+            booksFromMap = booksController.getBooks(pageNum, "id");
+            System.out.println(booksController.getBooks(2, "id").keySet());
+           // System.out.println(pageNum);
         } catch (SQLException e) {
-            bookNum = 0;
+            booksFromMap = null;
         } catch (ClassNotFoundException e) {
-            bookNum = 0;
+            booksFromMap = null;
         }
 
-        int startNum = pageNum * bookNum/1000;
-        int endNum = Math.min(startNum + bookNum/1000, bookNum);
-        //System.out.println(books.get(1));
-        bookOverviewTable.setItems(FXCollections.observableArrayList(books.subList(startNum, endNum)));
+        ObservableList<Book> books = FXCollections.observableArrayList(booksFromMap.values());
+
+
+        //ObservableList<Book> books = fillTable(paginationBooks.getCurrentPageIndex());
+
+//        int bookNum;
+//        try {
+//            bookNum = Database.getInstance().getRowsCount("books");
+//        } catch (SQLException e) {
+//            bookNum = 0;
+//        } catch (ClassNotFoundException e) {
+//            bookNum = 0;
+//        }
+//        System.out.println(paginationBooks.getCurrentPageIndex());
+//        int startNum = pageNum * bookNum/1000;
+//        int endNum = Math.min(startNum + bookNum/1000, bookNum);
+//        //System.out.println(books.get(1));
+        bookOverviewTable.setItems(books);
         return bookOverviewTable;
     }
 
@@ -217,15 +253,20 @@ public class AdminMainController implements Initializable {
 
     }
 
-    public void hidePagination(Event event) {
-        paginationBooks.setVisible(false);
+    public void loadOrders(Event event) {
+        createOrderTable();
     }
-    public void showPagination(Event event) {
 
-        if(paginationBooks != null){
-            paginationBooks.setVisible(true);
-        }
-
-
+    public void createOrderTable(){
+        orderIDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        orderPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        orderDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        orderStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+//        orderCustomerColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Order, String>, ObservableValue<String>>() {
+//            @Override
+//            public ObservableValue<String> call(TableColumn.CellDataFeatures<Order, String> param) {
+//                return new SimpleStringProperty(param.getValue().);
+//            }
+//        });
     }
 }

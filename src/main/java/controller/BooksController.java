@@ -44,7 +44,7 @@ public class BooksController {
         ObservableMap<Integer, Publisher> publishers = publishersController.getPublishers();
         while(resultSet.next()){
             int id = resultSet.getInt("id");
-            System.out.println(id);
+            //System.out.println(id);
             String title = resultSet.getString("title");
             double price = resultSet.getDouble("price");
             int stockQuantity = resultSet.getInt("stock_quantity");
