@@ -15,6 +15,8 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -43,6 +45,8 @@ public class UserMainController implements Initializable {
     private JFXTextArea synopsisText;
     @FXML
     private JFXTextField searchBookText;
+    @FXML
+    private Pagination paginationBooks;
     @FXML
     private TableView<Book> bookOverviewTable;
     @FXML
@@ -74,13 +78,19 @@ public class UserMainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        fillTable();
+        createBooksTable();
+        findBook();
+        paginationBooks.setPageCount(1000);
+        //paginationBooks.setPageFactory(this::createBooksPage);
+        paginationBooks.setPageFactory(new Callback<Integer, Node>() {
+            @Override
+            public Node call(Integer pageIndex) {
+                return createBooksPage(pageIndex);
+            }
+        });
     }
 
-    public void fillTable(){
-        booksFromMap = booksController.getBooks();
-        ObservableList<Book> books = FXCollections.observableArrayList(booksFromMap.values());
-
+    public void createBooksTable(){
         bookNameColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         publisherColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, String>, ObservableValue<String>>() {
             @Override
@@ -118,6 +128,7 @@ public class UserMainController implements Initializable {
                 } catch (SQLException e) {
                     return new SimpleObjectProperty("-");
                 }
+
                 //all genres with their ids as keys
                 genresFromMap = genresController.getGenres();
                 List<String> genreName = new ArrayList<>();
@@ -128,9 +139,13 @@ public class UserMainController implements Initializable {
                 return new SimpleObjectProperty(String.join(", ", genreName));
             }
         });
-        bookOverviewTable.setItems(books);
+        //bookOverviewTable.setItems(books);
+        //return books; //bookOverviewTable.setItems(books);
+    }
 
+    private void findBook(){
         //search
+        ObservableList<Book> books = FXCollections.observableArrayList(booksFromMap.values());
         FilteredList<Book> filteredList = new FilteredList<>(books, e -> true);
         searchBookText.setOnKeyReleased(e ->{
             searchBookText.textProperty().addListener((v, oldValue, newValue) -> {
@@ -149,6 +164,38 @@ public class UserMainController implements Initializable {
             sortList.comparatorProperty().bind(bookOverviewTable.comparatorProperty());
             bookOverviewTable.setItems(sortList);
         });
+    }
+
+    private Node createBooksPage(int pageNum){
+        try {
+            booksFromMap = booksController.getBooks(pageNum, "id");
+            System.out.println(booksController.getBooks(2, "id").keySet());
+            // System.out.println(pageNum);
+        } catch (SQLException e) {
+            booksFromMap = null;
+        } catch (ClassNotFoundException e) {
+            booksFromMap = null;
+        }
+
+        ObservableList<Book> books = FXCollections.observableArrayList(booksFromMap.values());
+
+
+        //ObservableList<Book> books = fillTable(paginationBooks.getCurrentPageIndex());
+
+//        int bookNum;
+//        try {
+//            bookNum = Database.getInstance().getRowsCount("books");
+//        } catch (SQLException e) {
+//            bookNum = 0;
+//        } catch (ClassNotFoundException e) {
+//            bookNum = 0;
+//        }
+//        System.out.println(paginationBooks.getCurrentPageIndex());
+//        int startNum = pageNum * bookNum/1000;
+//        int endNum = Math.min(startNum + bookNum/1000, bookNum);
+//        //System.out.println(books.get(1));
+        bookOverviewTable.setItems(books);
+        return bookOverviewTable;
     }
 
     public void handleExit(javafx.event.ActionEvent actionEvent) {
