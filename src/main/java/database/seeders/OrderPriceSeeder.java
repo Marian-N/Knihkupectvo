@@ -14,7 +14,7 @@ import java.util.List;
 public class OrderPriceSeeder {
     public static void run(Connection connection) throws SQLException, ClassNotFoundException {
         Database database = Database.getInstance();
-        ObservableMap<Integer, Book> books = BooksController.getInstance().getBooks();
+        ObservableMap<Integer, Book> books = BooksController.getInstance().getAllBooks();
         List<Integer> orders = database.getTableIDs("orders");
         double orderPrice = 0;
         for(int order : orders){
