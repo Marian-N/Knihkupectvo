@@ -2,6 +2,7 @@ package controller;
 
 import database.Database;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import model.Book;
 import model.Publisher;
@@ -20,6 +21,28 @@ public class BooksController {
         if(_instance == null)
             _instance = new BooksController();
         return _instance;
+    }
+
+    private ObservableList<Book> getList(ResultSet resultSet) throws SQLException, ClassNotFoundException {
+        ObservableList<Book> books = FXCollections.observableArrayList();
+
+        PublishersController publishersController = PublishersController.getInstance();
+        ObservableMap<Integer, Publisher> publishers = publishersController.getPublishers();
+        while(resultSet.next()){
+            int id = resultSet.getInt("id");
+            String title = resultSet.getString("title");
+            double price = resultSet.getDouble("price");
+            int stockQuantity = resultSet.getInt("stock_quantity");
+            Date publicationDate = resultSet.getDate("publication_date");
+            String description = resultSet.getString("description");
+            int publisherID = resultSet.getInt("publisher_id");
+            Publisher publisher = publishers.get(publisherID);
+            Book book = new Book(id, title, price, stockQuantity, publisher, publicationDate, description);
+            books.add(book);
+        }
+        resultSet.close();
+
+        return books;
     }
 
     /**
@@ -55,7 +78,7 @@ public class BooksController {
      * @param order the column name by which query should be ordered
      * @return observableMap with classes Book with their id as key
      */
-    public ObservableMap<Integer, Book> getBooks(int page, String order) throws SQLException, ClassNotFoundException {
+    public ObservableList<Book> getBooks(int page, String order) throws SQLException, ClassNotFoundException {
         if(page < 0) return null;
         int booksPerPage = 100;
         int offset = booksPerPage * page;
@@ -63,7 +86,7 @@ public class BooksController {
                 "OFFSET %s ROWS FETCH FIRST %s ROW ONLY;", order, offset, booksPerPage);
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
-        ObservableMap<Integer, Book> books = handleResultSet(resultSet);
+        ObservableList<Book> books = getList(resultSet);
         statement.close();
 
         return books;
