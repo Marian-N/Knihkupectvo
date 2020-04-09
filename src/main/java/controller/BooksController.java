@@ -11,7 +11,6 @@ import java.sql.*;
 public class BooksController {
     private static BooksController _instance = null;
     private Connection connection;
-    private ObservableMap<Integer, Book> books = FXCollections.observableHashMap();
 
     private BooksController() throws SQLException, ClassNotFoundException {
         connection = Database.getInstance().getConnection();
@@ -34,6 +33,7 @@ public class BooksController {
      */
     public ObservableMap<Integer, Book> getBooks(int page, String order) throws SQLException, ClassNotFoundException {
         if(page < 0) return null;
+        ObservableMap<Integer, Book> books = FXCollections.observableHashMap();
         int booksPerPage = 100;
         int offset = booksPerPage * page;
         String query = String.format("SELECT * FROM books ORDER BY %s " +
@@ -60,7 +60,6 @@ public class BooksController {
 
         return books;
     }
-    public ObservableMap<Integer, Book> getBooks() { return null;};
 }
 
 
