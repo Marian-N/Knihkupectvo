@@ -1,6 +1,7 @@
 package gui.usermain;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controller.*;
@@ -46,6 +47,8 @@ public class UserMainController implements Initializable {
     @FXML
     private JFXTextField searchBookText;
     @FXML
+    private JFXComboBox<String> orderByBooksComboBox;
+    @FXML
     private Pagination paginationBooks;
     @FXML
     private TableView<Book> bookOverviewTable;
@@ -79,15 +82,30 @@ public class UserMainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createBooksTable();
+        createOrderByBooksComboBox();
         //findBook();
         paginationBooks.setPageCount(1000);
-        paginationBooks.setPageFactory(this::createBooksPage);
         paginationBooks.setPageFactory(new Callback<Integer, Node>() {
             @Override
             public Node call(Integer pageIndex) {
                 return createBooksPage(pageIndex);
             }
         });
+    }
+
+    private void createOrderByBooksComboBox() {
+        orderByBooksComboBox.getItems().addAll(
+                "-----",
+                "Book name - asc",
+                "Book name - desc",
+                "Author - asc",
+                "Author - desc",
+                "Price - asc",
+                "Price - desc",
+                "Date - asc",
+                "Date - desc"
+        );
+        orderByBooksComboBox.setValue("-----");
     }
 
     public void createBooksTable(){
@@ -167,9 +185,38 @@ public class UserMainController implements Initializable {
 //    }
 
     private Node createBooksPage(int pageNum){
+        String orderBy = orderByBooksComboBox.getValue();
         try {
-            books = booksController.getBooks(pageNum, "id");
-
+            if(orderBy == null){
+                books = booksController.getBooks(pageNum, "id");
+            }
+            else if(orderBy.equals("Book name - asc")){
+                books = booksController.getBooks(pageNum, "title");
+            }
+            else if(orderBy.equals("Book name - desc")){
+                books = booksController.getBooks(pageNum, "title", true);
+            }
+            else if(orderBy.equals("Author - asc")){
+                books = booksController.getBooks(pageNum, "author");
+            }
+            else if(orderBy.equals("Author - desc")){
+                books = booksController.getBooks(pageNum, "author", true);
+            }
+            else if(orderBy.equals("Price - asc")){
+                books = booksController.getBooks(pageNum, "price");
+            }
+            else if(orderBy.equals("Price - desc")){
+                books = booksController.getBooks(pageNum, "price", true);
+            }
+            else if(orderBy.equals("Date - asc")){
+                books = booksController.getBooks(pageNum, "publication_date");
+            }
+            else if(orderBy.equals("Date - desc")){
+                books = booksController.getBooks(pageNum, "publication_date", true);
+            }
+            else{
+                books = booksController.getBooks(pageNum, "id");
+            }
         } catch (SQLException e) {
             books = null;
         } catch (ClassNotFoundException e) {
@@ -194,5 +241,9 @@ public class UserMainController implements Initializable {
     }
 
     public void handleOrderBook(ActionEvent actionEvent) {
+    }
+
+    public void handleBookOrderChange(ActionEvent actionEvent) {
+        createBooksPage(paginationBooks.getCurrentPageIndex());
     }
 }

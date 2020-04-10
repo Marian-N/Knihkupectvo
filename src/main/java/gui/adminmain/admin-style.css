@@ -153,4 +153,15 @@
     -fx-min-height: 30;*/
 }
 
-/*pages number*/
+.combo-box > .list-cell {
+    -fx-text-fill: #a4a4a4;
+    -fx-background-radius: 0;
+    -fx-font-size: 15;
+
+}
+.combo-box-popup .list-view .list-cell
+{
+    -fx-background-color: #383838;
+    -fx-text-fill: #a4a4a4;
+    -fx-border-width: 0 0 0 0;
+}
