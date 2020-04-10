@@ -71,25 +71,46 @@ public class BooksController {
         return books;
     }
 
-    /**
-     * Returns an ObservableMap which can be used in javaFX (eg. displaying books to table).
-     * If page with given number does not exist return null
-     * @param page the page for which the data should be returned
-     * @param order the column name by which query should be ordered
-     * @return observableMap with classes Book with their id as key
-     */
-    public ObservableList<Book> getBooks(int page, String order) throws SQLException, ClassNotFoundException {
+    private ObservableList<Book> executeQuery(int page, String order, Boolean desc) throws SQLException, ClassNotFoundException {
         if(page < 0) return null;
         int booksPerPage = 100;
         int offset = booksPerPage * page;
-        String query = String.format("SELECT * FROM books ORDER BY %s " +
-                "OFFSET %s ROWS FETCH FIRST %s ROW ONLY;", order, offset, booksPerPage);
+        String query;
+        if(desc)
+            query = String.format("SELECT * FROM books ORDER BY %s DESC " +
+                    "OFFSET %s ROWS FETCH FIRST %s ROW ONLY;", order, offset, booksPerPage);
+        else
+            query = String.format("SELECT * FROM books ORDER BY %s " +
+                    "OFFSET %s ROWS FETCH FIRST %s ROW ONLY;", order, offset, booksPerPage);
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         ObservableList<Book> books = getList(resultSet);
         statement.close();
 
         return books;
+    }
+
+    /**
+     * Returns an ObservableList which can be used in javaFX (eg. displaying books to table).
+     * If page with given number does not exist return null
+     * @param page the page for which the data should be returned
+     * @param order the column name by which query should be ordered
+     * @return observableList with classes Book ordered by parameter order
+     */
+    public ObservableList<Book> getBooks(int page, String order) throws SQLException, ClassNotFoundException {
+        return executeQuery(page, order, false);
+    }
+
+    /**
+     * Returns an ObservableList which can be used in javaFX (eg. displaying books to table).
+     * If page with given number does not exist return null
+     * @param page the page for which the data should be returned
+     * @param order the column name by which query should be ordered
+     * @param desc true for descending order, false for ascending
+     * @return observableList with classes Book ordered by parameter order
+     */
+    public ObservableList<Book> getBooks(int page, String order, Boolean desc) throws SQLException, ClassNotFoundException {
+        return executeQuery(page, order, desc);
     }
 
     /**
