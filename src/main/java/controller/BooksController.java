@@ -71,17 +71,25 @@ public class BooksController {
         return books;
     }
 
-    private ObservableList<Book> executeQuery(int page, String order, Boolean desc) throws SQLException, ClassNotFoundException {
+    private ObservableList<Book> executeQuery(int page, String orderBy, Boolean desc) throws SQLException, ClassNotFoundException {
         if(page < 0) return null;
         int booksPerPage = 100;
         int offset = booksPerPage * page;
         String query;
-        if(desc)
-            query = String.format("SELECT * FROM books ORDER BY %s DESC " +
-                    "OFFSET %s ROWS FETCH FIRST %s ROW ONLY;", order, offset, booksPerPage);
-        else
-            query = String.format("SELECT * FROM books ORDER BY %s " +
-                    "OFFSET %s ROWS FETCH FIRST %s ROW ONLY;", order, offset, booksPerPage);
+        String order = "ASC";
+        if(desc) order = "DESC";
+        if(orderBy.equals("author")){
+            query = String.format("SELECT b.* FROM books b " +
+                    "JOIN author_book ab ON b.id=ab.book_id " +
+                    "JOIN authors a ON a.id=ab.author_id " +
+                    "ORDER BY a.name %s " +
+                    "OFFSET %s ROWS " +
+                    "FETCH FIRST %s ROWS ONLY;", order, offset, booksPerPage);
+        }
+        else {
+            query = String.format("SELECT * FROM books ORDER BY %s %s " +
+                    "OFFSET %s ROWS FETCH FIRST %s ROW ONLY;", orderBy, order, offset, booksPerPage);
+        }
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         ObservableList<Book> books = getList(resultSet);
