@@ -1,20 +1,23 @@
 package model;
 
 import java.sql.Date;
+import java.util.List;
 
 public class Order {
     private int ID;
     private Date date;
-    private int customerID;
+    private Customer customer;
     private double price;
     private String status;
+    private List<OrderContent> orderContents;
 
-    public Order(int ID, Date date, int customerID, double price, String status) {
+    public Order(int ID, Date date, Customer customer, double price, String status, List<OrderContent> orderContents) {
         this.ID = ID;
         this.date = new Date(date.getTime());
-        this.customerID = customerID;
+        this.customer = customer;
         this.price = price;
         this.status = status;
+        this.orderContents = orderContents;
     }
 
     public int getID() {
@@ -33,12 +36,12 @@ public class Order {
         this.date = new Date(date.getTime());
     }
 
-    public int getCustomerID() {
-        return customerID;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public double getPrice() {
@@ -55,5 +58,13 @@ public class Order {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<OrderContent> getOrderContent() {
+        return orderContents;
+    }
+
+    public void setOrderContent(OrderContent orderContent) {
+        this.orderContents = orderContents;
     }
 }
