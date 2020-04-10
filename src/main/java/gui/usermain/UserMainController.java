@@ -49,6 +49,8 @@ public class UserMainController implements Initializable {
     @FXML
     private JFXComboBox<String> orderByBooksComboBox;
     @FXML
+    private JFXTextField setPageBooksTextField;
+    @FXML
     private Pagination paginationBooks;
     @FXML
     private TableView<Book> bookOverviewTable;
@@ -245,5 +247,34 @@ public class UserMainController implements Initializable {
 
     public void handleBookOrderChange(ActionEvent actionEvent) {
         createBooksPage(paginationBooks.getCurrentPageIndex());
+    }
+
+    public void handleGoToPage(ActionEvent actionEvent) {
+        int pageId = 0;
+        try{
+            pageId =Integer.parseInt(setPageBooksTextField.getText());
+        } catch (NumberFormatException e){
+            pageId = 0;
+        }
+
+        if(pageId > 0 && pageId <= 1000){
+            paginationBooks.setCurrentPageIndex(pageId - 1);
+        }
+        createBooksPage(paginationBooks.getCurrentPageIndex());
+    }
+
+    //Searching of book by title
+    public void handleSearchBook(ActionEvent actionEvent){
+        String bookToFind = searchBookText.getText();
+        if (bookToFind.equals("")){
+            createBooksPage(paginationBooks.getCurrentPageIndex());
+        }
+        else{
+            try {
+                bookOverviewTable.setItems(booksController.findBook(bookToFind));
+            } catch (SQLException e) {
+            } catch (ClassNotFoundException e) {
+            }
+        }
     }
 }

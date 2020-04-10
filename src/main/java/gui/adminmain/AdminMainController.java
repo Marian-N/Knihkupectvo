@@ -23,10 +23,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Pagination;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -60,6 +58,8 @@ public class AdminMainController implements Initializable {
     private JFXTextField searchBookText;
     @FXML
     private JFXComboBox<String> orderByBooksComboBox;
+    @FXML
+    private JFXTextField setPageBooksTextField;
     @FXML
     private TableView<Book> bookOverviewTable;
     @FXML
@@ -274,6 +274,40 @@ public class AdminMainController implements Initializable {
         }
     }
 
+    public void handleGoToPage(ActionEvent actionEvent) {
+        int pageId = 0;
+        try{
+            pageId =Integer.parseInt(setPageBooksTextField.getText());
+        } catch (NumberFormatException e){
+            pageId = 0;
+        }
+
+        if(pageId > 0 && pageId <= 1000){
+            paginationBooks.setCurrentPageIndex(pageId - 1);
+        }
+        createBooksPage(paginationBooks.getCurrentPageIndex());
+    }
+
+    public void handleBookOrderChange(ActionEvent actionEvent) {
+        createBooksPage(paginationBooks.getCurrentPageIndex());
+    }
+
+    //Searching of book by title
+    public void handleSearchBook(ActionEvent actionEvent){
+        String bookToFind = searchBookText.getText();
+        if (bookToFind.equals("")){
+            createBooksPage(paginationBooks.getCurrentPageIndex());
+        }
+        else{
+            try {
+                bookOverviewTable.setItems(booksController.findBook(bookToFind));
+            } catch (SQLException e) {
+            } catch (ClassNotFoundException e) {
+            }
+        }
+
+    }
+
     public void handleChangeBook(javafx.event.ActionEvent event) throws IOException {
 
     }
@@ -299,10 +333,6 @@ public class AdminMainController implements Initializable {
 //        });
     }
 
-    public void handleSearchBook(ActionEvent actionEvent) {
-    }
 
-    public void handleBookOrderChange(ActionEvent actionEvent) {
-        createBooksPage(paginationBooks.getCurrentPageIndex());
-    }
+
 }

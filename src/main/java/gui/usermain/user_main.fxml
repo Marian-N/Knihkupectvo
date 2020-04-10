@@ -22,8 +22,8 @@
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
                                 <JFXTextField fx:id="searchBookText" focusColor="darkorange" layoutX="12.0" layoutY="62.0" prefHeight="40.0" prefWidth="219.0" promptText="Search" />
-                                <!--<JFXButton fx:id="searchBookButton" onAction="#handleSearchBook" layoutX="75.0" layoutY="128.0" prefHeight="40.0" prefWidth="100.0" ripplerFill="darkorange" text="Search" />-->
-                                <Label fx:id="searchBookLabel" layoutX="80.0" layoutY="128.0" prefHeight="40.0" prefWidth="100.0" text="Search" />
+                                <JFXButton fx:id="searchBookButton" onAction="#handleSearchBook" layoutX="75.0" layoutY="128.0" prefHeight="40.0" prefWidth="100.0" ripplerFill="darkorange" text="Search" />
+                                <!--<Label fx:id="searchBookLabel" layoutX="80.0" layoutY="128.0" prefHeight="40.0" prefWidth="100.0" text="Search" />-->
                                 <JFXTextArea fx:id="synopsisText" editable="false" focusColor="darkorange" focusTraversable="false" layoutX="18.0" layoutY="213.0" mouseTransparent="true" prefHeight="323.0" prefWidth="211.0" />
                                 <JFXButton fx:id="orderBook" layoutX="72.0" layoutY="567.0" onAction="#handleOrderBook" prefHeight="40.0" prefWidth="100.0" ripplerFill="darkorange" text="Order" />
                         <Pagination fx:id="paginationBooks" layoutX="277.0" layoutY="1.0" prefHeight="717.0" prefWidth="1224.0" />
@@ -37,7 +37,7 @@
                                           <TableColumn fx:id="yearColumn" minWidth="0.0" prefWidth="100.0" text="Date" />
                                       </columns>
                                   </TableView>
-                        <JFXButton fx:id="setPageBooksButton" layoutX="444.0" layoutY="644.0" ripplerFill="darkorange" text="Go to page" />
+                        <JFXButton fx:id="setPageBooksButton" layoutX="444.0" layoutY="644.0" ripplerFill="darkorange" text="Go to page" onAction="#handleGoToPage" />
                         <JFXTextField fx:id="setPageBooksTextField" focusColor="darkorange" layoutX="374.0" layoutY="654.0" prefHeight="25.0" prefWidth="43.0" />
                         <JFXComboBox fx:id="orderByBooksComboBox" focusColor="darkorange" layoutX="30.0" layoutY="275.0" prefHeight="25.0" prefWidth="188.0" onAction="#handleBookOrderChange" />
                         <Label layoutX="80.0" layoutY="245.0" text="Order by:" />
