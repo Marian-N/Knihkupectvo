@@ -133,6 +133,14 @@ public class BooksController {
 
         return books;
     }
+
+    public ObservableList<Book> findBook(String title) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM books WHERE title LIKE '%c%s%c;", '%', title, '%');
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+        statement.close();
+        return getList(resultSet);
+    }
 }
 
 
