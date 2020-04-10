@@ -22,6 +22,11 @@ public class OrdersController {
         return instance;
     }
 
+    /**
+     * Returns list od OrderContent from order with id order_id, with books and quantity
+     * @param order_id is id of order
+     * @return List of order contents(model Book and quantity)
+     */
     private List<OrderContent> getOrderContents(int order_id) throws SQLException {
         List<OrderContent> orderContents = new ArrayList<>();
         String query = String.format("SELECT ob.book_id, ob.quantity, " +
@@ -53,6 +58,11 @@ public class OrdersController {
         return orderContents;
     }
 
+    /**
+     * Returns observable list with all orders of customer with id customer_id
+     * @param customer_id
+     * @return ObservableList of orders
+     */
     public ObservableList<Order> getOrders(int customer_id) throws SQLException, ClassNotFoundException {
         CustomerController cc = CustomerController.getInstance();
         ObservableList<Order> orders = FXCollections.observableArrayList();
