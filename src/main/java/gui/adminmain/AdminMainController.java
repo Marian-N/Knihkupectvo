@@ -379,7 +379,15 @@ public class AdminMainController implements Initializable {
 
     }
 
-    public void handleOrderStatusChange(ActionEvent actionEvent) {
+    public void handleOrderStatusChange(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
+        if (order != null && orderStatusChangeComboBox.getValue() != " "){
+            ordersController.changeStatus(order, orderStatusChangeComboBox.getValue());
+            int customerID = order.getCustomer().getID();
+            orders = ordersController.getOrders(customerID);
+            orderOverviewTable.setItems(orders);
+            orderDetailTable.getItems().clear();
+        }
     }
 
     public void handleOrdersSetup(Event event) {
