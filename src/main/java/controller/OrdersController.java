@@ -6,8 +6,6 @@ import javafx.collections.ObservableList;
 import model.*;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class OrdersController {
     private static OrdersController instance = null;
@@ -27,8 +25,8 @@ public class OrdersController {
      * @param order_id is id of order
      * @return List of order contents(model Book and quantity)
      */
-    private List<OrderContent> getOrderContents(int order_id) throws SQLException {
-        List<OrderContent> orderContents = new ArrayList<>();
+    private ObservableList<OrderContent> getOrderContents(int order_id) throws SQLException {
+        ObservableList<OrderContent> orderContents = FXCollections.observableArrayList();
         String query = String.format("SELECT ob.book_id, ob.quantity, " +
                 "b.title, b.price, b.stock_quantity, b.publication_date, b.description, " +
                 "p.id publisher_id, p.name publisher_name " +
@@ -79,7 +77,7 @@ public class OrdersController {
             double price = resultSet.getDouble("price");
             String status = resultSet.getString("status");
             Customer customer = cc.getCustomerFromRS(resultSet);
-            List<OrderContent> orderContents = getOrderContents(id);
+            ObservableList orderContents = getOrderContents(id);
             orders.add(new Order(id, date, customer, price, status, orderContents));
         }
         resultSet.close();

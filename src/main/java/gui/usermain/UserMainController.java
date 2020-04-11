@@ -163,28 +163,6 @@ public class UserMainController implements Initializable {
         //return books; //bookOverviewTable.setItems(books);
     }
 
-//    private void findBook(){
-//        //search
-//        ObservableList<Book> books = FXCollections.observableArrayList(booksFromMap.values());
-//        FilteredList<Book> filteredList = new FilteredList<>(books, e -> true);
-//        searchBookText.setOnKeyReleased(e ->{
-//            searchBookText.textProperty().addListener((v, oldValue, newValue) -> {
-//                filteredList.setPredicate(book ->{
-//                    if (newValue == null || newValue.isEmpty()){
-//                        return true;
-//                    }
-//                    String lowerCaseFilter = newValue.toLowerCase();
-//                    if (book.getTitle().toLowerCase().contains(newValue)){
-//                        return true;
-//                    }
-//                    return false;
-//                });
-//            });
-//            SortedList<Book> sortList = new SortedList<>(filteredList);
-//            sortList.comparatorProperty().bind(bookOverviewTable.comparatorProperty());
-//            bookOverviewTable.setItems(sortList);
-//        });
-//    }
 
     private Node createBooksPage(int pageNum){
         String orderBy = orderByBooksComboBox.getValue();

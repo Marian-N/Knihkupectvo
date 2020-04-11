@@ -75,7 +75,7 @@ public class AdminMainController implements Initializable {
     @FXML
     private TableColumn<Book, Date> yearColumn;
     @FXML
-    private TableView<Order> OrderOverviewTable;
+    private TableView<Order> orderOverviewTable;
     @FXML
     private TableColumn<Order, Integer> orderIDColumn;
     @FXML
@@ -87,13 +87,19 @@ public class AdminMainController implements Initializable {
     @FXML
     private TableColumn<Order, String> orderStatusColumn;
     @FXML
-    private TableView<Order> OrderDetailTable;
+    private TableColumn<Order, String> orderCustomerIDColumn;
     @FXML
-    private TableColumn<Order, String> orderDetailBookColumn;
+    private TableView<OrderContent> orderDetailTable;
     @FXML
-    private TableColumn<Order, Integer> orderDetailQuantityColumn;
+    private TableColumn<OrderContent, String> orderDetailBookColumn;
     @FXML
-    private TableColumn<Order, Integer> orderDetailPriceColumn;
+    private TableColumn<OrderContent, Integer> orderDetailQuantityColumn;
+    @FXML
+    private TableColumn<OrderContent, String> orderDetailPriceColumn;
+    @FXML
+    private JFXComboBox<String> orderStatusChangeComboBox;
+    @FXML
+    private JFXTextField searchCustomerTextField;
 
 
     private BooksController booksController = BooksController.getInstance();
@@ -101,10 +107,12 @@ public class AdminMainController implements Initializable {
     private AuthorsController authorsController = AuthorsController.getInstance();
     private BookGenreController bookGenreController = BookGenreController.getInstance();
     private GenresController genresController = GenresController.getInstance();
+    private OrdersController ordersController = OrdersController.getInstance();
 
     ObservableList<Book> books = FXCollections.observableArrayList();
     ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
     ObservableMap<Integer, Genre> genresFromMap = FXCollections.observableHashMap();
+    ObservableList<Order> orders = FXCollections.observableArrayList();
 
 
 
@@ -127,7 +135,7 @@ public class AdminMainController implements Initializable {
     }
 
     private void createOrderByBooksComboBox() {
-        orderByBooksComboBox.getItems().addAll(
+        orderByBooksComboBox.getItems().setAll(
                 "-----",
                 "Book name - asc",
                 "Book name - desc",
@@ -194,28 +202,6 @@ public class AdminMainController implements Initializable {
         //return books; //bookOverviewTable.setItems(books);
     }
 
-//    private void findBook(){
-//        //search
-//        ObservableList<Book> books = ;
-//        FilteredList<Book> filteredList = new FilteredList<>(books, e -> true);
-//        searchBookText.setOnKeyReleased(e ->{
-//            searchBookText.textProperty().addListener((v, oldValue, newValue) -> {
-//                filteredList.setPredicate(book ->{
-//                    if (newValue == null || newValue.isEmpty()){
-//                        return true;
-//                    }
-//                    String lowerCaseFilter = newValue.toLowerCase();
-//                    if (book.getTitle().toLowerCase().contains(newValue)){
-//                        return true;
-//                    }
-//                    return false;
-//                });
-//            });
-//            SortedList<Book> sortList = new SortedList<>(filteredList);
-//            sortList.comparatorProperty().bind(bookOverviewTable.comparatorProperty());
-//            bookOverviewTable.setItems(sortList);
-//        });
-//    }
 
     private Node createBooksPage(int pageNum){
         String orderBy = orderByBooksComboBox.getValue();
@@ -316,8 +302,19 @@ public class AdminMainController implements Initializable {
 
     }
 
-    public void loadOrders(Event event) {
-        createOrderTable();
+    //load orders after searching of customer id
+    public void handleLoadOrders(Event event) throws SQLException, ClassNotFoundException {
+
+        int customerID;
+        try{
+            customerID = Integer.parseInt(searchCustomerTextField.getText());
+        }catch(NumberFormatException e){
+            customerID = -1;
+        }
+
+        orders = ordersController.getOrders(customerID);
+        orderOverviewTable.setItems(orders);
+
     }
 
     public void createOrderTable(){
@@ -325,14 +322,69 @@ public class AdminMainController implements Initializable {
         orderPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         orderDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         orderStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-//        orderCustomerColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Order, String>, ObservableValue<String>>() {
-//            @Override
-//            public ObservableValue<String> call(TableColumn.CellDataFeatures<Order, String> param) {
-//                return new SimpleStringProperty(param.getValue().);
-//            }
-//        });
+        orderCustomerColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Order, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Order, String> param) {
+                return new SimpleStringProperty(param.getValue().getCustomer().getFirstName() + " " +
+                        param.getValue().getCustomer().getLastName());
+
+            }
+        });
+        orderCustomerIDColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Order, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Order, String> param) {
+                return new SimpleStringProperty(String.valueOf(param.getValue().getCustomer().getID()));
+
+            }
+        });
+
     }
 
+    public void createOrderDetailTable(){
+        orderDetailBookColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<OrderContent, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<OrderContent, String> param) {
+                return new SimpleStringProperty(param.getValue().getBook().getTitle());
+            }
+        });
+        orderDetailQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        orderDetailPriceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<OrderContent, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<OrderContent, String> param) {
+                return new SimpleStringProperty(String.valueOf(param.getValue().getBook().getPrice()));
+            }
+        });
+    }
 
+    public void handleOrderSelected(MouseEvent mouseEvent){
+        //fill detail table
+        Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
 
+        if(order != null){
+            ObservableList<OrderContent> orderContent =  order.getOrderContents();
+            orderDetailTable.setItems(orderContent);
+        }
+
+        //change status of order
+        orderStatusChangeComboBox.setValue(" ");
+    }
+
+    public void createOrderStatusComboBox(){
+
+        orderStatusChangeComboBox.getItems().setAll(
+                "vybavená",
+                "zamietnutá",
+                "nevybavená"
+        );
+
+    }
+
+    public void handleOrderStatusChange(ActionEvent actionEvent) {
+    }
+
+    public void handleOrdersSetup(Event event) {
+        createOrderTable();
+        createOrderDetailTable();
+        createOrderStatusComboBox();
+    }
 }

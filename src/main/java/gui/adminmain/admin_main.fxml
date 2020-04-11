@@ -41,17 +41,17 @@
                         <Pagination fx:id="paginationBooks" layoutX="247.0" prefHeight="720.0" prefWidth="1253.0" />
                                   <TableView fx:id="bookOverviewTable" layoutX="253.0" layoutY="1.0" onMouseClicked="#handleBookSelected" prefHeight="638.0" prefWidth="1245.0">
                                       <columns>
-                                          <TableColumn fx:id="bookNameColumn" prefWidth="300.0" styleClass="name-table" text="Book name" sortable="false" />
-                                          <TableColumn fx:id="genreColumn" minWidth="0.0" prefWidth="300.0" text="Genre" sortable="false" />
-                                          <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="250.0" text="Author" sortable="false" />
-                                          <TableColumn fx:id="publisherColumn" prefWidth="200.0" text="Publisher" sortable="false" />
-                                          <TableColumn fx:id="priceColumn" prefWidth="88.0" text="Price" sortable="false" />
-                                          <TableColumn fx:id="yearColumn" minWidth="0.0" prefWidth="100.0" text="Date" sortable="false" />
+                                          <TableColumn fx:id="bookNameColumn" prefWidth="300.0" sortable="false" styleClass="name-table" text="Book name" />
+                                          <TableColumn fx:id="genreColumn" minWidth="0.0" prefWidth="300.0" sortable="false" text="Genre" />
+                                          <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="250.0" sortable="false" text="Author" />
+                                          <TableColumn fx:id="publisherColumn" prefWidth="200.0" sortable="false" text="Publisher" />
+                                          <TableColumn fx:id="priceColumn" prefWidth="88.0" sortable="false" text="Price" />
+                                          <TableColumn fx:id="yearColumn" minWidth="0.0" prefWidth="100.0" sortable="false" text="Date" />
                                       </columns>
                                   </TableView>
-                        <JFXButton fx:id="setPageBooksButton" layoutX="444.0" layoutY="644.0" ripplerFill="darkorange" text="Go to page" onAction="#handleGoToPage" />
+                        <JFXButton fx:id="setPageBooksButton" layoutX="444.0" layoutY="644.0" onAction="#handleGoToPage" ripplerFill="darkorange" text="Go to page" />
                         <JFXTextField fx:id="setPageBooksTextField" focusColor="darkorange" layoutX="374.0" layoutY="654.0" prefHeight="25.0" prefWidth="43.0" />
-                        <JFXComboBox fx:id="orderByBooksComboBox" focusColor="darkorange" layoutX="30.0" layoutY="275.0" prefHeight="25.0" prefWidth="188.0" onAction="#handleBookOrderChange" />
+                        <JFXComboBox fx:id="orderByBooksComboBox" focusColor="darkorange" layoutX="30.0" layoutY="275.0" onAction="#handleBookOrderChange" prefHeight="25.0" prefWidth="188.0" />
                         <Label layoutX="80.0" layoutY="245.0" text="Order by:" />
                             </children></AnchorPane>
                     </content>
@@ -78,30 +78,35 @@
                      </children></AnchorPane>
                     </content>
                 </Tab>
-                <Tab id="ordersTab" onSelectionChanged="#loadOrders" text="Orders">
+                <Tab id="ordersTab" text="Orders" onSelectionChanged="#handleOrdersSetup">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <AnchorPane prefHeight="720.0" prefWidth="1500.0">
                            <children>
-                              <TableView fx:id="orderOverviewTable" layoutX="602.0" layoutY="-1.0" prefHeight="625.0" prefWidth="898.0">
+                              <TableView fx:id="orderOverviewTable" layoutX="602.0" layoutY="-1.0" onMouseClicked="#handleOrderSelected" prefHeight="722.0" prefWidth="898.0">
                                 <columns>
-                                  <TableColumn fx:id="orderCustomerColumn" prefWidth="255.0" text="Customer" />
-                                  <TableColumn fx:id="orderIDColumn" prefWidth="140.0" text="Order id" />
-                                    <TableColumn fx:id="orderPriceColumn" minWidth="0.0" prefWidth="140.0" text="Price" />
-                                    <TableColumn fx:id="orderDateColumn" prefWidth="170.0" text="Date" />
-                                    <TableColumn fx:id="orderStatusColumn" prefWidth="190.0" text="Status" />
+                                    <TableColumn fx:id="orderCustomerIDColumn" prefWidth="102.0" text="Customer ID" />
+                                  <TableColumn fx:id="orderCustomerColumn" prefWidth="223.0" text="Customer Name" />
+                                  <TableColumn fx:id="orderIDColumn" prefWidth="110.0" text="Order ID" />
+                                    <TableColumn fx:id="orderPriceColumn" minWidth="0.0" prefWidth="134.0" text="Price" />
+                                    <TableColumn fx:id="orderDateColumn" prefWidth="129.0" text="Date" />
+                                    <TableColumn fx:id="orderStatusColumn" prefWidth="193.0" text="Status" />
                                 </columns>
                               </TableView>
-                              <TableView fx:id="orderDetailTable" layoutX="55.0" layoutY="101.0" prefHeight="572.0" prefWidth="485.0">
+                              <TableView fx:id="orderDetailTable" layoutX="55.0" layoutY="218.0" prefHeight="345.0" prefWidth="485.0">
                                 <columns>
-                                  <TableColumn fx:id="orderDetailCBookColumn" prefWidth="271.0" text="Book" />
+                                  <TableColumn fx:id="orderDetailBookColumn" prefWidth="271.0" text="Book" />
                                   <TableColumn fx:id="orderDetailQuantityColumn" prefWidth="111.0" text="Quantity" />
-                                    <TableColumn fx:id="orderDetailPriceColumn" prefWidth="102.0" text="Price" />
+                                    <TableColumn fx:id="orderDetailPriceColumn" prefWidth="99.0" text="Price" />
                                 </columns>
                               </TableView>
-                              <Label layoutX="244.0" layoutY="43.0" text="Order detail" />
-                              <Pagination fx:id="paginationOrders" layoutX="783.0" layoutY="624.0" prefHeight="84.0" prefWidth="537.0" />
+                              <Label layoutX="245.0" layoutY="174.0" text="Order detail" />
+                              <Label layoutX="55.0" layoutY="83.0" text="Customer ID:" />
+                              <JFXTextField fx:id="searchCustomerTextField" layoutX="210.0" layoutY="86.0" prefHeight="25.0" prefWidth="71.0" focusColor="darkorange" />
+                              <JFXButton fx:id="searchCustomerButton" layoutX="330.0" layoutY="77.0" onAction="#handleLoadOrders" text="Search" ripplerFill="darkorange" />
+                              <JFXComboBox fx:id="orderStatusChangeComboBox" layoutX="269.0" layoutY="578.0" onAction="#handleOrderStatusChange" prefHeight="31.0" prefWidth="165.0" focusColor="darkorange" />
+                              <Label layoutX="66.0" layoutY="578.0" text="Change order status" />
                            </children>
                         </AnchorPane>
                      </children></AnchorPane>

@@ -1,5 +1,7 @@
 package model;
 
+import javafx.collections.ObservableList;
+
 import java.sql.Date;
 import java.util.List;
 
@@ -9,9 +11,9 @@ public class Order {
     private Customer customer;
     private double price;
     private String status;
-    private List<OrderContent> orderContents;
+    private ObservableList<OrderContent> orderContents;
 
-    public Order(int ID, Date date, Customer customer, double price, String status, List<OrderContent> orderContents) {
+    public Order(int ID, Date date, Customer customer, double price, String status, ObservableList orderContents) {
         this.ID = ID;
         this.date = new Date(date.getTime());
         this.customer = customer;
@@ -60,11 +62,11 @@ public class Order {
         this.status = status;
     }
 
-    public List<OrderContent> getOrderContent() {
+    public ObservableList<OrderContent> getOrderContents() {
         return orderContents;
     }
 
-    public void setOrderContent(OrderContent orderContent) {
+    public void setOrderContents(ObservableList<OrderContent> orderContent) {
         this.orderContents = orderContents;
     }
 }
