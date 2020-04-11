@@ -165,3 +165,9 @@
     -fx-text-fill: #a4a4a4;
     -fx-border-width: 0 0 0 0;
 }
+
+.text-field-book-change{
+    -fx-font-size: 20;
+    -fx-text-alignment: bottom;
+
+}

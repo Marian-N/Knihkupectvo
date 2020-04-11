@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controller.*;
 import database.Database;
+import gui.ScreenConfiguration;
 import gui.adminchangebook.ChangeBookController;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,9 +28,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.*;
+
+import gui.adminchangebook.ChangeBookController;
 
 import java.awt.*;
 import java.io.IOException;
@@ -114,6 +118,7 @@ public class AdminMainController implements Initializable {
     ObservableMap<Integer, Genre> genresFromMap = FXCollections.observableHashMap();
     ObservableList<Order> orders = FXCollections.observableArrayList();
 
+    ScreenConfiguration screenConfiguration = new ScreenConfiguration();
 
 
     public AdminMainController() throws SQLException, ClassNotFoundException {
@@ -295,7 +300,11 @@ public class AdminMainController implements Initializable {
     }
 
     public void handleChangeBook(javafx.event.ActionEvent event) throws IOException {
-
+        //ChangeBookController changeBookController = new ChangeBookController();
+        Book book = bookOverviewTable.getSelectionModel().getSelectedItem();
+        if(book != null){
+            screenConfiguration.setChangeBookScene(book);
+        }
     }
 
     public void handleDeleteBook(ActionEvent actionEvent) {
@@ -383,10 +392,7 @@ public class AdminMainController implements Initializable {
         Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
         if (order != null && orderStatusChangeComboBox.getValue() != " "){
             ordersController.changeStatus(order, orderStatusChangeComboBox.getValue());
-            int customerID = order.getCustomer().getID();
-            orders = ordersController.getOrders(customerID);
-            orderOverviewTable.setItems(orders);
-            orderDetailTable.getItems().clear();
+            orderOverviewTable.refresh();
         }
     }
 
