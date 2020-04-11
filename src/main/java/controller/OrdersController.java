@@ -20,10 +20,14 @@ public class OrdersController {
         return instance;
     }
 
+    public void changeStatus(Order order, String status) throws SQLException, ClassNotFoundException {
+        order.setStatus(status);
+    }
+
     /**
-     * Returns list od OrderContent from order with id order_id, with books and quantity
+     * Returns ObservableList od OrderContent from order with id order_id, with books and quantity
      * @param order_id is id of order
-     * @return List of order contents(model Book and quantity)
+     * @return ObservableList of order contents(model Book and quantity)
      */
     private ObservableList<OrderContent> getOrderContents(int order_id) throws SQLException {
         ObservableList<OrderContent> orderContents = FXCollections.observableArrayList();

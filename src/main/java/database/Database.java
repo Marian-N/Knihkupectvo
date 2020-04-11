@@ -28,6 +28,12 @@ public class Database {
         return _instance;
     }
 
+    public static void executeQuery(String query) throws SQLException {
+        Statement statement = connection.createStatement();
+        statement.execute(query);
+        statement.close();
+    }
+
     public static int getRowsCount(String tableName) throws SQLException {
         String query = String.format("SELECT count(*) FROM %s", tableName);
         Statement statement = connection.createStatement();

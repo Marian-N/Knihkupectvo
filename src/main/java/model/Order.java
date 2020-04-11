@@ -1,8 +1,10 @@
 package model;
 
+import database.Database;
 import javafx.collections.ObservableList;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Order {
@@ -58,7 +60,11 @@ public class Order {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(String status) throws SQLException, ClassNotFoundException {
+        String query = String.format("UPDATE orders " +
+                "SET status = \'%s\' " +
+                "WHERE id = %s;", status, this.ID);
+        Database.getInstance().executeQuery(query);
         this.status = status;
     }
 
