@@ -71,4 +71,12 @@ public class ScreenConfiguration {
         return;
     }
 
+    public void setLoginScene(javafx.event.ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/login/login.fxml"));
+        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene((Pane) loader.load(), 900, 500));
+        stage.setResizable(false);
+        stage.show();
+    }
+
 }

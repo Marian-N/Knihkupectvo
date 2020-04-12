@@ -78,7 +78,7 @@
                      </children></AnchorPane>
                     </content>
                 </Tab>
-                <Tab id="ordersTab" text="Orders" onSelectionChanged="#handleOrdersSetup">
+                <Tab id="ordersTab" onSelectionChanged="#handleOrdersSetup" text="Orders">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -103,9 +103,9 @@
                               </TableView>
                               <Label layoutX="245.0" layoutY="174.0" text="Order detail" />
                               <Label layoutX="55.0" layoutY="83.0" text="Customer ID:" />
-                              <JFXTextField fx:id="searchCustomerTextField" layoutX="210.0" layoutY="86.0" prefHeight="25.0" prefWidth="71.0" focusColor="darkorange" />
-                              <JFXButton fx:id="searchCustomerButton" layoutX="330.0" layoutY="77.0" onAction="#handleLoadOrders" text="Search" ripplerFill="darkorange" />
-                              <JFXComboBox fx:id="orderStatusChangeComboBox" layoutX="269.0" layoutY="578.0" onAction="#handleOrderStatusChange" prefHeight="31.0" prefWidth="165.0" focusColor="darkorange" />
+                              <JFXTextField fx:id="searchCustomerTextField" focusColor="darkorange" layoutX="210.0" layoutY="86.0" prefHeight="25.0" prefWidth="71.0" />
+                              <JFXButton fx:id="searchCustomerButton" layoutX="330.0" layoutY="77.0" onAction="#handleLoadOrders" ripplerFill="darkorange" text="Search" />
+                              <JFXComboBox fx:id="orderStatusChangeComboBox" focusColor="darkorange" layoutX="269.0" layoutY="578.0" onAction="#handleOrderStatusChange" prefHeight="31.0" prefWidth="165.0" />
                               <Label layoutX="66.0" layoutY="578.0" text="Change order status" />
                            </children>
                         </AnchorPane>
@@ -115,6 +115,11 @@
             </tabs></JFXTabPane>
         <HBox AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="1.0">
             <children>
+            <AnchorPane prefHeight="0.0" prefWidth="200.0">
+               <children>
+                  <JFXButton fx:id="logoutButton" onAction="#handleLogout" layoutX="87.0" prefHeight="77.0" prefWidth="99.0" text="Logout" />
+               </children>
+            </AnchorPane>
                 <JFXButton fx:id="exitButton" mnemonicParsing="false" onAction="#handleExit" prefHeight="77.0" prefWidth="88.0" text="Exit" />
             </children></HBox>
     </children>

@@ -336,11 +336,16 @@ public class UserMainController implements Initializable {
 
     public void handleOrderCancel(ActionEvent event) throws SQLException, ClassNotFoundException, IOException {
         Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
-        if (order != null){
+        if (order != null && !order.getStatus().equals("vybavená")){
             CancelConfirmation cancelConfirmation = new CancelConfirmation();
             ScreenConfiguration screenConfiguration = new ScreenConfiguration();
             screenConfiguration.setCancelConfirmationScene(order);
             orderOverviewTable.refresh();
         }
+    }
+
+    public void handleLogout(javafx.event.ActionEvent event) throws IOException {
+        ScreenConfiguration screenConfiguration = new ScreenConfiguration();
+        screenConfiguration.setLoginScene(event);
     }
 }

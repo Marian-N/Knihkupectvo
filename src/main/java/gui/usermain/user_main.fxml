@@ -65,7 +65,7 @@
                                     </columns>
                                 </TableView>
                                 <Label layoutX="343.0" layoutY="153.0" text="Order detail" />
-                        <JFXButton fx:id="cancelOrderButton" onAction="#handleOrderCancel" ripplerFill="darkorange" layoutX="326.0" layoutY="573.0" text="Cancel order" />
+                        <JFXButton fx:id="cancelOrderButton" layoutX="326.0" layoutY="573.0" onAction="#handleOrderCancel" ripplerFill="darkorange" text="Cancel order" />
                         <Label layoutX="1006.0" layoutY="72.0" text="Orders" />
                             </children></AnchorPane>
                     </content>
@@ -73,10 +73,11 @@
             </tabs></JFXTabPane>
         <HBox AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="1.0">
             <children>
-            <AnchorPane prefHeight="77.0" prefWidth="357.0">
+            <AnchorPane prefHeight="77.0" prefWidth="572.0">
                <children>
                   <JFXTextField fx:id="userIdTextField" editable="false" layoutX="53.0" layoutY="16.0" mouseTransparent="true" prefHeight="9.0" prefWidth="68.0" styleClass="user-id-text-field" />
                   <Label layoutX="14.0" layoutY="23.0" text="ID:" />
+                  <JFXButton fx:id="logoutButton" onAction="#handleLogout" layoutX="454.0" layoutY="-1.0" prefHeight="77.0" prefWidth="99.0" text="Logout" />
                </children>
             </AnchorPane>
             <Region HBox.hgrow="ALWAYS" />

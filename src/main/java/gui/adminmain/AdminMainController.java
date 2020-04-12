@@ -401,4 +401,9 @@ public class AdminMainController implements Initializable {
         createOrderDetailTable();
         createOrderStatusComboBox();
     }
+
+    public void handleLogout(javafx.event.ActionEvent event) throws IOException {
+        ScreenConfiguration screenConfiguration = new ScreenConfiguration();
+        screenConfiguration.setLoginScene(event);
+    }
 }
