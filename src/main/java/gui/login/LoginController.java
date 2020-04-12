@@ -3,6 +3,7 @@ package gui.login;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import gui.ScreenConfiguration;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -30,16 +31,26 @@ public class LoginController implements Initializable {
     @FXML
     private Label wrongInfo;
 
+    ScreenConfiguration screenConfiguration = new ScreenConfiguration();
 
     @FXML
     private void handleLogin(javafx.event.ActionEvent event) throws Exception {
 
-        if(nameLogin.getText().contentEquals("user")){
-            loadMainUserScene(event);
-        }
-        else if(nameLogin.getText().contentEquals("admin")){
+        if(nameLogin.getText().contentEquals("admin")){
             loadMainAdminScene(event);
         }
+        else {//if(nameLogin.getText().contentEquals("user")){
+            int userId;
+            try{
+                userId = Integer.parseInt(nameLogin.getText());
+            } catch (NumberFormatException e){
+                userId = -1;
+            }
+            if(userId > 0 && userId <= 200){
+                loadMainUserScene(event, userId);
+            }
+        }
+
 
 //        else{
 //            nameLogin.clear();
@@ -62,14 +73,8 @@ public class LoginController implements Initializable {
         window.show();
     }
 
-    // cgange scene to user
-    private void loadMainUserScene(javafx.event.ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/gui/usermain/user_main.fxml"));
-        Scene mainScene = new Scene(root);
-
-        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        window.setScene(mainScene);
-        window.setResizable(false);
-        window.show();
+    // change scene to user
+    private void loadMainUserScene(javafx.event.ActionEvent event, int userId) throws Exception {
+        screenConfiguration.setMainUserScene(event, userId);
     }
 }

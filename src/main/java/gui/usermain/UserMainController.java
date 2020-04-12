@@ -5,6 +5,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controller.*;
+import gui.ScreenConfiguration;
+import gui.usermain.confirmation.CancelConfirmation;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -14,6 +16,7 @@ import javafx.collections.ObservableMap;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -24,10 +27,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import model.Author;
-import model.Book;
-import model.Genre;
+import model.*;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -66,16 +68,43 @@ public class UserMainController implements Initializable {
     private TableColumn<Book, Double> priceColumn;
     @FXML
     private TableColumn<Book, Date> yearColumn;
+    @FXML
+    private JFXTextField userIdTextField;
+    @FXML
+    private TableView<Order> orderOverviewTable;
+    @FXML
+    private TableColumn<Order, Integer> orderIDColumn;
+    @FXML
+    private TableColumn<Order, String> orderCustomerColumn;
+    @FXML
+    private TableColumn<Order, Integer> orderPriceColumn;
+    @FXML
+    private TableColumn<Order, Date> orderDateColumn;
+    @FXML
+    private TableColumn<Order, String> orderStatusColumn;
+    @FXML
+    private TableColumn<Order, String> orderCustomerIDColumn;
+    @FXML
+    private TableView<OrderContent> orderDetailTable;
+    @FXML
+    private TableColumn<OrderContent, String> orderDetailBookColumn;
+    @FXML
+    private TableColumn<OrderContent, Integer> orderDetailQuantityColumn;
+    @FXML
+    private TableColumn<OrderContent, String> orderDetailPriceColumn;
+
 
     private BooksController booksController = BooksController.getInstance();
     private AuthorBookController authorBookController = AuthorBookController.getInstance();
     private AuthorsController authorsController = AuthorsController.getInstance();
     private BookGenreController bookGenreController = BookGenreController.getInstance();
     private GenresController genresController = GenresController.getInstance();
+    private OrdersController ordersController = OrdersController.getInstance();
 
     ObservableList<Book> books = FXCollections.observableArrayList();
     ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
     ObservableMap<Integer, Genre> genresFromMap = FXCollections.observableHashMap();
+    ObservableList<Order> orders = FXCollections.observableArrayList();
 
 
     public UserMainController() throws SQLException, ClassNotFoundException {
@@ -93,6 +122,10 @@ public class UserMainController implements Initializable {
                 return createBooksPage(pageIndex);
             }
         });
+    }
+
+    public void initData(int userId){
+        userIdTextField.setText(String.valueOf(userId));
     }
 
     private void createOrderByBooksComboBox() {
@@ -253,6 +286,61 @@ public class UserMainController implements Initializable {
             } catch (SQLException e) {
             } catch (ClassNotFoundException e) {
             }
+        }
+    }
+
+    //Orders history controllers
+    public void handleOrdersHistorySelected(Event event) throws SQLException, ClassNotFoundException {
+        createOrderTable();
+        createOrderDetailTable();
+        int customerID= Integer.parseInt(userIdTextField.getText());
+        orders = ordersController.getOrders(customerID);
+        orderOverviewTable.setItems(orders);
+    }
+
+
+    public void createOrderTable(){
+        orderIDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        orderPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        orderDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        orderStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+    }
+
+    public void createOrderDetailTable(){
+        orderDetailBookColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<OrderContent, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<OrderContent, String> param) {
+                return new SimpleStringProperty(param.getValue().getBook().getTitle());
+            }
+        });
+        orderDetailQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        orderDetailPriceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<OrderContent, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<OrderContent, String> param) {
+                return new SimpleStringProperty(String.valueOf(param.getValue().getBook().getPrice()));
+            }
+        });
+    }
+
+
+    public void handleOrderSelected(MouseEvent mouseEvent) {
+        //fill detail table
+        Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
+
+        if(order != null){
+            ObservableList<OrderContent> orderContent =  order.getOrderContents();
+            orderDetailTable.setItems(orderContent);
+        }
+    }
+
+
+    public void handleOrderCancel(ActionEvent event) throws SQLException, ClassNotFoundException, IOException {
+        Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
+        if (order != null){
+            CancelConfirmation cancelConfirmation = new CancelConfirmation();
+            ScreenConfiguration screenConfiguration = new ScreenConfiguration();
+            screenConfiguration.setCancelConfirmationScene(order);
+            orderOverviewTable.refresh();
         }
     }
 }

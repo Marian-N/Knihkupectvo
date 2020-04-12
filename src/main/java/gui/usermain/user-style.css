@@ -90,6 +90,9 @@
 .table-view .column-header, .table-view .column-header .filler, .table-view .column-header-background .filler {
     -fx-background-color: #383838;
 }
+.table-view{
+    -fx-background-color: transparent;
+}
 
 /*pagination button on hover colour*/
 .pagination > .pagination-control > .control-box > .number-button:hover,
@@ -135,4 +138,10 @@
     -fx-background-color: #383838;
     -fx-text-fill: #a4a4a4;
     -fx-border-width: 0 0 0 0;
+}
+
+.user-id-text-field{
+    -fx-text-fill: #a4a4a4;
+    -fx-font-size: 20;
+    -fx-alignment: center ;
 }

@@ -1,13 +1,18 @@
 package gui;
 
 import gui.adminchangebook.ChangeBookController;
+import gui.adminmain.AdminMainController;
+import gui.usermain.UserMainController;
+import gui.usermain.confirmation.CancelConfirmation;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Book;
+import model.Order;
 
 import java.io.IOException;
 
@@ -24,7 +29,21 @@ public class ScreenConfiguration {
         primaryStage.show();
     }
 
-    public Stage setChangeBookScene(Book book) throws IOException {
+    // change scene to user
+    public void setMainUserScene(javafx.event.ActionEvent event, int userId) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/usermain/user_main.fxml"));
+        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene((Pane) loader.load()));
+
+        UserMainController userMainController = loader.<UserMainController>getController();
+        userMainController.initData(userId);
+
+        stage.setResizable(false);
+        stage.show();
+    }
+
+
+    public void setChangeBookScene(Book book) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/adminchangebook/change_book.fxml"));
         Stage stage = new Stage();
         stage.setScene(new Scene((Pane) loader.load()));
@@ -34,6 +53,22 @@ public class ScreenConfiguration {
         stage.setTitle("Change book");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
-        return stage;
+        return ;
     }
+
+    public void setCancelConfirmationScene(Order order) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/usermain/confirmation/cancel_confirmation.fxml"));
+        Stage stage = new Stage();
+        stage.setScene(new Scene((Pane) loader.load()));
+        CancelConfirmation cancelConfirmation = loader.<CancelConfirmation>getController();
+        cancelConfirmation.cancelConfirm(order, stage);
+        //cancelConfirmation.initData(book);
+
+        stage.setResizable(false);
+        stage.setTitle("Cancel order");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+        return;
+    }
+
 }
