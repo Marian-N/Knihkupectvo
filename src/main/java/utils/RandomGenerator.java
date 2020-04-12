@@ -8,7 +8,7 @@ public class RandomGenerator {
     static private Random random = new Random();
 
     public static String getRandomStatus(){
-        String[] statuses = {"nevybavená", "vybavená", "zamietnutá"};
+        String[] statuses = {"nevybavená", "vybavená", "zamietnutá", "zrušená"};
         int randomIndex = random.nextInt(statuses.length);
         return statuses[randomIndex];
     }
@@ -26,6 +26,8 @@ public class RandomGenerator {
 
     public static Double getRandomPrice(){
         int number = random.nextInt(6666); //Generates random number
-        return number / 100.0;
+        double price = (double) number / 100;
+        if(price < 2) price += 3.0;
+        return price;
     }
 }

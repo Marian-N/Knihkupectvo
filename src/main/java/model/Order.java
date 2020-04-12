@@ -29,7 +29,7 @@ public class Order {
         this.price = getTotalPrice();
         this.status = "nevybavená";
         String query = "INSERT INTO orders " +
-                "(date, customer_id, price, status)" +
+                "(date, customer_id, price, status) " +
                 " VALUES (?, ?, ?, ?)";
         Connection connection = Database.getInstance().getConnection();
         PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -43,17 +43,24 @@ public class Order {
     }
 
     private void addToOrderBook() throws SQLException, ClassNotFoundException {
-        String query = "INSERT INTO order_book (order_id, book_id, quantity) VALUES (?, ?, ?)";
+        String insertQuery = "INSERT INTO order_book (order_id, book_id, quantity) VALUES (?, ?, ?)";
+        String quantityQuery = "UPDATE books SET stock_quantity = stock_quantity - ? WHERE id=?";
         Connection connection = Database.getInstance().getConnection();
-        PreparedStatement statement = connection.prepareStatement(query);
+        PreparedStatement statement = connection.prepareStatement(insertQuery);
+        PreparedStatement changeQuantity = connection.prepareStatement(quantityQuery);
         for(OrderContent orderContent:orderContents) {
             statement.setInt(1, this.ID);
             statement.setInt(2, orderContent.getBook().getID());
             statement.setInt(3, orderContent.getQuantity());
             statement.addBatch();
+            changeQuantity.setInt(1, orderContent.getQuantity());
+            changeQuantity.setInt(2, orderContent.getBook().getID());
+            changeQuantity.addBatch();
         }
         statement.executeBatch();
         statement.close();
+        changeQuantity.executeBatch();
+        changeQuantity.close();
     }
 
     public int getID() {
@@ -105,6 +112,19 @@ public class Order {
                 "WHERE id = %s;", status, this.ID);
         Database.getInstance().executeQuery(query);
         this.status = status;
+
+        if(status.equals("zamietnutá") || status.equals("zrušená")){
+            String quantityQuery = "UPDATE books SET stock_quantity = stock_quantity + ? WHERE id=?";
+            Connection connection = Database.getInstance().getConnection();
+            PreparedStatement changeQuantity = connection.prepareStatement(quantityQuery);
+            for(OrderContent orderContent:orderContents) {
+                changeQuantity.setInt(1, orderContent.getQuantity());
+                changeQuantity.setInt(2, orderContent.getBook().getID());
+                changeQuantity.addBatch();
+            }
+            changeQuantity.executeBatch();
+            changeQuantity.close();
+        }
     }
 
     public ObservableList<OrderContent> getOrderContents() {
