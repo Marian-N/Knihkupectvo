@@ -1,6 +1,7 @@
 package model;
 
 import database.Database;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
@@ -22,9 +23,9 @@ public class Order {
         this.orderContents = orderContents;
     }
 
-    public Order(Customer customer, ObservableList orderContents) throws SQLException, ClassNotFoundException {
+    public Order(Customer customer, ObservableList<OrderContent> orderContents) throws SQLException, ClassNotFoundException {
         this.customer = customer;
-        this.orderContents = orderContents;
+        this.orderContents = FXCollections.observableArrayList(orderContents);
         this.date = new Date(System.currentTimeMillis());
         this.price = getTotalPrice();
         this.status = "nevybavená";

@@ -7,6 +7,7 @@ import com.jfoenix.controls.JFXTextField;
 import controller.*;
 import gui.ScreenConfiguration;
 import gui.usermain.confirmation.CancelConfirmation;
+import gui.usermain.makeorder.MakeOrderController;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -41,9 +42,9 @@ public class UserMainController implements Initializable {
     @FXML
     private JFXButton exitButton;
     @FXML
-    private JFXButton changeBookButton;
+    private JFXButton addToOrderButton;
     @FXML
-    private JFXButton deleteBookButton;
+    private JFXButton orderBooksButton;
     @FXML
     private JFXTextArea synopsisText;
     @FXML
@@ -68,6 +69,8 @@ public class UserMainController implements Initializable {
     private TableColumn<Book, Double> priceColumn;
     @FXML
     private TableColumn<Book, Date> yearColumn;
+    @FXML
+    private TableColumn<Book, Integer> stockColumn;
     @FXML
     private JFXTextField userIdTextField;
     @FXML
@@ -100,11 +103,13 @@ public class UserMainController implements Initializable {
     private BookGenreController bookGenreController = BookGenreController.getInstance();
     private GenresController genresController = GenresController.getInstance();
     private OrdersController ordersController = OrdersController.getInstance();
+    MakeOrderController makeOrderController = new MakeOrderController();
 
     ObservableList<Book> books = FXCollections.observableArrayList();
     ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
     ObservableMap<Integer, Genre> genresFromMap = FXCollections.observableHashMap();
     ObservableList<Order> orders = FXCollections.observableArrayList();
+    ObservableList<OrderContent> newOrder = FXCollections.observableArrayList();
 
 
     public UserMainController() throws SQLException, ClassNotFoundException {
@@ -122,6 +127,29 @@ public class UserMainController implements Initializable {
                 return createBooksPage(pageIndex);
             }
         });
+
+        addToOrderButton.setOnAction(e->{
+            if(bookOverviewTable.getSelectionModel().getSelectedItem() != null &&
+               bookOverviewTable.getSelectionModel().getSelectedItem().getStockQuantity() > 0){
+
+                newOrder.add(handleAddToOrderBook());
+            }
+        });
+        orderBooksButton.setOnAction(e-> {
+            try {
+                newOrder = handleOrderBooks(newOrder);
+                bookOverviewTable.refresh();
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+    }
+
+    public void deleteNewOrder(){
+        System.out.println(newOrder);
+        newOrder.removeAll();
     }
 
     public void initData(int userId){
@@ -153,6 +181,7 @@ public class UserMainController implements Initializable {
         });
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("publicationDate"));
+        stockColumn.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
         authorColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, List<String>>, ObservableValue<List<String>>>() {
             @Override
             public ObservableValue<List<String>> call(TableColumn.CellDataFeatures<Book, List<String>> param) {
@@ -239,10 +268,7 @@ public class UserMainController implements Initializable {
         return bookOverviewTable;
     }
 
-    public void handleExit(javafx.event.ActionEvent actionEvent) {
-        Stage stage = (Stage) exitButton.getScene().getWindow();
-        stage.close();
-    }
+
 
     public void handleBookSelected(MouseEvent mouseEvent){
         Book book = bookOverviewTable.getSelectionModel().getSelectedItem();
@@ -253,7 +279,17 @@ public class UserMainController implements Initializable {
         }
     }
 
-    public void handleOrderBook(ActionEvent actionEvent) {
+    public ObservableList<OrderContent> handleOrderBooks(ObservableList<OrderContent> newOrder) throws IOException {
+        ScreenConfiguration screenConfiguration = new ScreenConfiguration();
+        int userId = Integer.parseInt(userIdTextField.getText());
+        newOrder = screenConfiguration.setMakeOrderScene(newOrder, userId);
+        return newOrder;
+    }
+
+    public OrderContent handleAddToOrderBook() {
+        Book chosenBook = bookOverviewTable.getSelectionModel().getSelectedItem();
+        OrderContent newOrder = new OrderContent(chosenBook, 1);
+        return newOrder;
     }
 
     public void handleBookOrderChange(ActionEvent actionEvent) {
@@ -336,7 +372,7 @@ public class UserMainController implements Initializable {
 
     public void handleOrderCancel(ActionEvent event) throws SQLException, ClassNotFoundException, IOException {
         Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
-        if (order != null && !order.getStatus().equals("vybavená")){
+        if (order != null && order.getStatus().equals("nevybavená")){
             CancelConfirmation cancelConfirmation = new CancelConfirmation();
             ScreenConfiguration screenConfiguration = new ScreenConfiguration();
             screenConfiguration.setCancelConfirmationScene(order);
@@ -348,4 +384,10 @@ public class UserMainController implements Initializable {
         ScreenConfiguration screenConfiguration = new ScreenConfiguration();
         screenConfiguration.setLoginScene(event);
     }
+    public void handleExit(javafx.event.ActionEvent actionEvent) {
+        Stage stage = (Stage) exitButton.getScene().getWindow();
+        stage.close();
+    }
+
+
 }

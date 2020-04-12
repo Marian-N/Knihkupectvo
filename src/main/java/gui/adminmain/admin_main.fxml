@@ -41,12 +41,13 @@
                         <Pagination fx:id="paginationBooks" layoutX="247.0" prefHeight="720.0" prefWidth="1253.0" />
                                   <TableView fx:id="bookOverviewTable" layoutX="253.0" layoutY="1.0" onMouseClicked="#handleBookSelected" prefHeight="638.0" prefWidth="1245.0">
                                       <columns>
-                                          <TableColumn fx:id="bookNameColumn" prefWidth="300.0" sortable="false" styleClass="name-table" text="Book name" />
-                                          <TableColumn fx:id="genreColumn" minWidth="0.0" prefWidth="300.0" sortable="false" text="Genre" />
-                                          <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="250.0" sortable="false" text="Author" />
-                                          <TableColumn fx:id="publisherColumn" prefWidth="200.0" sortable="false" text="Publisher" />
-                                          <TableColumn fx:id="priceColumn" prefWidth="88.0" sortable="false" text="Price" />
-                                          <TableColumn fx:id="yearColumn" minWidth="0.0" prefWidth="100.0" sortable="false" text="Date" />
+                                          <TableColumn fx:id="bookNameColumn" prefWidth="292.0" sortable="false" styleClass="name-table" text="Book name" />
+                                          <TableColumn fx:id="genreColumn" minWidth="0.0" prefWidth="262.0" sortable="false" text="Genre" />
+                                          <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="264.0" sortable="false" text="Author" />
+                                          <TableColumn fx:id="publisherColumn" prefWidth="136.0" sortable="false" text="Publisher" />
+                                          <TableColumn fx:id="priceColumn" prefWidth="79.0" sortable="false" text="Price" />
+                                          <TableColumn fx:id="yearColumn" minWidth="0.0" prefWidth="129.0" sortable="false" text="Date" />
+                                          <TableColumn fx:id="stockColumn" prefWidth="76.0" text="Stock" />
                                       </columns>
                                   </TableView>
                         <JFXButton fx:id="setPageBooksButton" layoutX="444.0" layoutY="644.0" onAction="#handleGoToPage" ripplerFill="darkorange" text="Go to page" />
@@ -117,7 +118,7 @@
             <children>
             <AnchorPane prefHeight="0.0" prefWidth="200.0">
                <children>
-                  <JFXButton fx:id="logoutButton" onAction="#handleLogout" layoutX="87.0" prefHeight="77.0" prefWidth="99.0" text="Logout" />
+                  <JFXButton fx:id="logoutButton" layoutX="87.0" onAction="#handleLogout" prefHeight="77.0" prefWidth="99.0" text="Logout" />
                </children>
             </AnchorPane>
                 <JFXButton fx:id="exitButton" mnemonicParsing="false" onAction="#handleExit" prefHeight="77.0" prefWidth="88.0" text="Exit" />

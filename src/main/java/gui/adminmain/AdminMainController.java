@@ -79,6 +79,8 @@ public class AdminMainController implements Initializable {
     @FXML
     private TableColumn<Book, Date> yearColumn;
     @FXML
+    private TableColumn<Book, Integer> stockColumn;
+    @FXML
     private TableView<Order> orderOverviewTable;
     @FXML
     private TableColumn<Order, Integer> orderIDColumn;
@@ -164,6 +166,7 @@ public class AdminMainController implements Initializable {
         });
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("publicationDate"));
+        stockColumn.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
         authorColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, List<String>>, ObservableValue<List<String>>>() {
             @Override
             public ObservableValue<List<String>> call(TableColumn.CellDataFeatures<Book, List<String>> param) {
@@ -382,8 +385,8 @@ public class AdminMainController implements Initializable {
 
         orderStatusChangeComboBox.getItems().setAll(
                 "vybavená",
-                "zamietnutá",
-                "nevybavená"
+                "zamietnutá"
+                //"nevybavená"
         );
 
     }
@@ -391,8 +394,11 @@ public class AdminMainController implements Initializable {
     public void handleOrderStatusChange(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
         if (order != null && orderStatusChangeComboBox.getValue() != " "){
-            ordersController.changeStatus(order, orderStatusChangeComboBox.getValue());
-            orderOverviewTable.refresh();
+            if(order.getStatus().equals("nevybavená")){
+                ordersController.changeStatus(order, orderStatusChangeComboBox.getValue());
+                orderOverviewTable.refresh();
+            }
+
         }
     }
 

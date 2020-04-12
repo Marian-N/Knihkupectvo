@@ -4,6 +4,8 @@ import gui.adminchangebook.ChangeBookController;
 import gui.adminmain.AdminMainController;
 import gui.usermain.UserMainController;
 import gui.usermain.confirmation.CancelConfirmation;
+import gui.usermain.makeorder.MakeOrderController;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -13,6 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Book;
 import model.Order;
+import model.OrderContent;
 
 import java.io.IOException;
 
@@ -77,6 +80,19 @@ public class ScreenConfiguration {
         stage.setScene(new Scene((Pane) loader.load(), 900, 500));
         stage.setResizable(false);
         stage.show();
+    }
+
+    public ObservableList<OrderContent> setMakeOrderScene(ObservableList<OrderContent> newOrder, int userId) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/usermain/makeorder/make_order.fxml"));
+        Stage stage = new Stage();
+        stage.setScene(new Scene((Pane) loader.load()));
+        MakeOrderController makeOrderController = loader.<MakeOrderController>getController();
+        makeOrderController.initData(newOrder, userId, stage);
+        stage.setResizable(false);
+        stage.setTitle("Complete order");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+        return makeOrderController.getNewOrder();
     }
 
 }

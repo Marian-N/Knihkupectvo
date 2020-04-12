@@ -3,9 +3,7 @@ package controller;
 import database.Database;
 import model.Customer;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class CustomerController {
     private static CustomerController instance = null;
@@ -29,5 +27,15 @@ public class CustomerController {
         String zip = resultSet.getString("zip");
         String address = resultSet.getString("address");
         return new Customer(id, firstName, lastName, mail, city, zip, address);
+    }
+
+    public Customer getCustomer(int id) throws SQLException {
+        String query = "SELECT * FROM customers WHERE id = ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, id);
+        ResultSet resultSet = statement.executeQuery();
+        Customer customer = new Customer(resultSet);
+        statement.close();
+        return customer;
     }
 }

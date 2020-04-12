@@ -39,6 +39,9 @@
 }
 .text-field{
     -fx-text-fill: #a4a4a4;
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-insets: 0;
 }
 
 

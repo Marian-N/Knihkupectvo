@@ -1,5 +1,8 @@
 package model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Customer {
     private int ID;
     private String firstName;
@@ -17,6 +20,19 @@ public class Customer {
         this.city = city;
         this.zip = zip;
         this.address = address;
+    }
+
+    public Customer(ResultSet resultSet) throws SQLException {
+        resultSet.next();
+        ID = resultSet.getInt("id");
+        firstName = resultSet.getString("first_name");
+        lastName = resultSet.getString("last_name");
+        mail = resultSet.getString("mail");
+        city = resultSet.getString("city");
+        zip = resultSet.getString("zip");
+        address = resultSet.getString("address");
+
+        resultSet.close();
     }
 
     public int getID() {
