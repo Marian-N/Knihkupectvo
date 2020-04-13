@@ -90,6 +90,7 @@ public class BooksController {
             query = String.format("SELECT b.* " +
                     "FROM order_book ob " +
                     "JOIN books b ON ob.book_id = b.id " +
+                    "WHERE b.stock_quantity>0 " +
                     "GROUP BY b.id " +
                     "HAVING COUNT(ob.book_id)>=1 " +
                     "ORDER BY COUNT(ob.book_id) %s " +

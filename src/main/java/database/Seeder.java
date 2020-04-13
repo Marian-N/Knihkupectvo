@@ -11,14 +11,14 @@ public class Seeder {
             Database database = Database.getInstance();
             Connection connection = database.getConnection();
             Faker faker = new Faker();
-            CustomersSeeder.run(connection,200, faker);
-            OrdersSeeder.run(connection, 10000);
-            PublishersSeeder.run(connection, 100, faker);
-            BooksSeeder.run(connection, 10000, faker);
+            CustomersSeeder.run(connection,100000, faker);
+            OrdersSeeder.run(connection, 100000);
+            PublishersSeeder.run(connection, 100000, faker);
+            BooksSeeder.run(connection, 1000000, faker);
             OrderBookSeeder.run(connection);
-            AuthorsSeeder.run(connection, 500, faker);
+            AuthorsSeeder.run(connection, 100000, faker);
             AuthorBookSeeder.run(connection);
-            GenresSeeder.run(connection, 150, faker);
+            GenresSeeder.run(connection, 100000, faker);
             BookGenreSeeder.run(connection);
             OrderPriceSeeder.run(connection);
         } catch (Exception e) {

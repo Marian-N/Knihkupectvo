@@ -117,6 +117,8 @@ public class UserMainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        authorsFromMap = authorsController.getAuthors();
+        genresFromMap = genresController.getGenres();
         createBooksTable();
         createOrderByBooksComboBox();
         //findBook();
@@ -193,7 +195,6 @@ public class UserMainController implements Initializable {
                     return new SimpleObjectProperty("-");
                 }
                 //all authors with their ids as keys
-                authorsFromMap = authorsController.getAuthors();
                 List<String> authorName = new ArrayList<>();
                 //taking only names from hashmap
                 for (Integer id : authorId){
@@ -213,7 +214,6 @@ public class UserMainController implements Initializable {
                 }
 
                 //all genres with their ids as keys
-                genresFromMap = genresController.getGenres();
                 List<String> genreName = new ArrayList<>();
                 //taking only names from hashmap
                 for (Integer id : genreId){
