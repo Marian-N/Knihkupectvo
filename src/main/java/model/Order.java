@@ -38,7 +38,11 @@ public class Order {
         statement.setInt(2, customer.getID());
         statement.setDouble(3, price);
         statement.setString(4, status);
-        this.ID = statement.executeUpdate();
+        statement.executeUpdate();
+        ResultSet rs = statement.getGeneratedKeys();
+        rs.next();
+        this.ID = rs.getInt(1);
+        rs.close();
         statement.close();
         addToOrderBook();
     }
