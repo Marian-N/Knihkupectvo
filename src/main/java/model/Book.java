@@ -10,8 +10,10 @@ public class Book {
     private Date publicationDate;
     private String description;
     private Publisher publisher;
+    private Genres genres;
 
-    public Book(int ID, String title, double price, int stockQuantity, Publisher publisher, Date publicationDate, String description) {
+    public Book(int ID, String title, double price, int stockQuantity, Publisher publisher,
+                Date publicationDate, String description, Genres genres) {
         this.ID = ID;
         this.title = title;
         this.price = price;
@@ -19,6 +21,7 @@ public class Book {
         this.publisher = publisher;
         this.publicationDate = new Date(publicationDate.getTime());
         this.description = description;
+        this.genres = genres;
     }
 
     public Publisher getPublisher() {

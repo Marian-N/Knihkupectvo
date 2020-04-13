@@ -29,7 +29,7 @@ public class OrdersController {
      * @param order_id is id of order
      * @return ObservableList of order contents(model Book and quantity)
      */
-    private ObservableList<OrderContent> getOrderContents(int order_id) throws SQLException {
+    private ObservableList<OrderContent> getOrderContents(int order_id) throws SQLException, ClassNotFoundException {
         ObservableList<OrderContent> orderContents = FXCollections.observableArrayList();
         String query = String.format("SELECT ob.book_id, ob.quantity, " +
                 "b.title, b.price, b.stock_quantity, b.publication_date, b.description, " +
@@ -51,7 +51,8 @@ public class OrdersController {
             int publisherID = resultSet.getInt("publisher_id");
             String publisherName = resultSet.getString("publisher_name");
             Publisher publisher = new Publisher(publisherID, publisherName);
-            Book book = new Book(id, title, price, stockQuantity, publisher, publicationDate, description);
+            Genres genres = GenresController.getInstance().getBookGenres(id);
+            Book book = new Book(id, title, price, stockQuantity, publisher, publicationDate, description, genres);
             orderContents.add(new OrderContent(book, quantity));
         }
         resultSet.close();

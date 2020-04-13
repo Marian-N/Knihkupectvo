@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import model.Book;
+import model.Genres;
 import model.Publisher;
 
 import java.sql.*;
@@ -26,8 +27,6 @@ public class BooksController {
     private ObservableList<Book> getList(ResultSet resultSet) throws SQLException, ClassNotFoundException {
         ObservableList<Book> books = FXCollections.observableArrayList();
 
-        PublishersController publishersController = PublishersController.getInstance();
-        ObservableMap<Integer, Publisher> publishers = publishersController.getPublishers();
         while(resultSet.next()){
             int id = resultSet.getInt("id");
             String title = resultSet.getString("title");
@@ -35,9 +34,9 @@ public class BooksController {
             int stockQuantity = resultSet.getInt("stock_quantity");
             Date publicationDate = resultSet.getDate("publication_date");
             String description = resultSet.getString("description");
-            int publisherID = resultSet.getInt("publisher_id");
-            Publisher publisher = publishers.get(publisherID);
-            Book book = new Book(id, title, price, stockQuantity, publisher, publicationDate, description);
+            Publisher publisher = new Publisher(resultSet);
+            Genres genres = GenresController.getInstance().getBookGenres(id);
+            Book book = new Book(id, title, price, stockQuantity, publisher, publicationDate, description, genres);
             books.add(book);
         }
         resultSet.close();
@@ -52,8 +51,6 @@ public class BooksController {
     private ObservableMap<Integer, Book> getObservableMap(ResultSet resultSet) throws SQLException, ClassNotFoundException {
         ObservableMap<Integer, Book> books = FXCollections.observableHashMap();
 
-        PublishersController publishersController = PublishersController.getInstance();
-        ObservableMap<Integer, Publisher> publishers = publishersController.getPublishers();
         while(resultSet.next()){
             int id = resultSet.getInt("id");
             String title = resultSet.getString("title");
@@ -61,9 +58,9 @@ public class BooksController {
             int stockQuantity = resultSet.getInt("stock_quantity");
             Date publicationDate = resultSet.getDate("publication_date");
             String description = resultSet.getString("description");
-            int publisherID = resultSet.getInt("publisher_id");
-            Publisher publisher = publishers.get(publisherID);
-            Book book = new Book(id, title, price, stockQuantity, publisher, publicationDate, description);
+            Publisher publisher = new Publisher(resultSet);
+            Genres genres = GenresController.getInstance().getBookGenres(id);
+            Book book = new Book(id, title, price, stockQuantity, publisher, publicationDate, description, genres);
             books.put(id, book);
         }
         resultSet.close();
@@ -79,17 +76,19 @@ public class BooksController {
         String order = "ASC";
         if(desc) order = "DESC";
         if(orderBy.equals("author")){
-            query = String.format("SELECT b.* FROM books b " +
+            query = String.format("SELECT b.*, p.name publisher_name FROM books b " +
                     "JOIN author_book ab ON b.id=ab.book_id " +
                     "JOIN authors a ON a.id=ab.author_id " +
+                    "JOIN publishers p ON p.id=b.publisher_id " +
                     "ORDER BY a.name %s " +
                     "OFFSET %s ROWS " +
                     "FETCH FIRST %s ROWS ONLY;", order, offset, booksPerPage);
         }
         else if(orderBy.equals("popularity")){
-            query = String.format("SELECT b.* " +
+            query = String.format("SELECT b.*, p.name publisher_name " +
                     "FROM order_book ob " +
                     "JOIN books b ON ob.book_id = b.id " +
+                    "JOIN publishers p ON p.id=b.publisher_id " +
                     "WHERE b.stock_quantity>0 " +
                     "GROUP BY b.id " +
                     "HAVING COUNT(ob.book_id)>=1 " +
@@ -98,7 +97,9 @@ public class BooksController {
                     "FETCH FIRST %s ROWS ONLY;", order, offset, booksPerPage);
         }
         else {
-            query = String.format("SELECT * FROM books ORDER BY %s %s " +
+            query = String.format("SELECT b.*, p.name publisher_name FROM books b " +
+                    "JOIN publishers p ON p.id=b.publisher_id " +
+                    "ORDER BY %s %s " +
                     "OFFSET %s ROWS FETCH FIRST %s ROW ONLY;", orderBy, order, offset, booksPerPage);
         }
         Statement statement = connection.createStatement();
@@ -146,7 +147,9 @@ public class BooksController {
     }
 
     public ObservableList<Book> findBook(String title) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM books WHERE title LIKE '%c%s%c';", '%', title, '%');
+        String query = String.format("SELECT b.*, p.name publisher_name FROM books b " +
+                "JOIN publishers p ON p.id=b.publisher_id " +
+                "WHERE title LIKE '%c%s%c';", '%', title, '%');
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         ObservableList<Book> books = getList(resultSet);
