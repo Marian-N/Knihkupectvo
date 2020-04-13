@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Genres {
-    private List<Genre> genres;
+    private List<Genre> genres = new ArrayList<>();
     private SimpleObjectProperty<String> stringGenres;
 
     public Genres(int bookID) throws SQLException, ClassNotFoundException {

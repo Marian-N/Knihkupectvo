@@ -118,7 +118,7 @@
             <children>
             <AnchorPane prefHeight="0.0" prefWidth="200.0">
                <children>
-                  <JFXButton fx:id="logoutButton" layoutX="87.0" onAction="#handleLogout" prefHeight="77.0" prefWidth="99.0" text="Logout" />
+                  <JFXButton fx:id="logoutButton" layoutX="100.0" onAction="#handleLogout" prefHeight="77.0" prefWidth="99.0" text="Logout" />
                </children>
             </AnchorPane>
                 <JFXButton fx:id="exitButton" mnemonicParsing="false" onAction="#handleExit" prefHeight="77.0" prefWidth="88.0" text="Exit" />

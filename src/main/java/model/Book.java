@@ -12,6 +12,10 @@ public class Book {
     private Publisher publisher;
     private Genres genres;
 
+    public Genres getGenres() {
+        return genres;
+    }
+
     public Book(int ID, String title, double price, int stockQuantity, Publisher publisher,
                 Date publicationDate, String description, Genres genres) {
         this.ID = ID;

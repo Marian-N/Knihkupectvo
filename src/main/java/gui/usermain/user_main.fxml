@@ -18,7 +18,7 @@
     <children>
         <JFXTabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <tabs>
-                <Tab text="Books" >
+                <Tab text="Books">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -79,7 +79,7 @@
                <children>
                   <JFXTextField fx:id="userIdTextField" editable="false" layoutX="53.0" layoutY="16.0" mouseTransparent="true" prefHeight="9.0" prefWidth="68.0" styleClass="user-id-text-field" />
                   <Label layoutX="14.0" layoutY="23.0" text="ID:" />
-                  <JFXButton fx:id="logoutButton" layoutX="454.0" layoutY="-1.0" onAction="#handleLogout" prefHeight="77.0" prefWidth="99.0" text="Logout" />
+                  <JFXButton fx:id="logoutButton" layoutX="473.0" onAction="#handleLogout" prefHeight="77.0" prefWidth="99.0" text="Logout" />
                </children>
             </AnchorPane>
             <Region HBox.hgrow="ALWAYS" />

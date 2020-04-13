@@ -118,7 +118,7 @@ public class UserMainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         authorsFromMap = authorsController.getAuthors();
-        genresFromMap = genresController.getGenres();
+        //genresFromMap = genresController.getGenres();
         createBooksTable();
         createOrderByBooksComboBox();
         //findBook();
