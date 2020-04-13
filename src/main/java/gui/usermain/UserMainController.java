@@ -131,7 +131,6 @@ public class UserMainController implements Initializable {
         addToOrderButton.setOnAction(e->{
             if(bookOverviewTable.getSelectionModel().getSelectedItem() != null &&
                bookOverviewTable.getSelectionModel().getSelectedItem().getStockQuantity() > 0){
-
                 newOrder.add(handleAddToOrderBook());
             }
         });
@@ -166,7 +165,9 @@ public class UserMainController implements Initializable {
                 "Price - asc",
                 "Price - desc",
                 "Date - asc",
-                "Date - desc"
+                "Date - desc",
+                "Popularity - asc",
+                "Popularity - desc"
         );
         orderByBooksComboBox.setValue("-----");
     }
@@ -255,6 +256,12 @@ public class UserMainController implements Initializable {
             }
             else if(orderBy.equals("Date - desc")){
                 books = booksController.getBooks(pageNum, "publication_date", true);
+            }
+            else if(orderBy.equals("Popularity - asc")){
+                books = booksController.getBooks(pageNum, "popularity");
+            }
+            else if(orderBy.equals("Popularity - desc")){
+                books = booksController.getBooks(pageNum, "popularity", true);
             }
             else{
                 books = booksController.getBooks(pageNum, "id");
@@ -377,6 +384,7 @@ public class UserMainController implements Initializable {
             ScreenConfiguration screenConfiguration = new ScreenConfiguration();
             screenConfiguration.setCancelConfirmationScene(order);
             orderOverviewTable.refresh();
+            bookOverviewTable.refresh();
         }
     }
 
@@ -388,6 +396,5 @@ public class UserMainController implements Initializable {
         Stage stage = (Stage) exitButton.getScene().getWindow();
         stage.close();
     }
-
 
 }

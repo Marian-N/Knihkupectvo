@@ -92,13 +92,15 @@ public class MakeOrderController {
             });
 
             completeOrderButton.setOnAction(e->{
-                ObservableList<OrderContent> newnewOrder = null;
-                Order order = null;
-                try {
-                    newnewOrder = newOrder;
-                    order = new Order(customerController.getCustomer(customerId), newnewOrder);
-                } catch (SQLException | ClassNotFoundException ex) {
-                    ex.printStackTrace();
+                if(newOrder.size() > 0){
+                    ObservableList<OrderContent> newnewOrder = null;
+                    Order order = null;
+                    try {
+                        newnewOrder = newOrder;
+                        order = new Order(customerController.getCustomer(customerId), newnewOrder);
+                    } catch (SQLException | ClassNotFoundException ex) {
+                        ex.printStackTrace();
+                    }
                 }
                 newOrder.clear();
                 stage.close();
