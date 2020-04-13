@@ -49,7 +49,7 @@ public class BooksController {
      * @param resultSet from which data will be added to books map
      * @return ObservableMap with all books from result set
      */
-    private ObservableMap<Integer, Book> handleResultSet(ResultSet resultSet) throws SQLException, ClassNotFoundException {
+    private ObservableMap<Integer, Book> getObservableMap(ResultSet resultSet) throws SQLException, ClassNotFoundException {
         ObservableMap<Integer, Book> books = FXCollections.observableHashMap();
 
         PublishersController publishersController = PublishersController.getInstance();
@@ -83,6 +83,16 @@ public class BooksController {
                     "JOIN author_book ab ON b.id=ab.book_id " +
                     "JOIN authors a ON a.id=ab.author_id " +
                     "ORDER BY a.name %s " +
+                    "OFFSET %s ROWS " +
+                    "FETCH FIRST %s ROWS ONLY;", order, offset, booksPerPage);
+        }
+        else if(orderBy.equals("popularity")){
+            query = String.format("SELECT b.* " +
+                    "FROM order_book ob " +
+                    "JOIN books b ON ob.book_id = b.id " +
+                    "GROUP BY b.id " +
+                    "HAVING COUNT(ob.book_id)>=1 " +
+                    "ORDER BY COUNT(ob.book_id) %s " +
                     "OFFSET %s ROWS " +
                     "FETCH FIRST %s ROWS ONLY;", order, offset, booksPerPage);
         }
@@ -128,7 +138,7 @@ public class BooksController {
         String query = "SELECT * FROM books";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
-        ObservableMap<Integer, Book> books = handleResultSet(resultSet);
+        ObservableMap<Integer, Book> books = getObservableMap(resultSet);
         statement.close();
 
         return books;

@@ -54,6 +54,9 @@ public class Order {
         PreparedStatement statement = connection.prepareStatement(insertQuery);
         PreparedStatement changeQuantity = connection.prepareStatement(quantityQuery);
         for(OrderContent orderContent:orderContents) {
+            int quantity = orderContent.getQuantity();
+            Book book = orderContent.getBook();
+            book.setStockQuantity(book.getStockQuantity() - quantity);
             statement.setInt(1, this.ID);
             statement.setInt(2, orderContent.getBook().getID());
             statement.setInt(3, orderContent.getQuantity());
@@ -123,8 +126,11 @@ public class Order {
             Connection connection = Database.getInstance().getConnection();
             PreparedStatement changeQuantity = connection.prepareStatement(quantityQuery);
             for(OrderContent orderContent:orderContents) {
-                changeQuantity.setInt(1, orderContent.getQuantity());
-                changeQuantity.setInt(2, orderContent.getBook().getID());
+                int quantity = orderContent.getQuantity();
+                Book book = orderContent.getBook();
+                book.setStockQuantity(book.getStockQuantity() + quantity);
+                changeQuantity.setInt(1, quantity);
+                changeQuantity.setInt(2, book.getID());
                 changeQuantity.addBatch();
             }
             changeQuantity.executeBatch();
