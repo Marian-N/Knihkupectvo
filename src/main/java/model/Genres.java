@@ -10,10 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Genres {
-    private List<Genre> genres = new ArrayList<>();
+    private List<Genre> genres;
     private SimpleObjectProperty<String> stringGenres;
 
     public Genres(int bookID) throws SQLException, ClassNotFoundException {
+        genres = new ArrayList<>();
         String query = "SELECT g.id genre_id, g.name genre_name " +
                 "FROM book_genre bg " +
                 "JOIN genres g ON g.id=bg.genre_id " +
@@ -21,10 +22,10 @@ public class Genres {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(query);
         preparedStatement.setInt(1, bookID);
         ResultSet resultSet = preparedStatement.executeQuery();
-        List<String> genreNames = new ArrayList<String>();
+        List<String> genreNames = new ArrayList<>();
         while(resultSet.next()) {
             genres.add(new Genre(resultSet));
-            genreNames.add(resultSet.getString("genre_name"));
+            genreNames.add(resultSet.getString(2));
         }
         resultSet.close();
         preparedStatement.close();
