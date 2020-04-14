@@ -141,7 +141,7 @@ public class AdminMainController implements Initializable {
         createBooksTable();
         createOrderByBooksComboBox();
         //findBook();
-        paginationBooks.setPageCount(10000);
+        paginationBooks.setPageCount(1000);
         paginationBooks.setPageFactory(new Callback<Integer, Node>() {
             @Override
             public Node call(Integer pageIndex) {
@@ -293,7 +293,7 @@ public class AdminMainController implements Initializable {
             pageId = 0;
         }
 
-        if(pageId > 0 && pageId <= 10000){
+        if(pageId > 0 && pageId <= 1000){
             paginationBooks.setCurrentPageIndex(pageId - 1);
         }
         createBooksPage(paginationBooks.getCurrentPageIndex());
