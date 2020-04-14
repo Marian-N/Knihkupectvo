@@ -168,6 +168,6 @@
 
 .text-field-book-change{
     -fx-font-size: 20;
-    -fx-text-alignment: bottom;
-
+    -fx-text-fill: #a4a4a4;
+    -fx-background-color: transparent;
 }

@@ -26,6 +26,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
@@ -106,6 +107,8 @@ public class AdminMainController implements Initializable {
     private JFXComboBox<String> orderStatusChangeComboBox;
     @FXML
     private JFXTextField searchCustomerTextField;
+    @FXML
+    private TextField bestCustomersTextField;
 
 
     private BooksController booksController = BooksController.getInstance();
@@ -114,6 +117,7 @@ public class AdminMainController implements Initializable {
     private BookGenreController bookGenreController = BookGenreController.getInstance();
     private GenresController genresController = GenresController.getInstance();
     private OrdersController ordersController = OrdersController.getInstance();
+    private CustomerController customerController = CustomerController.getInstance();
 
     ObservableList<Book> books = FXCollections.observableArrayList();
     ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
@@ -415,10 +419,11 @@ public class AdminMainController implements Initializable {
         }
     }
 
-    public void handleOrdersSetup(Event event) {
+    public void handleOrdersSetup(Event event) throws SQLException {
         createOrderTable();
         createOrderDetailTable();
         createOrderStatusComboBox();
+        bestCustomersTextField.setText(customerController.getBestCustomers(3));
     }
 
     public void handleLogout(javafx.event.ActionEvent event) throws IOException {

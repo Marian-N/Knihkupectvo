@@ -38,4 +38,29 @@ public class CustomerController {
         statement.close();
         return customer;
     }
+
+    public String getBestCustomers(int count) throws SQLException {
+        String query = "SELECT c.id FROM customers c " +
+                "JOIN orders o ON c.id=o.customer_id " +
+                "WHERE o.status='vybavená' " +
+                "GROUP BY c.id " +
+                "HAVING COUNT(c.id)>=5 " +
+                "ORDER BY COUNT(c.id) DESC " +
+                "LIMIT ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, count);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        String customersIDs = "";
+        while(resultSet.next()){
+            if(customersIDs.equals("")){
+                customersIDs +=resultSet.getString(1);
+            }
+            else{
+                customersIDs += ", " + resultSet.getString(1);
+            }
+        }
+        resultSet.close();
+        preparedStatement.close();
+        return customersIDs;
+    }
 }
