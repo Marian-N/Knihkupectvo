@@ -115,6 +115,7 @@ CREATE TABLE orders (
 );
 ```
 **Príklad napĺňania tabuľky generovanými údajmi pomocou java faker** <a name ="priklad_faker"></a>
+Pri spustení seederu sa vygenerujú informácie o zákazníkovi a vložia sa do databázy.
 ```java
 //src/main/java/database/seeders/CustomersSeeder.java
 public class CustomersSeeder {
@@ -147,7 +148,7 @@ Ostatné sú naplnené so 100 000 dátami.
 Tie sme generovali pomocou java faker tak ako aj v [1. etape](#etapa1), kde je [príklad kódu](#priklad_faker). 
 #### Netriviálne dopyty
 ##### Zoraďovanie kníh podľa popularity
-Zákazník má možnosť zoradiť si knihy podľa popularity zostupne aj vzostupne a ukáže mu tie, ktoré sú na sklade.
+Zákazník má možnosť zoradiť si knihy podľa popularity zostupne aj vzostupne a ukáže mu tie, ktoré sú na sklade, boli objednané aspoň raz a zoradené podľa počtu objednaní.
 ```java
 //src/main/java/controller/BooksController.java
 query = String.format("SELECT b.*, p.name publisher_name " +
