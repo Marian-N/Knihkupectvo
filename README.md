@@ -142,20 +142,45 @@ pristupovať k histórii svojich objednávok a administrátor ich vie spravovať
 #### Napĺňanie tabuliek
 V tejto etape sme mali taktiež naplniť jednu tabuľku s milión dátami. Rozhodli sme sa tak naplniť *orders* tabuľku.
 Ostatné sú naplnené so 100 000 dátami. 
-Tie sme generovali pomocou java faker tak ako aj v [1. etape](etapa1), kde je [príklad kódu](#priklad_faker). 
+Tie sme generovali pomocou java faker tak ako aj v [1. etape](#etapa1), kde je [príklad kódu](#priklad_faker). 
 #### Netriviálne dopyty
 ##### Zoraďovanie kníh podľa popularity
 Zákazník má možnosť zoradiť si knihy podľa popularity zostupne aj vzostupne a ukáže mu tie, ktoré sú na sklade.
-```sql
--- src/main/java/controller/BooksController.java
-SELECT b.*, p.name publisher_name
-FROM order_book ob
-JOIN books b ON ob.book_id = b.id
-JOIN publishers p ON p.id=b.publisher_id
-WHERE b.stock_quantity>0
-GROUP BY b.id
-HAVING COUNT(ob.book_id)>=1
-ORDER BY COUNT(ob.book_id) %s
-OFFSET %s ROWS
-FETCH FIRST %s ROWS ONLY;
+```java
+//src/main/java/controller/BooksController.java
+query = String.format("SELECT b.*, p.name publisher_name " +
+               "FROM order_book ob " +
+               "JOIN books b ON ob.book_id = b.id " +
+               "JOIN publishers p ON p.id=b.publisher_id " +
+               "WHERE b.stock_quantity>0 " +
+               "GROUP BY b.id " +
+               "HAVING COUNT(ob.book_id)>=1 " +
+               "ORDER BY COUNT(ob.book_id) %s " +
+               "OFFSET %s ROWS " +
+               "FETCH FIRST %s ROWS ONLY;", order, offset, booksPerPage);
 ```
+##### Zobrazenie najlepších zákazníkov
+Administrátorovi sa pri prístupe k objednávkam zobrazia ID troch zákazníkov s najvyšším počtom vybavených objednávok, pričom ich musí byť aspoň 5.
+```java
+//src/main/java/controller/CustomerController.java
+String query = "SELECT c.id FROM customers c " +
+                "JOIN orders o ON c.id=o.customer_id " +
+                "WHERE o.status='vybavená' " +
+                "GROUP BY c.id " +
+                "HAVING COUNT(c.id)>=5 " +
+                "ORDER BY COUNT(c.id) DESC " +
+                "LIMIT ?";
+```
+#### Práca s programom
+##### Zákazník
+Pri prihlásení sa zadáva iba ID zákazníka (čísla medzi 1 - 100 000), za ktorého sa chceme prihlásiť, nakoľko login scenár ešte nemáme implementovaný.
+Po prihlásení sa zákazníkovi zobrazia knihy. Ak na nejakú knihu klikne, môže následne stlačiť tlačidlo __*Add to order*__.
+Toto priradí zvolenú knihu do jeho novo vytváranej objednávky. K objednaní pristupuje po stlačení __*Make order*__. 
+Zobrazí sa mu okno, kde vidí knihy vo svojej objednávke. Vie zmeniť ich počet (Tlačidlo __*Change quantity*__ a pole pre zadanie počtu),
+odobrať knihu z objednávky, dokončiť objednávku alebo ju zrušiť. Po dokončení objednávky sa zaradí do __*Orders history*__.
+V nej zákazník vidí svoje objednávky, ich stav a po kliknutí na nejakú aj jej detaily. 
+V prípade že objednávka ešte nieje vybavená, môže ju zákazník zrušiť.
+##### Administrátor
+Prihlasuje sa zadaním *admin* do kolónky *name*. Po pristúpení do časti __*Orders*__ zadáme ID zákazníka, ktorého objednávky chceme vybaviť.
+Zobrazia sa nám, podobne ako pri zákazníkovi, jeho objednávky so statusom a po kliknutí na nejakú aj jej detaily.
+Administrátor následne vie vybranú objednávku vybaviť alebo zamietnuť, pokiaľ je ešte nevybavená.
