@@ -114,7 +114,7 @@ CREATE TABLE orders (
         ON DELETE CASCADE
 );
 ```
-**Príklad napĺňania tabuľky generovanými údajmi pomocou java faker** <a name ="priklad_faker"></a>
+**Príklad napĺňania tabuľky generovanými údajmi pomocou java faker** <a name ="priklad_faker"></a> <br>
 Pri spustení seederu sa vygenerujú informácie o zákazníkovi a vložia sa do databázy.
 ```java
 //src/main/java/database/seeders/CustomersSeeder.java
