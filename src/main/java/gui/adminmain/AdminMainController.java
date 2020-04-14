@@ -162,7 +162,6 @@ public class AdminMainController implements Initializable {
     }
 
 
-
     public void createBooksTable(){
 
         bookNameColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -182,27 +181,25 @@ public class AdminMainController implements Initializable {
             }
         });
 
+        authorColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, List<String>>, ObservableValue<List<String>>>() {
+            @Override
+            public ObservableValue<List<String>> call(TableColumn.CellDataFeatures<Book, List<String>> param) {
+                List<Integer> authorId = null;
+                try {
+                    authorId = authorBookController.getAuthors(param.getValue().getID());
+                } catch (SQLException e) {
+                    return new SimpleObjectProperty("-");
+                }
+                //all authors with their ids as keys
 
-
-//        authorColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, List<String>>, ObservableValue<List<String>>>() {
-//            @Override
-//            public ObservableValue<List<String>> call(TableColumn.CellDataFeatures<Book, List<String>> param) {
-//                List<Integer> authorId = null;
-//                try {
-//                    authorId = authorBookController.getAuthors(param.getValue().getID());
-//                } catch (SQLException e) {
-//                    return new SimpleObjectProperty("-");
-//                }
-//                //all authors with their ids as keys
-//
-//                List<String> authorName = new ArrayList<>();
-//                //taking only names from hashmap
-//                for (Integer id : authorId){
-//                    authorName.add(authorsFromMap.get(id).getName());
-//                }
-//                return new SimpleObjectProperty(String.join(", ", authorName));
-//            }
-//        });
+                List<String> authorName = new ArrayList<>();
+                //taking only names from hashmap
+                for (Integer id : authorId){
+                    authorName.add(authorsFromMap.get(id).getName());
+                }
+                return new SimpleObjectProperty(String.join(", ", authorName));
+            }
+        });
 //        genreColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, List<String>>, ObservableValue<List<String>>>() {
 //            @Override
 //            public ObservableValue<List<String>> call(TableColumn.CellDataFeatures<Book, List<String>> param) {
@@ -227,7 +224,6 @@ public class AdminMainController implements Initializable {
         //return books; //bookOverviewTable.setItems(books);
     }
 
-    private int counter = 0;
     private Node createBooksPage(int pageNum){
         String orderBy = orderByBooksComboBox.getValue();
         try {

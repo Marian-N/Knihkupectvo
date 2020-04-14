@@ -28,6 +28,7 @@ public class BooksController {
         ObservableList<Book> books = FXCollections.observableArrayList();
 
         while(resultSet.next()){
+
             int id = resultSet.getInt("id");
             String title = resultSet.getString("title");
             double price = resultSet.getDouble("price");
@@ -90,7 +91,7 @@ public class BooksController {
                     "JOIN books b ON ob.book_id = b.id " +
                     "JOIN publishers p ON p.id=b.publisher_id " +
                     "WHERE b.stock_quantity>0 " +
-                    "GROUP BY b.id " +
+                    "GROUP BY b.id, p.name " +
                     "HAVING COUNT(ob.book_id)>=1 " +
                     "ORDER BY COUNT(ob.book_id) %s " +
                     "OFFSET %s ROWS " +

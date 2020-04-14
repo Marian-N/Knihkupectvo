@@ -12,15 +12,15 @@ public class Seeder {
             Connection connection = database.getConnection();
             Faker faker = new Faker();
             CustomersSeeder.run(connection,100000, faker);
-            OrdersSeeder.run(connection, 100000);
+            OrdersSeeder.run(connection, 1000000);
             PublishersSeeder.run(connection, 100000, faker);
-            BooksSeeder.run(connection, 1000000, faker);
+            BooksSeeder.run(connection, 100000, faker);
             OrderBookSeeder.run(connection);
             AuthorsSeeder.run(connection, 100000, faker);
             AuthorBookSeeder.run(connection);
             GenresSeeder.run(connection, 100000, faker);
             BookGenreSeeder.run(connection);
-            OrderPriceSeeder.run(connection);
+            //OrderPriceSeeder.run(connection);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

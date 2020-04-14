@@ -185,6 +185,12 @@ public class UserMainController implements Initializable {
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("publicationDate"));
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
+        genreColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, List<String>>, ObservableValue<List<String>>>() {
+            @Override
+            public ObservableValue<List<String>> call(TableColumn.CellDataFeatures<Book, List<String>> param) {
+                return new SimpleObjectProperty(param.getValue().getGenres().getStringGenres());
+            }
+        });
         authorColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, List<String>>, ObservableValue<List<String>>>() {
             @Override
             public ObservableValue<List<String>> call(TableColumn.CellDataFeatures<Book, List<String>> param) {
@@ -203,25 +209,25 @@ public class UserMainController implements Initializable {
                 return new SimpleObjectProperty(String.join(", ", authorName));
             }
         });
-        genreColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, List<String>>, ObservableValue<List<String>>>() {
-            @Override
-            public ObservableValue<List<String>> call(TableColumn.CellDataFeatures<Book, List<String>> param) {
-                List<Integer> genreId = null;
-                try {
-                    genreId = bookGenreController.getGenres(param.getValue().getID());
-                } catch (SQLException e) {
-                    return new SimpleObjectProperty("-");
-                }
-
-                //all genres with their ids as keys
-                List<String> genreName = new ArrayList<>();
-                //taking only names from hashmap
-                for (Integer id : genreId){
-                    genreName.add(genresFromMap.get(id).getName());
-                }
-                return new SimpleObjectProperty(String.join(", ", genreName));
-            }
-        });
+//        genreColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, List<String>>, ObservableValue<List<String>>>() {
+//            @Override
+//            public ObservableValue<List<String>> call(TableColumn.CellDataFeatures<Book, List<String>> param) {
+//                List<Integer> genreId = null;
+//                try {
+//                    genreId = bookGenreController.getGenres(param.getValue().getID());
+//                } catch (SQLException e) {
+//                    return new SimpleObjectProperty("-");
+//                }
+//
+//                //all genres with their ids as keys
+//                List<String> genreName = new ArrayList<>();
+//                //taking only names from hashmap
+//                for (Integer id : genreId){
+//                    genreName.add(genresFromMap.get(id).getName());
+//                }
+//                return new SimpleObjectProperty(String.join(", ", genreName));
+//            }
+//        });
         //bookOverviewTable.setItems(books);
         //return books; //bookOverviewTable.setItems(books);
     }
