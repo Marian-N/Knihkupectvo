@@ -9,6 +9,7 @@ Administrátor má na starosti aj správu objednávok, a teda vybavovanie a zami
 **[Technická realizácia](#technicka-realizacia)**<br>
 **[Dátový model](#datovy-model)**<br>
 **[Scenáre](#scenare)** <br>
+**[Etapy](#etapy)** <br>
 
 
 ## Technická realizácia <a name="technicka-realizacia"></a>
@@ -32,7 +33,7 @@ Na generovanie databázy využívame vlastnoručne písané seedery a [Java Fake
 ![Fyzicky model](images/fyzicky_model.png)
 
 ## Scenáre <a name="scenare"></a>
-1. **Výber kníh**(implementované v 1. etape)<br>
+1. **Výber kníh**(implementované v [1. etape](#etapa1)) <a name="scenar1"></a><br>
 Tento scenár zahŕňa prezeranie si dostupných kníh zákazníkom aj administrátorom.<br>
 Knihy si môžu zoradiť podľa názvu, vydavateľa, dátumu vydania, ceny ale vedia si knihu aj vyhľadať podľa názvu.
 Po vybraní knihy sa im ukáže jej popis, autori a žáner.<br>
@@ -49,12 +50,12 @@ pre pridanie bude musieť vyplniť potrebné informácie – názov, cenu, poče
 Vydavateľa aj autora si bude vedieť vybrať z dostupných alebo pridať nového.<br>
 (b) **Odobrať** - odobratie knihy ju vymaže z databázy. <br>
 (c) **Upraviť** - pri úprave bude môcť zmeniť jej množstvo alebo cenu.
-3. **Objednanie knihy**<br> <a name="objednanie-knihy"></a>
+3. **Objednanie knihy**(implementované v [2. etape](#etapa2))<br> <a name="objednanie-knihy"></a>
 Objednať knihu si vie zákazník. Ku objednávke pristúpi po vybraní knihy zo zoznamu.
 Vyplní jej množstvo a potvrdí objednanie.
 Následne sa objednávka zaradí do histórie jeho objednávok a bude si vedieť pozrieť jej informácie – číslo, dátum, cenu, stav.
 Taktiež v prípade že objednávka ešte nie je vybavená, bude ju vedieť zákazník zrušiť.
-4. **Správa objednávok** <br>
+4. **Správa objednávok**(implementované v [2. etape](#etapa2)) <br>
 Pristupuje k tomu administrátor. <br> 
 Správa objednávok zahŕňa menenie jej stavu:<br>
 (a) **Vybavená** - k vybaveniu dôjde v prípade, že nedošlo k žiadnemu problému na strane kníhkupectva. 
@@ -65,3 +66,73 @@ Tento stav vyhodnocuje administrátor.
 5. **Prihlásenie** <br>
 Prihlasovania sú dve. Jedno pre administrátora a jedno pre zákazníka.
 Na základe prihlasovacích údajov sa určia práva, ktoré budú používatelia v systéme mať. Tie sú popísané vo zvyšných scenároch.
+
+##Etapy <a name="etapy"></a>
+###Etapa 1 <a name="etapa1"></a>
+Pre prvú etapu sme sa rozhodli implementovať [scenár 1](#scenar1). V aplikácií sa dajú zobraziť a vyhľadať knihy.
+*Frontend* komunikuje s *backend-om* pomocou *controllerov*.
+* BooksController vráti knihy z databázy v hashmape
+* AuthorBookController vráti ID autorov s daným ID knihy alebo knihy s ID autora
+* AuthorsController vráti autorov z databázy v hashmape
+* BookGenreController vráti ID žánrov, danej knihy
+* GenreController vráti žánre z databázy v hashmape
+##### Práca s programom
+Pri zapnutí programu je potrebné sa prihlásiť. 
+Keďže tento scenár (prihlásenie) ešte nemáme implementovaný, pre prihlásenie sa ako užívateľ treba do kolónky name napísať “user”.
+Pre prihlásenie sa ako administrátor tam treba zadať “admin”. Obe tieto rozhrania sa zatiaľ funkčne rovnajú.
+Zobrazí sa tabuľka, do ktorej sa z databázy načítajú všetky knihy a informácie k nim. 
+Vľavo od tabuľky je textové pole, do ktorého sa zadáva názov knihy, ktorá sa v tabuľke vyhľadá.
+Pod týmto hľadaním sa zobrazuje obsah knihy. Pre jeho zobrazenie je potrebné si v tabuľke vybrať knihu.
+#### Práca s jayzkom SQL
+**Príklad migrácií**
+```sql
+-- src/main/resources/db/migration/V1.1__Create_customers_table.sql
+CREATE TABLE customers (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    mail VARCHAR(255) NOT NULL,
+    city VARCHAR(50),
+    zip VARCHAR(15),
+    address VARCHAR(255)
+);
+```
+```postgresql
+-- src/main/resources/db/migration/V1.2__Create_orders_table.sql
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    date DATE NOT NULL,
+    customer_id INT NOT NULL,
+    price DECIMAL(6, 2),
+    status VARCHAR(15) NOT NULL,
+    CONSTRAINT fk_customer_order
+        FOREIGN KEY(customer_id)
+        REFERENCES customers(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+```
+**Príklad napĺňania tabuľky generovanými údajmi pomocou java faker**
+```java
+//src/main/java/database/seeders/CustomersSeeder.java
+public class CustomersSeeder {
+    public static void run(Connection connection, Integer count, Faker faker) throws SQLException {
+        String query = "INSERT INTO customers " +
+                "(first_name, last_name, mail, city, zip, address) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+        PreparedStatement statement = connection.prepareStatement(query);
+        Database.emptyTable("customers");
+        while(count-- > 0) {
+            statement.setString(1, faker.name().firstName());
+            statement.setString(2, faker.name().lastName());
+            statement.setString(3, faker.internet().emailAddress());
+            statement.setString(4, faker.address().city());
+            statement.setString(5, faker.address().zipCode());
+            statement.setString(6, faker.address().streetAddress());
+            statement.executeUpdate();
+        }
+        statement.close();
+    }
+}
+```
+###Etapa 2 <a name="etapa2"></a>
