@@ -9,7 +9,7 @@ Administrátor má na starosti aj správu objednávok, a teda vybavovanie a zami
 **[Technická realizácia](#technicka-realizacia)**<br>
 **[Dátový model](#datovy-model)**<br>
 **[Scenáre](#scenare)** <br>
-**[Etapy](#etapy)** <br>
+**[Etapy](#etapy)([1](#etapa1), [2](#etapa2))** <br>
 
 
 ## Technická realizácia <a name="technicka-realizacia"></a>
@@ -50,12 +50,12 @@ pre pridanie bude musieť vyplniť potrebné informácie – názov, cenu, poče
 Vydavateľa aj autora si bude vedieť vybrať z dostupných alebo pridať nového.<br>
 (b) **Odobrať** - odobratie knihy ju vymaže z databázy. <br>
 (c) **Upraviť** - pri úprave bude môcť zmeniť jej množstvo alebo cenu.
-3. **Objednanie knihy**(implementované v [2. etape](#etapa2))<br> <a name="objednanie-knihy"></a>
+3. **Objednanie knihy**(implementované v [2. etape](#etapa2))<br> <a name="objednanie-knihy"></a> <a name="scenar3"></a>
 Objednať knihu si vie zákazník. Ku objednávke pristúpi po vybraní knihy zo zoznamu.
 Vyplní jej množstvo a potvrdí objednanie.
 Následne sa objednávka zaradí do histórie jeho objednávok a bude si vedieť pozrieť jej informácie – číslo, dátum, cenu, stav.
 Taktiež v prípade že objednávka ešte nie je vybavená, bude ju vedieť zákazník zrušiť.
-4. **Správa objednávok**(implementované v [2. etape](#etapa2)) <br>
+4. **Správa objednávok**(implementované v [2. etape](#etapa2)) <br> <a name="scenar4"></a>
 Pristupuje k tomu administrátor. <br> 
 Správa objednávok zahŕňa menenie jej stavu:<br>
 (a) **Vybavená** - k vybaveniu dôjde v prípade, že nedošlo k žiadnemu problému na strane kníhkupectva. 
@@ -67,8 +67,8 @@ Tento stav vyhodnocuje administrátor.
 Prihlasovania sú dve. Jedno pre administrátora a jedno pre zákazníka.
 Na základe prihlasovacích údajov sa určia práva, ktoré budú používatelia v systéme mať. Tie sú popísané vo zvyšných scenároch.
 
-##Etapy <a name="etapy"></a>
-###Etapa 1 <a name="etapa1"></a>
+## Etapy <a name="etapy"></a>
+### Etapa 1 <a name="etapa1"></a>
 Pre prvú etapu sme sa rozhodli implementovať [scenár 1](#scenar1). V aplikácií sa dajú zobraziť a vyhľadať knihy.
 *Frontend* komunikuje s *backend-om* pomocou *controllerov*.
 * BooksController vráti knihy z databázy v hashmape
@@ -76,7 +76,7 @@ Pre prvú etapu sme sa rozhodli implementovať [scenár 1](#scenar1). V aplikác
 * AuthorsController vráti autorov z databázy v hashmape
 * BookGenreController vráti ID žánrov, danej knihy
 * GenreController vráti žánre z databázy v hashmape
-##### Práca s programom
+#### Práca s programom
 Pri zapnutí programu je potrebné sa prihlásiť. 
 Keďže tento scenár (prihlásenie) ešte nemáme implementovaný, pre prihlásenie sa ako užívateľ treba do kolónky name napísať “user”.
 Pre prihlásenie sa ako administrátor tam treba zadať “admin”. Obe tieto rozhrania sa zatiaľ funkčne rovnajú.
@@ -97,7 +97,7 @@ CREATE TABLE customers (
     address VARCHAR(255)
 );
 ```
-```postgresql
+```sql
 -- src/main/resources/db/migration/V1.2__Create_orders_table.sql
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
@@ -112,7 +112,7 @@ CREATE TABLE orders (
         ON DELETE CASCADE
 );
 ```
-**Príklad napĺňania tabuľky generovanými údajmi pomocou java faker**
+**Príklad napĺňania tabuľky generovanými údajmi pomocou java faker** <a name ="priklad_faker"></a>
 ```java
 //src/main/java/database/seeders/CustomersSeeder.java
 public class CustomersSeeder {
@@ -135,4 +135,27 @@ public class CustomersSeeder {
     }
 }
 ```
-###Etapa 2 <a name="etapa2"></a>
+### Etapa 2 <a name="etapa2"></a>
+Pre druhú etapu sme sa rozhodli implementovať [3.](#scenar3) a [4.](#scenar4) scenár.
+Oba tieto scenáre medzi sebou súvisia. Zákazník si vie knihy objednať, 
+pristupovať k histórii svojich objednávok a administrátor ich vie spravovať - vybaviť a zamietnuť.
+#### Napĺňanie tabuliek
+V tejto etape sme mali taktiež naplniť jednu tabuľku s milión dátami. Rozhodli sme sa tak naplniť *orders* tabuľku.
+Ostatné sú naplnené so 100 000 dátami. 
+Tie sme generovali pomocou java faker tak ako aj v [1. etape](etapa1), kde je [príklad kódu](#priklad_faker). 
+#### Netriviálne dopyty
+##### Zoraďovanie kníh podľa popularity
+Zákazník má možnosť zoradiť si knihy podľa popularity zostupne aj vzostupne a ukáže mu tie, ktoré sú na sklade.
+```sql
+-- src/main/java/controller/BooksController.java
+SELECT b.*, p.name publisher_name
+FROM order_book ob
+JOIN books b ON ob.book_id = b.id
+JOIN publishers p ON p.id=b.publisher_id
+WHERE b.stock_quantity>0
+GROUP BY b.id
+HAVING COUNT(ob.book_id)>=1
+ORDER BY COUNT(ob.book_id) %s
+OFFSET %s ROWS
+FETCH FIRST %s ROWS ONLY;
+```
