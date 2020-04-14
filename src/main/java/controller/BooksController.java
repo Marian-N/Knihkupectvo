@@ -28,12 +28,12 @@ public class BooksController {
         ObservableList<Book> books = FXCollections.observableArrayList();
 
         while(resultSet.next()){
-            int id = resultSet.getInt("id");
-            String title = resultSet.getString("title");
-            double price = resultSet.getDouble("price");
-            int stockQuantity = resultSet.getInt("stock_quantity");
-            Date publicationDate = resultSet.getDate("publication_date");
-            String description = resultSet.getString("description");
+            int id = resultSet.getInt(1);
+            String title = resultSet.getString(2);
+            double price = resultSet.getDouble(3);
+            int stockQuantity = resultSet.getInt(4);
+            Date publicationDate = resultSet.getDate(5);
+            String description = resultSet.getString(7);
             Publisher publisher = new Publisher(resultSet);
             Genres genres = GenresController.getInstance().getBookGenres(id);
             Book book = new Book(id, title, price, stockQuantity, publisher, publicationDate, description, genres);
@@ -103,6 +103,7 @@ public class BooksController {
                     "OFFSET %s ROWS FETCH FIRST %s ROW ONLY;", orderBy, order, offset, booksPerPage);
         }
         Statement statement = connection.createStatement();
+        statement.setFetchSize(100);
         ResultSet resultSet = statement.executeQuery(query);
         ObservableList<Book> books = getList(resultSet);
         statement.close();
@@ -147,11 +148,12 @@ public class BooksController {
     }
 
     public ObservableList<Book> findBook(String title) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT b.*, p.name publisher_name FROM books b " +
+        String query = "SELECT b.*, p.name publisher_name FROM books b " +
                 "JOIN publishers p ON p.id=b.publisher_id " +
-                "WHERE title LIKE '%c%s%c';", '%', title, '%');
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
+                "WHERE title LIKE ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, String.format("%c%s%c", '%', title, '%'));
+        ResultSet resultSet = statement.executeQuery();
         ObservableList<Book> books = getList(resultSet);
         statement.close();
         return books;

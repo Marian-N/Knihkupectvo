@@ -13,8 +13,8 @@ public class Genre {
     }
 
     public Genre(ResultSet resultSet) throws SQLException {
-        this.ID = resultSet.getInt("genre_id");
-        this.name = resultSet.getString("genre_name");
+        this.ID = resultSet.getInt(1);
+        this.name = resultSet.getString(2);
     }
 
     public int getID() {
