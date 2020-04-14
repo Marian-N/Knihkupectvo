@@ -10,6 +10,8 @@ Administrátor má na starosti aj správu objednávok, a teda vybavovanie a zami
 **[Dátový model](#datovy-model)**<br>
 **[Scenáre](#scenare)** <br>
 **[Etapy](#etapy)([1](#etapa1), [2](#etapa2))** <br>
+**[Práca s maven, flyway a konfigurácia](#navod)** <br>
+**[Užitočné odkazy](#uzitocne_odkazy)** <br>
 
 
 ## Technická realizácia <a name="technicka-realizacia"></a>
@@ -153,7 +155,7 @@ query = String.format("SELECT b.*, p.name publisher_name " +
                "JOIN books b ON ob.book_id = b.id " +
                "JOIN publishers p ON p.id=b.publisher_id " +
                "WHERE b.stock_quantity>0 " +
-               "GROUP BY b.id " +
+               "GROUP BY b.id, p.name " +
                "HAVING COUNT(ob.book_id)>=1 " +
                "ORDER BY COUNT(ob.book_id) %s " +
                "OFFSET %s ROWS " +
@@ -184,3 +186,30 @@ V prípade že objednávka ešte nieje vybavená, môže ju zákazník zrušiť.
 Prihlasuje sa zadaním *admin* do kolónky *name*. Po pristúpení do časti __*Orders*__ zadáme ID zákazníka, ktorého objednávky chceme vybaviť.
 Zobrazia sa nám, podobne ako pri zákazníkovi, jeho objednávky so statusom a po kliknutí na nejakú aj jej detaily.
 Administrátor následne vie vybranú objednávku vybaviť alebo zamietnuť, pokiaľ je ešte nevybavená.
+
+### Práca s maven, flyway a konfigurácia <a name="navod"></a>
+* V *src/main/resources/* sa nachádza vzorový súbor *configuration_example.properties* kde je konfigurácia pre pripojenie do databázy.
+Je potrebné tam zadať usera, heslo a url k databáze a premenovať ho z *configuration_example.properties* na *configuration.properties*.
+* V *pom.xml* v časti *\<properties>* je potrebné nastaviť údaje rovnako ako v *configuration.properties* 
+    * *\<database.url>* - url k databáze
+    * *\<database.user>* - user na prístup k databáze
+    * *\<database.password>* - heslo k databáze
+* [Flyway](https://flywaydb.org/) sa používa pomocou [Maven](https://maven.apache.org/what-is-maven.html)
+ (pred používaním príkazov *flyway* je potrebné spustiť príkaz *mvn install*
+  * *mvn flyway:info* vypíše informácie o stave migrácií
+  * *mvn flyway:baseline* vytvorí baseline verziu migrácií(používa sa na prázdnu databázu)
+  * *mvn flyway:migrate* vytvorí tabuľky v databáze v poradí od najstaršej po najnovšiu verziu
+  * *mvn flyway:clean* vymaže všetko z databázy
+* Údaje v databáze sa generujú spustením *src/main/java/database/Seeder.java* 
+ktorý naplní databázu údajmi generovanými pomocou [Java Faker](https://github.com/DiUS/java-faker) ([Príklad seederu](#priklad_faker))
+* Program sa spúšťa spustením *src/main/java/Main.java*
+
+### Užitočné odkazy <a name="uzitocne_odkazy"></a>
+[Github Classroom](https://github.com/FIIT-DBS2020/project-rauchova_nisky) <br>
+[Github Repository](https://github.com/Marian-N/Knihkupectvo) <br>
+[Flyway](https://flywaydb.org/) <br>
+[PostgreSQL](https://www.postgresql.org/) <br>
+[JavaFX](https://openjfx.io/) <br>
+[Java Faker](https://github.com/DiUS/java-faker) <br>
+[Maven](https://maven.apache.org/what-is-maven.html)
+
