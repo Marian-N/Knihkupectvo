@@ -1,7 +1,12 @@
 package database;
 
 
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.service.ServiceRegistry;
 import utils.Configuration;
+
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +14,7 @@ import java.util.List;
 public class Database {
     private static Connection connection;
     private static Database _instance = null;
+    private static SessionFactory sessionFactory;
 
     public static Connection getConnection() {
         return connection;
@@ -20,6 +26,11 @@ public class Database {
                 .getConnection(Configuration.getDatabaseUrl(), Configuration.getDatabaseUser(),
                         Configuration.getDatabasePassword());
         Class.forName("org.postgresql.Driver");
+        buildSessionFactory();
+    }
+
+    public static SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 
     public static Database getInstance() throws SQLException, ClassNotFoundException {
@@ -84,5 +95,12 @@ public class Database {
         resultSet.close();
         statement.close();
         return IDs;
+    }
+
+    private static void buildSessionFactory() {
+        File cfgFile = new File("src\\main\\resources\\hibernate.cfg.xml");
+        org.hibernate.cfg.Configuration cfg = new org.hibernate.cfg.Configuration().configure(cfgFile);
+        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(cfg.getProperties()).build();
+        sessionFactory = cfg.buildSessionFactory(serviceRegistry);
     }
 }

@@ -1,14 +1,33 @@
 package model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Date;
 
+@Entity
+@Table(name = "books")
 public class Book {
+    @Id
+    @Column(name = "id")
     private int ID;
+
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "price")
     private double price;
+
+    @Column(name = "stock_quantity")
     private int stockQuantity;
+
+    @Column(name = "publication_date")
     private Date publicationDate;
+
+    @Column(name = "description")
     private String description;
+
     private Publisher publisher;
     private Genres genres;
 
