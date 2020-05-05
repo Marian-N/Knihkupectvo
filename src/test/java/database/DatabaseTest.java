@@ -2,7 +2,6 @@ package database;
 
 import model.Book;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.junit.Test;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -22,6 +21,6 @@ public class DatabaseTest {
         criteria.from(Book.class);
         List<Book> books = session.createQuery(criteria).getResultList();
         session.close();
-        System.out.print(books);
+        assertNotNull("There are no data in table books", books);
     }
 }

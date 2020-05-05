@@ -1,9 +1,6 @@
 package model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
@@ -28,7 +25,10 @@ public class Book {
     @Column(name = "description")
     private String description;
 
+    @Transient
     private Publisher publisher;
+
+    @Transient
     private Genres genres;
 
     public Genres getGenres() {
@@ -46,6 +46,8 @@ public class Book {
         this.description = description;
         this.genres = genres;
     }
+
+    public Book() {}
 
     public Publisher getPublisher() {
         return publisher;

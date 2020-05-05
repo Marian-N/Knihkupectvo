@@ -99,8 +99,6 @@ public class Database {
 
     private static void buildSessionFactory() {
         File cfgFile = new File("src\\main\\resources\\hibernate.cfg.xml");
-        org.hibernate.cfg.Configuration cfg = new org.hibernate.cfg.Configuration().configure(cfgFile);
-        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(cfg.getProperties()).build();
-        sessionFactory = cfg.buildSessionFactory(serviceRegistry);
+        sessionFactory = new org.hibernate.cfg.Configuration().configure(cfgFile).buildSessionFactory();
     }
 }
