@@ -90,4 +90,18 @@ public class OrdersController {
 
         return orders;
     }
+
+    public boolean hasOrders(int bookID) throws SQLException {
+        String query = "SELECT COUNT(ob.book_id) FROM order_book ob " +
+                "WHERE ob.book_id = ?;";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, bookID);
+        ResultSet resultSet = statement.executeQuery();
+        resultSet.next();
+        int count = resultSet.getInt(1);
+        resultSet.close();
+        statement.close();
+
+        return count > 0;
+    }
 }

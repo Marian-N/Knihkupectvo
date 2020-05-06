@@ -1,11 +1,21 @@
 package model;
 
+import javax.persistence.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Entity
+@Table(name = "authors")
 public class Author {
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
     private int ID;
+
+    @Column(name = "name")
     private String name;
+
+    public Author() {}
 
     public Author(int ID, String name) {
         this.ID = ID;

@@ -2,11 +2,13 @@ package model;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "books")
 public class Book {
     @Id
+    @GeneratedValue
     @Column(name = "id")
     private int ID;
 
@@ -25,9 +27,21 @@ public class Book {
     @Column(name = "description")
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "publisher_id", referencedColumnName = "id")
     private Publisher publisher;
+
+    @OneToMany
+            @JoinTable(name = "book_genre",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    public List<Genre> genresList;
+
+    @OneToMany
+    @JoinTable(name = "author_book",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
+    public List<Author> authorsList;
 
     @Transient
     private Genres genres;

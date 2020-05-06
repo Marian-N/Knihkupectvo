@@ -22,5 +22,7 @@
         <!-- Mapping With Model Class Containing Annotations -->
         <mapping class="model.Book"/>
         <mapping class="model.Publisher"/>
+        <mapping class="model.Genre"/>
+        <mapping class="model.Author"/>
     </session-factory>
 </hibernate-configuration>

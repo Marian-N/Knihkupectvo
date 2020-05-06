@@ -180,6 +180,22 @@ public class BooksController {
         transaction.commit();
         session.close();
     }
+
+    public boolean removeBook(int bookID) throws SQLException, ClassNotFoundException {
+        Session session = Database.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+
+        Book book = session.get(Book.class, bookID);
+        if(book != null && !OrdersController.getInstance().hasOrders(bookID)) {
+            session.delete(book);
+            transaction.commit();
+            session.close();
+            return true;
+        }
+        transaction.commit();
+        session.close();
+        return false;
+    }
 }
 
 
