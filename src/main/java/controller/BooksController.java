@@ -7,6 +7,8 @@ import javafx.collections.ObservableMap;
 import model.Book;
 import model.Genres;
 import model.Publisher;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.sql.*;
 
@@ -157,6 +159,26 @@ public class BooksController {
         ObservableList<Book> books = getList(resultSet);
         statement.close();
         return books;
+    }
+
+    public void changeBook(int bookID, double price) throws SQLException, ClassNotFoundException {
+        Session session = Database.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Book book = session.get(Book.class, bookID);
+        book.setPrice(price);
+        session.saveOrUpdate(book);
+        transaction.commit();
+        session.close();
+    }
+
+    public void changeBook(int bookID, int quantity) throws SQLException, ClassNotFoundException {
+        Session session = Database.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Book book = session.get(Book.class, bookID);
+        book.setStockQuantity(quantity);
+        session.saveOrUpdate(book);
+        transaction.commit();
+        session.close();
     }
 }
 
