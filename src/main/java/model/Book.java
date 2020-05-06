@@ -25,7 +25,8 @@ public class Book {
     @Column(name = "description")
     private String description;
 
-    @Transient
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "publisher_id", referencedColumnName = "id")
     private Publisher publisher;
 
     @Transient
