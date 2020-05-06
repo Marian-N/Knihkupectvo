@@ -55,7 +55,7 @@ public class ScreenConfiguration {
         stage.setResizable(false);
         stage.setTitle("Change book");
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();
+        stage.showAndWait();
         return ;
     }
 

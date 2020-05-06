@@ -19,6 +19,7 @@ import model.Order;
 import model.OrderContent;
 
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 
 public class MakeOrderController {
 
@@ -51,17 +52,19 @@ public class MakeOrderController {
     }
 
     public void initData(ObservableList<OrderContent> newOrderTaken, int customerId, Stage stage){
+        DecimalFormat df = new DecimalFormat("#.##");
         createTable();
         newOrder = newOrderTaken;
         if(newOrder != null){
             fillTable(newOrder);
             double totalPrice = getTotalPrice(newOrder);
-            totalCostTextField.setText(String.valueOf(totalPrice));
+            totalCostTextField.setText(String.valueOf(df.format(totalPrice)));
 
             removeItemButton.setOnAction(e->{
                 OrderContent selectedItem = orderMakeTable.getSelectionModel().getSelectedItem();
                 if(newOrder.contains(selectedItem)){
                     newOrder.remove(selectedItem);
+                    totalCostTextField.setText(String.valueOf(df.format(getTotalPrice(newOrder))));
                 }
             });
 
@@ -74,7 +77,7 @@ public class MakeOrderController {
                         if(newOrder.get(idOfOrder).getBook().getStockQuantity() >= newQuantity && newQuantity > 0){
                             newOrderTaken.get(idOfOrder).setQuantity(newQuantity);
                             orderMakeTable.refresh();
-                            totalCostTextField.setText(String.valueOf(getTotalPrice(newOrder)));
+                            totalCostTextField.setText(String.valueOf(df.format(getTotalPrice(newOrder))));
                             changeQuantityTextField.clear();
                         }
                         else{

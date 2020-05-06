@@ -324,6 +324,7 @@ public class AdminMainController implements Initializable {
         Book book = bookOverviewTable.getSelectionModel().getSelectedItem();
         if(book != null){
             screenConfiguration.setChangeBookScene(book);
+            bookOverviewTable.refresh();
         }
     }
 

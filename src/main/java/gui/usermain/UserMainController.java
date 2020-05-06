@@ -24,6 +24,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -72,7 +73,7 @@ public class UserMainController implements Initializable {
     @FXML
     private TableColumn<Book, Integer> stockColumn;
     @FXML
-    private JFXTextField userIdTextField;
+    private TextField userIdTextField;
     @FXML
     private TableView<Order> orderOverviewTable;
     @FXML

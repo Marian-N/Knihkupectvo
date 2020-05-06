@@ -2,6 +2,7 @@ package gui.adminchangebook;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import controller.BooksController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,10 +14,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jdk.nashorn.internal.objects.Global;
 import model.Book;
+import javafx.scene.control.TextField;
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 
@@ -26,17 +30,22 @@ public class ChangeBookController {
     @FXML
     private JFXTextField changeStockTextField;
     @FXML
-    private JFXTextField bookTitle;
+    private TextField bookTitle;
     @FXML
-    private JFXTextField bookId;
+    private TextField bookId;
     @FXML
-    private JFXTextField bookPrice;
+    private TextField bookPrice;
     @FXML
-    private JFXTextField bookStock;
+    private TextField bookStock;
     @FXML
     private JFXButton changePriceButton;
     @FXML
     private JFXButton changeStockButton;
+
+    private BooksController booksController = BooksController.getInstance();
+
+    public ChangeBookController() throws SQLException, ClassNotFoundException {
+    }
 
     void initialize(){}
 
@@ -51,9 +60,34 @@ public class ChangeBookController {
     }
 
     public void handleChangePrice(ActionEvent event, Book book) {
-        System.out.println(book.getTitle());
+        DecimalFormat df = new DecimalFormat("#.##");
+        try {
+            double newPrice = Double.parseDouble(df.format(Double.parseDouble(changePriceTextField.getText())));
+            booksController.changeBook(book.getID(), newPrice);
+            book.setPrice(newPrice);
+        } catch (SQLException e) {
+        } catch (ClassNotFoundException e) {
+        } catch(NumberFormatException ex) {
+            changePriceTextField.clear();
+        }
     }
 
     public void handleChangeStock(ActionEvent event, Book book) {
+        try{
+            int newStock = Integer.parseInt(changeStockTextField.getText());
+            booksController.changeBook(book.getID(), newStock);
+            book.setStockQuantity(newStock);
+        } catch (SQLException e) {
+        } catch (ClassNotFoundException e) {
+        } catch(NumberFormatException ex) {
+            changeStockTextField.clear();
+        }
+
+
+//        try {
+//            booksController.changeBook(book.getID(), newPrice);
+//        } catch (SQLException e) {
+//        } catch (ClassNotFoundException e) {
+//        }
     }
 }
