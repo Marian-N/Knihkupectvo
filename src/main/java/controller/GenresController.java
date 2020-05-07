@@ -7,6 +7,7 @@ import javafx.collections.ObservableMap;
 import model.Genre;
 import model.Genres;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -64,5 +65,16 @@ public class GenresController {
         EntityManager entityManager = session.getEntityManagerFactory().createEntityManager();
         List<Genre> genres = entityManager.createQuery(query).setMaxResults(20).getResultList();
         return FXCollections.observableList(genres);
+    }
+
+    public void addGenre(Genre genre) {
+        Session session = Database.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+
+        if(genre != null) {
+            session.saveOrUpdate(genre);
+            transaction.commit();
+        }
+        session.close();
     }
 }

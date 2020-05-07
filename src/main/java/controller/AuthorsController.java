@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import model.Author;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -59,5 +60,16 @@ public class AuthorsController {
         EntityManager entityManager = session.getEntityManagerFactory().createEntityManager();
         List<Author> authors = entityManager.createQuery(query).setMaxResults(20).getResultList();
         return FXCollections.observableList(authors);
+    }
+
+    public void addAuthor(Author author) {
+        Session session = Database.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+
+        if(author != null) {
+            session.saveOrUpdate(author);
+            transaction.commit();
+        }
+        session.close();
     }
 }

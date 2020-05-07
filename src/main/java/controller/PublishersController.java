@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import model.Publisher;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -59,5 +60,16 @@ public class PublishersController {
         EntityManager entityManager = session.getEntityManagerFactory().createEntityManager();
         List<Publisher> publishers = entityManager.createQuery(query).setMaxResults(20).getResultList();
         return FXCollections.observableList(publishers);
+    }
+
+    public void addPublisher(Publisher publisher) {
+        Session session = Database.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+
+        if(publisher != null) {
+            session.saveOrUpdate(publisher);
+            transaction.commit();
+        }
+        session.close();
     }
 }
