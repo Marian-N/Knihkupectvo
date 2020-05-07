@@ -731,4 +731,37 @@ public class AdminMainController implements Initializable {
     public void handleCancelAddBook(ActionEvent event) {
         addBookClear();
     }
+
+    public void handleAddNewAuthor(ActionEvent event) {
+        if(!addBookSAuthorT.getText().isEmpty()){
+            String newAuthorName = addBookSAuthorT.getText();
+            Author newAuthor = new Author(newAuthorName);
+            authorsController.addAuthor(newAuthor);
+            addBookAuthors.getItems().add(newAuthor);
+            wrongAuthor.setVisible(false);
+
+        }
+    }
+
+    public void handleAddNewPublisher(ActionEvent event) {
+        if(!addBookSPublisherT.getText().isEmpty()){
+            String newPublisherName = addBookSPublisherT.getText();
+            Publisher newPublisher = new Publisher(newPublisherName);
+            publishersController.addPublisher(newPublisher);
+            addBookPublishers.getItems().clear();
+            addBookPublishers.getItems().add(newPublisher);
+            wrongPublisher.setVisible(false);
+        }
+    }
+
+    public void handleAddNewGenre(ActionEvent event) {
+        if(!addBookSGenreT.getText().isEmpty()){
+            String newGenreName = addBookSGenreT.getText();
+            Genre newGenre = new Genre(newGenreName);
+            genresController.addGenre(newGenre);
+            addBookGenres.getItems().add(newGenre);
+            wrongGenre.setVisible(false);
+
+        }
+    }
 }

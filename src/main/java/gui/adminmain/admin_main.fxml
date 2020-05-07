@@ -81,9 +81,9 @@
                         <JFXButton fx:id="addBookButton" layoutX="1134.0" layoutY="544.0" onAction="#handleAddBook" prefHeight="80.0" prefWidth="120.0" ripplerFill="darkorange" text="Add Book" />
                         <JFXComboBox fx:id="addBookGenreChoice" focusColor="darkorange" layoutX="684.0" layoutY="405.0" prefHeight="50.0" prefWidth="300.0" />
                         <Label layoutX="94.0" layoutY="415.0" text="Genre:" />
-                        <JFXListView fx:id="addBookAuthors" layoutX="1059.0" layoutY="188.0" prefHeight="44.0" prefWidth="300.0" />
-                        <JFXListView fx:id="addBookPublishers" layoutX="1059.0" layoutY="298.0" prefHeight="44.0" prefWidth="300.0" />
-                        <JFXListView fx:id="addBookGenres" layoutX="1059.0" layoutY="408.0" prefHeight="44.0" prefWidth="300.0" />
+                        <JFXListView fx:id="addBookAuthors" layoutX="1059.0" layoutY="188.0" prefHeight="77.0" prefWidth="300.0" />
+                        <JFXListView fx:id="addBookPublishers" layoutX="1059.0" layoutY="298.0" prefHeight="77.0" prefWidth="300.0" />
+                        <JFXListView fx:id="addBookGenres" layoutX="1059.0" layoutY="408.0" prefHeight="77.0" prefWidth="300.0" />
                         <JFXDatePicker fx:id="addBookPDate" layoutX="775.0" layoutY="562.0" prefWidth="297.0" promptText="month/day/year" />
                         <Text fx:id="wrongTitle" fill="RED" layoutX="464.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-wrong-mark" text="!" visible="false" />
                         <Text fx:id="wrongPrice" fill="RED" layoutX="834.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-wrong-mark" text="!" visible="false" />
@@ -99,7 +99,10 @@
                         <JFXButton fx:id="addBookSAuthorB" layoutX="483.0" layoutY="188.0" onAction="#handleABAuthorSearch" text="search author" />
                         <JFXButton fx:id="addBookSPublisherB" layoutX="483.0" layoutY="298.0" onAction="#handleABPublisherSearch" text="search publisher" />
                         <JFXButton fx:id="addBookSGenreB" layoutX="483.0" layoutY="408.0" onAction="#handleABGenreSearch" prefHeight="44.0" prefWidth="145.0" text="search genre" />
-                        <JFXButton fx:id="addBookCancel" layoutX="1298.0" layoutY="544.0" prefHeight="80.0" prefWidth="100.0" onAction="#handleCancelAddBook" text="Cancel" />
+                        <JFXButton fx:id="addBookCancel" layoutX="1298.0" layoutY="544.0" onAction="#handleCancelAddBook" prefHeight="80.0" prefWidth="100.0" text="Cancel" />
+                        <JFXButton fx:id="addNewAuthorButton" layoutX="191.0" layoutY="236.0" onAction="#handleAddNewAuthor" styleClass="add-new-button" text="Add new Author" />
+                        <JFXButton fx:id="addNewPublisherButton" layoutX="191.0" layoutY="346.0" onAction="#handleAddNewPublisher" styleClass="add-new-button" text="Add new Publisher" />
+                        <JFXButton fx:id="addNewGenreButton" layoutX="191.0" layoutY="456.0" onAction="#handleAddNewGenre" styleClass="add-new-button" text="Add new Genre" />
                      </children></AnchorPane>
                     </content>
                 </Tab>

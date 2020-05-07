@@ -230,5 +230,9 @@
     -fx-text-fill: white;
 }
 
+.add-new-button{
+    -fx-font-size: 13;
+}
+
 
 
