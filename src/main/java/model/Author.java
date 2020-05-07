@@ -8,7 +8,7 @@ import java.sql.SQLException;
 @Table(name = "authors")
 public class Author {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int ID;
 
@@ -16,6 +16,10 @@ public class Author {
     private String name;
 
     public Author() {}
+
+    public Author(String name) {
+        this.name = name;
+    }
 
     public Author(int ID, String name) {
         this.ID = ID;
