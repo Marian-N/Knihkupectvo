@@ -49,10 +49,17 @@
 
 .tab .jfx-rippler{
     -jfx-rippler-fill:  #383838;
+    -jfx-rippler-radius: 0;
+}
+
+.jfx-tab-pane .headers-region .tab-selected-line {
+    -fx-background-color: darkorange;
 }
 
 .text-field{
     -fx-text-fill: #a4a4a4;
+    -fx-font-size: 20;
+    -jfx-focus-color: darkorange;
 }
 /*change background and horizontal borders*/
 .table-view .cell{
@@ -74,6 +81,12 @@
     -fx-alignment: CENTER_LEFT;
 }
 .table-view{
+    -fx-background-color: transparent;
+}
+.table-view .filler {
+    -fx-background-color: transparent;
+}
+.table-view .corner {
     -fx-background-color: transparent;
 }
 
@@ -107,18 +120,30 @@
     -fx-cell-size: 30px;
 }
 
-.table-view .scroll-bar:horizontal .track,
-.table-view .scroll-bar:vertical .track{
+/*.table-view .scroll-bar:horizontal .track,*/
+/*.table-view .scroll-bar:vertical .track{*/
+/*    -fx-background-color: #383838;*/
+/*    -fx-border-color:#383838;*/
+/*    -fx-background-radius: 0;*/
+/*    -fx-border-radius: 0;*/
+/*}*/
+
+/*.table-view .scroll-bar:horizontal .thumb,*/
+/*.table-view .scroll-bar:vertical .thumb {*/
+/*    -fx-background-color: #a4a4a4;*/
+/*    -fx-background-insets: 0, 0, 0;*/
+/*    -fx-background-radius: 0;*/
+/*}*/
+
+.scroll-bar{
     -fx-background-color: #383838;
     -fx-border-color:#383838;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
 }
-
-.table-view .scroll-bar:horizontal .thumb,
-.table-view .scroll-bar:vertical .thumb {
-    -fx-background-color: #a4a4a4;
-    -fx-background-insets: 0, 0, 0;
+.scroll-bar .thumb{
+    -fx-background-color: #393939;
+    -fx-border-color: #626262;
     -fx-background-radius: 0;
 }
 
@@ -175,3 +200,35 @@
     -fx-text-fill: #a4a4a4;
     -fx-background-color: transparent;
 }
+
+.list-view{
+    -fx-background-color: transparent;
+}
+.text-wrong-mark{
+    -fx-font-size: 30;
+    -fx-text-fill: red;
+}
+
+/*date picker base color and button*/
+.jfx-date-picker .date-picker-popup .button{
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 0 0;
+}
+
+.jfx-date-picker {
+    -jfx-default-color: darkorange;
+}
+
+.list-view{
+    -fx-font-size: 16;
+    -fx-background-color: transparent;
+    -fx-border-radius: 0;
+}
+
+.list-view .list-cell{
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+
+

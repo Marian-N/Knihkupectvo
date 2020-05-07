@@ -36,3 +36,7 @@
     -fx-font-size: 13;
     -fx-text-fill: #ff7961;
 }
+
+.jfx-rippler{
+    -jfx-rippler-radius: 0;
+}

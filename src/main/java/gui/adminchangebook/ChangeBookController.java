@@ -5,23 +5,10 @@ import com.jfoenix.controls.JFXTextField;
 import controller.BooksController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import jdk.nashorn.internal.objects.Global;
 import model.Book;
 import javafx.scene.control.TextField;
-
-import java.awt.*;
-import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.util.ResourceBundle;
 
 
 public class ChangeBookController {
@@ -82,12 +69,5 @@ public class ChangeBookController {
         } catch(NumberFormatException ex) {
             changeStockTextField.clear();
         }
-
-
-//        try {
-//            booksController.changeBook(book.getID(), newPrice);
-//        } catch (SQLException e) {
-//        } catch (ClassNotFoundException e) {
-//        }
     }
 }

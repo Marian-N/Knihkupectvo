@@ -37,7 +37,13 @@
 
 .tab .jfx-rippler{
     -jfx-rippler-fill:  #383838;
+    -jfx-rippler-radius: 0;
 }
+
+.jfx-tab-pane .headers-region .tab-selected-line {
+    -fx-background-color: darkorange;
+}
+
 .tab-header-background{
     -fx-background-color: #383838;
 }
@@ -46,6 +52,7 @@
     -fx-background-color: transparent;
     -fx-background-radius: 0;
     -fx-border-insets: 0;
+    -jfx-focus-color: darkorange;
 }
 
 
@@ -79,20 +86,25 @@
     -fx-text-fill: #383838;
 }
 /*scrollbars*/
-.table-view .scroll-bar:horizontal .track,
-.table-view .scroll-bar:vertical .track{
+.scroll-bar{
     -fx-background-color: #383838;
     -fx-border-color:#383838;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
 }
-
-.table-view .scroll-bar:horizontal .thumb,
-.table-view .scroll-bar:vertical .thumb {
-    -fx-background-color: #a4a4a4;
-    -fx-background-insets: 0, 0, 0;
+.scroll-bar .thumb{
+    -fx-background-color: #393939;
+    -fx-border-color: #626262;
     -fx-background-radius: 0;
 }
+
+.table-view .filler {
+    -fx-background-color: transparent;
+}
+.table-view .corner {
+    -fx-background-color: transparent;
+}
+
 /*header of tableview background*/
 .table-view .column-header, .table-view .column-header .filler, .table-view .column-header-background .filler {
     -fx-background-color: #383838;
@@ -152,3 +164,5 @@
     -fx-font-size: 20;
     -fx-alignment: center ;
 }
+
+

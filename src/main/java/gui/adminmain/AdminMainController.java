@@ -1,9 +1,6 @@
 package gui.adminmain;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextArea;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import controller.*;
 import database.Database;
 import gui.ScreenConfiguration;
@@ -29,9 +26,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 import model.*;
 
 import gui.adminchangebook.ChangeBookController;
@@ -41,6 +40,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -81,6 +82,7 @@ public class AdminMainController implements Initializable {
     private TableColumn<Book, Date> yearColumn;
     @FXML
     private TableColumn<Book, Integer> stockColumn;
+    //Orders
     @FXML
     private TableView<Order> orderOverviewTable;
     @FXML
@@ -109,6 +111,52 @@ public class AdminMainController implements Initializable {
     private JFXTextField searchCustomerTextField;
     @FXML
     private TextField bestCustomersTextField;
+    //Add book
+    @FXML
+    private JFXTextField addBookTitle;
+    @FXML
+    private JFXTextField addBookStock;
+    @FXML
+    private JFXTextField addBookPrice;
+    @FXML
+    private JFXTextArea addBookSynopsis;
+    @FXML
+    private JFXDatePicker addBookPDate;
+    @FXML
+    private JFXComboBox<Author> addBookAuthorChoice;
+    @FXML
+    private JFXComboBox<Publisher> addBookPublisherChoice;
+    @FXML
+    private JFXComboBox<Genre> addBookGenreChoice;
+    @FXML
+    private JFXListView<Author> addBookAuthors;
+    @FXML
+    private JFXListView<Publisher> addBookPublishers;
+    @FXML
+    private JFXListView<Genre> addBookGenres;
+    @FXML
+    private JFXTextField addBookSAuthorT;
+    @FXML
+    private JFXTextField addBookSPublisherT;
+    @FXML
+    private JFXTextField addBookSGenreT;
+    @FXML
+    private Text wrongTitle;
+    @FXML
+    private Text wrongPrice;
+    @FXML
+    private Text wrongDate;
+    @FXML
+    private Text wrongStock;
+    @FXML
+    private Text wrongSynopsis;
+    @FXML
+    private Text wrongAuthor;
+    @FXML
+    private Text wrongPublisher;
+    @FXML
+    private Text wrongGenre;
+
 
 
     private BooksController booksController = BooksController.getInstance();
@@ -118,6 +166,7 @@ public class AdminMainController implements Initializable {
     private GenresController genresController = GenresController.getInstance();
     private OrdersController ordersController = OrdersController.getInstance();
     private CustomerController customerController = CustomerController.getInstance();
+    private PublishersController publishersController = PublishersController.getInstance();
 
     ObservableList<Book> books = FXCollections.observableArrayList();
     ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
@@ -148,6 +197,9 @@ public class AdminMainController implements Initializable {
                 return createBooksPage(pageIndex);
             }
         });
+
+        AddBookInitialization();
+
     }
 
     private void createOrderByBooksComboBox() {
@@ -328,8 +380,13 @@ public class AdminMainController implements Initializable {
         }
     }
 
-    public void handleDeleteBook(ActionEvent actionEvent) {
-
+    public void handleDeleteBook(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        Book book = bookOverviewTable.getSelectionModel().getSelectedItem();
+        if(book != null) {
+            boolean deleted = booksController.removeBook(book.getID());
+            System.out.println("Book deleted: " + deleted);
+            bookOverviewTable.refresh();
+        }
     }
 
     //load orders after searching of customer id
@@ -430,5 +487,248 @@ public class AdminMainController implements Initializable {
     public void handleLogout(javafx.event.ActionEvent event) throws IOException {
         ScreenConfiguration screenConfiguration = new ScreenConfiguration();
         screenConfiguration.setLoginScene(event);
+    }
+
+    //Adding book
+    public void AddBookInitialization() {
+        //Adding book initialization of author
+        addBookAuthors.setCellFactory(param -> new ListCell<Author>(){
+            @Override
+            protected void updateItem(Author item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null || item.getName() == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+
+        addBookAuthorChoice.valueProperty().addListener((v, oldValue, newValue) -> {
+            if(newValue != null){
+                addBookAuthors.getItems().add(newValue);
+            }
+        });
+        //Adding book initialization of publisher
+        addBookPublishers.setCellFactory(param -> new ListCell<Publisher>(){
+            @Override
+            protected void updateItem(Publisher item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null || item.getName() == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+
+        addBookPublisherChoice.valueProperty().addListener((v, oldValue, newValue) -> {
+            if(newValue != null){
+                addBookPublishers.getItems().clear();
+                addBookPublishers.getItems().add(newValue);
+            }
+        });
+
+        //Adding book initialization of genre
+        addBookGenres.setCellFactory(param -> new ListCell<Genre>(){
+            @Override
+            protected void updateItem(Genre item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null || item.getName() == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+
+        addBookGenreChoice.valueProperty().addListener((v, oldValue, newValue) -> {
+            if(newValue != null){
+                addBookGenres.getItems().add(newValue);
+            }
+        });
+    }
+
+    public void handleAddBook(ActionEvent event) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        int counter = 0;
+
+        double newPrice = 0;
+        try{
+            newPrice = Double.parseDouble(df.format(Double.parseDouble(addBookPrice.getText())));
+            wrongPrice.setVisible(false);
+            counter++;
+        } catch(NumberFormatException e){
+            wrongPrice.setVisible(true);
+        }
+        int newStock = 0;
+        try{
+            newStock = Integer.parseInt(addBookStock.getText());
+            wrongStock.setVisible(false);
+            counter++;
+        } catch(NumberFormatException e){
+            wrongStock.setVisible(true);
+        }
+
+        String newTitle = null;
+        if(addBookTitle.getText().isEmpty()){
+            wrongTitle.setVisible(true);
+        } else{
+            newTitle = addBookTitle.getText();
+            wrongTitle.setVisible(false);
+            counter++;
+        }
+
+        String newSynopsis = null;
+        if(addBookSynopsis.getText().isEmpty()){
+            wrongSynopsis.setVisible(true);
+        } else{
+            newSynopsis = addBookSynopsis.getText();
+            wrongSynopsis.setVisible(false);
+            counter++;
+        }
+
+        LocalDate dateFromPicker = addBookPDate.valueProperty().getValue();
+        Date newPublicationDate = null;
+        if (dateFromPicker != null){
+            newPublicationDate = Date.valueOf(dateFromPicker);
+            wrongDate.setVisible(false);
+            counter++;
+        } else{
+            wrongDate.setVisible(true);
+        }
+
+        List<Author> newAuthors = null;
+        if(addBookAuthors.getItems().isEmpty()){
+            wrongAuthor.setVisible(true);
+        } else{
+            wrongAuthor.setVisible(false);
+            newAuthors = addBookAuthors.getItems();
+            counter++;
+        }
+        Publisher newPublisher = null;
+        if(addBookPublishers.getItems().isEmpty()){
+            wrongPublisher.setVisible(true);
+        } else{
+            wrongPublisher.setVisible(false);
+            newPublisher = addBookPublishers.getItems().get(0);
+            counter++;
+        }
+        List<Genre> newGenres = null;
+        if(addBookGenres.getItems().isEmpty()){
+            wrongGenre.setVisible(true);
+        } else{
+            wrongGenre.setVisible(false);
+            newGenres = addBookGenres.getItems();
+            counter++;
+        }
+
+        System.out.println(counter);
+        if(counter == 8){
+            Book book = new Book(newTitle, newPrice, newStock, newPublisher,
+                                 newPublicationDate, newSynopsis, newGenres, newAuthors);
+            booksController.addBook(book);
+            addBookClear();
+
+        }
+
+    }
+
+    //Clearing of fields
+    public void addBookClear(){
+        addBookPrice.clear();
+        addBookStock.clear();
+        addBookTitle.clear();
+        addBookSynopsis.clear();
+        addBookAuthors.getItems().clear();
+        addBookPublishers.getItems().clear();
+        addBookGenres.getItems().clear();
+        addBookPDate.getEditor().clear();
+
+        wrongPrice.setVisible(false);
+        wrongPublisher.setVisible(false);
+        wrongAuthor.setVisible(false);
+        wrongSynopsis.setVisible(false);
+        wrongDate.setVisible(false);
+        wrongTitle.setVisible(false);
+        wrongGenre.setVisible(false);
+        wrongStock.setVisible(false);
+    }
+
+    //Author search in add book
+    public void handleABAuthorSearch(ActionEvent event) {
+        addBookAuthorChoice.getItems().clear();
+        String Name = addBookSAuthorT.getText();
+        ObservableList<Author> searchedAuthors = FXCollections.observableArrayList(authorsController.getAuthor(Name));
+        if(searchedAuthors.isEmpty()){
+            wrongAuthor.setVisible(true);
+        } else{
+            wrongAuthor.setVisible(false);
+            addBookAuthorChoice.getItems().addAll(searchedAuthors);
+            addBookAuthorChoice.setConverter(new StringConverter<Author>() {
+                @Override
+                public String toString(Author object) {
+                    return object.getName();
+                }
+
+                @Override
+                public Author fromString(String string) {
+                    return null;
+                }
+            });
+        }
+    }
+    //Publisher search in add book
+    public void handleABPublisherSearch(ActionEvent event) {
+        addBookPublisherChoice.getItems().clear();
+        String Name = addBookSPublisherT.getText();
+        ObservableList<Publisher> searchedPublishers = FXCollections.observableArrayList(publishersController.getPublisher(Name));
+        if(searchedPublishers.isEmpty()){
+            wrongPublisher.setVisible(true);
+        } else{
+            wrongPublisher.setVisible(false);
+            addBookPublisherChoice.getItems().addAll(searchedPublishers);
+            addBookPublisherChoice.setConverter(new StringConverter<Publisher>() {
+                @Override
+                public String toString(Publisher object) {
+                    return object.getName();
+                }
+
+                @Override
+                public Publisher fromString(String string) {
+                    return null;
+                }
+            });
+        }
+    }
+    //Genre search in add book
+    public void handleABGenreSearch(ActionEvent event) {
+        addBookGenreChoice.getItems().clear();
+        String Name = addBookSGenreT.getText();
+        ObservableList<Genre> searchedGenres = FXCollections.observableArrayList(genresController.getGenre(Name));
+        if(searchedGenres.isEmpty()){
+            wrongGenre.setVisible(true);
+        } else{
+            wrongGenre.setVisible(false);
+            addBookGenreChoice.getItems().addAll(searchedGenres);
+            addBookGenreChoice.setConverter(new StringConverter<Genre>() {
+                @Override
+                public String toString(Genre object) {
+                    return object.getName();
+                }
+
+                @Override
+                public Genre fromString(String string) {
+                    return null;
+                }
+            });
+        }
+    }
+
+    public void handleCancelAddBook(ActionEvent event) {
+        addBookClear();
     }
 }
