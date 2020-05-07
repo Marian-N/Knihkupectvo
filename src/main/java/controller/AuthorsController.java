@@ -6,10 +6,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import model.Author;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -55,7 +53,9 @@ public class AuthorsController {
         CriteriaQuery<Author> query = criteriaBuilder.createQuery(Author.class);
         Root<Author> rootEntry = query.from(Author.class);
         query.select(rootEntry);
-        query.where(criteriaBuilder.equal(rootEntry.get("name"), name));
+        String nameLike = String.format("%c%s%c", '%', name.toLowerCase(), '%');
+        query.where(criteriaBuilder.
+                like(criteriaBuilder.lower(rootEntry.get("name")), nameLike));
         EntityManager entityManager = session.getEntityManagerFactory().createEntityManager();
         List<Author> authors = entityManager.createQuery(query).setMaxResults(20).getResultList();
         return FXCollections.observableList(authors);

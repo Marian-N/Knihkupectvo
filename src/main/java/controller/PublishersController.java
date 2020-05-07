@@ -4,7 +4,6 @@ import database.Database;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import model.Author;
 import model.Publisher;
 import org.hibernate.Session;
 
