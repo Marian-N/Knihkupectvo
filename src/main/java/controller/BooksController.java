@@ -198,6 +198,14 @@ public class BooksController {
     }
 
     public void addBook(Book book) {
+        Session session = Database.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+
+        if(book != null) {
+            session.saveOrUpdate(book);
+            transaction.commit();
+        }
+        session.close();
     }
 }
 
