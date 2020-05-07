@@ -2,13 +2,21 @@ package controller;
 
 import database.Database;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import model.Author;
 import model.Publisher;
+import org.hibernate.Session;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class PublishersController {
     private static PublishersController _instance = null;
@@ -40,4 +48,17 @@ public class PublishersController {
         return publishers;
     }
 
+    public ObservableList<Publisher> getPublisher(String name) {
+        Session session = Database.getSessionFactory().openSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Publisher> query = criteriaBuilder.createQuery(Publisher.class);
+        Root<Publisher> rootEntry = query.from(Publisher.class);
+        query.select(rootEntry);
+        String nameLike = String.format("%c%s%c", '%', name.toLowerCase(), '%');
+        query.where(criteriaBuilder.
+                like(criteriaBuilder.lower(rootEntry.get("name")), nameLike));
+        EntityManager entityManager = session.getEntityManagerFactory().createEntityManager();
+        List<Publisher> publishers = entityManager.createQuery(query).setMaxResults(20).getResultList();
+        return FXCollections.observableList(publishers);
+    }
 }
