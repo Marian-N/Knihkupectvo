@@ -196,6 +196,9 @@ public class BooksController {
         session.close();
         return false;
     }
+
+    public void addBook(Book book) {
+    }
 }
 
 

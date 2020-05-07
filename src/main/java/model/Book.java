@@ -35,13 +35,13 @@ public class Book {
             @JoinTable(name = "book_genre",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
-    public List<Genre> genresList;
+    private List<Genre> genresList;
 
     @OneToMany
     @JoinTable(name = "author_book",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
-    public List<Author> authorsList;
+    private List<Author> authorsList;
 
     @Transient
     private Genres genres;
@@ -63,6 +63,18 @@ public class Book {
     }
 
     public Book() {}
+
+    public Book(String title, double price, int stockQuantity, Publisher publisher,
+                Date publicationDate, String description, List<Genre> genres, List<Author> authors) {
+        this.title = title;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        this.publisher = publisher;
+        this.publicationDate = new Date(publicationDate.getTime());
+        this.description = description;
+        this.genresList = genres;
+        this.authorsList = authors;
+    }
 
     public Publisher getPublisher() {
         return publisher;
@@ -118,5 +130,21 @@ public class Book {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Genre> getGenresList() {
+        return genresList;
+    }
+
+    public void setGenresList(List<Genre> genresList) {
+        this.genresList = genresList;
+    }
+
+    public List<Author> getAuthorsList() {
+        return authorsList;
+    }
+
+    public void setAuthorsList(List<Author> authorsList) {
+        this.authorsList = authorsList;
     }
 }
