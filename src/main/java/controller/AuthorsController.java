@@ -2,6 +2,7 @@ package controller;
 
 import database.Database;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import model.Author;
 import org.hibernate.Session;
@@ -48,7 +49,7 @@ public class AuthorsController {
         return authors;
     }
 
-    public List<Author> getAuthor(String name) {
+    public ObservableList<Author> getAuthor(String name) {
         Session session = Database.getSessionFactory().openSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Author> query = criteriaBuilder.createQuery(Author.class);
@@ -56,7 +57,7 @@ public class AuthorsController {
         query.select(rootEntry);
         query.where(criteriaBuilder.equal(rootEntry.get("name"), name));
         EntityManager entityManager = session.getEntityManagerFactory().createEntityManager();
-        List<Author> authors = entityManager.createQuery(query).getResultList();
-        return authors;
+        List<Author> authors = entityManager.createQuery(query).setMaxResults(20).getResultList();
+        return FXCollections.observableList(authors);
     }
 }
