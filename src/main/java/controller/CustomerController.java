@@ -83,7 +83,13 @@ public class CustomerController {
         query.where(criteriaBuilder.
                 equal(rootEntry.get("mail"), mail));
         EntityManager entityManager = session.getEntityManagerFactory().createEntityManager();
-        Customer customer = entityManager.createQuery(query).setMaxResults(20).getResultList().get(0);
+        Customer customer = null;
+        try {
+            customer = entityManager.createQuery(query).setMaxResults(20).getResultList().get(0);
+        }
+        catch(Exception e) {
+            return null;
+        }
         return customer;
     }
 

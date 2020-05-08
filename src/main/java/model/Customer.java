@@ -1,5 +1,7 @@
 package model;
 
+import security.Encoder;
+
 import javax.persistence.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,7 +48,7 @@ public class Customer {
         this.zip = zip;
         this.address = address;
         this.role = role;
-        this.encryptedPassword = encryptedPassword;
+        this.encryptedPassword = Encoder.encode(encryptedPassword);
     }
 
     public Customer(int ID, String firstName, String lastName, String mail, String city, String zip, String address) {
