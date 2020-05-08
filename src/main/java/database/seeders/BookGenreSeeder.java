@@ -16,19 +16,33 @@ public class BookGenreSeeder {
         List<Integer> genreIDs = Database.getTableIDs("genres");
         List<Integer> bookIDs = Database.getTableIDs("books");
         int numberOfBooks = Database.getRowsCount("books");
+        int inserted = 0;
         for(int i = 1; i <= numberOfBooks; i++) {
             int randomIndex = RandomGenerator.getRandomIntFromInterval(0, genreIDs.size() - 1);
             statement.setInt(1, genreIDs.get(randomIndex));
             statement.setInt(2, i);
-            statement.executeUpdate();
+            statement.addBatch();
+            inserted++;
+            if(inserted % 100 == 0) {
+                statement.executeBatch();
+                inserted = 0;
+            }
         }
+        if(inserted > 0) statement.executeBatch();
+        inserted = 0;
         int numberOfGenres = Database.getRowsCount("genres");
         for(int i = 1; i <= numberOfGenres; i++){
             int randomIndex = RandomGenerator.getRandomIntFromInterval(0, bookIDs.size() - 1);
             statement.setInt(1, i);
             statement.setInt(2, bookIDs.get(randomIndex));
-            statement.executeUpdate();
+            statement.addBatch();
+            inserted++;
+            if(inserted % 100 == 0) {
+                statement.executeBatch();
+                inserted = 0;
+            }
         }
+        if(inserted > 0) statement.executeBatch();
         statement.close();
     }
 }

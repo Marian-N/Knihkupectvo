@@ -14,6 +14,7 @@ public class OrderBookSeeder {
         Database.emptyTable("order_book");
         List<Integer> bookIDs = Database.getTableIDs("books");
         int numberOfOrders = Database.getRowsCount("orders");
+        int inserted = 0;
         for(int i = 1; i <= numberOfOrders; i++) {
             int numberOfBooksInOrder = RandomGenerator.getRandomIntFromInterval(1, 4);
             while(numberOfBooksInOrder-- > 0){
@@ -22,9 +23,15 @@ public class OrderBookSeeder {
                 int randomIndex = RandomGenerator.getRandomIntFromInterval(0, bookIDs.size() - 1);
                 statement.setInt(2, bookIDs.get(randomIndex));
                 statement.setInt(3, i);
-                statement.executeUpdate();
+                statement.addBatch();
+                inserted++;
+                if(inserted % 100 == 0) {
+                    statement.executeBatch();
+                    inserted = 0;
+                }
             }
         }
+        if(inserted > 0) statement.executeBatch();
         statement.close();
     }
 }

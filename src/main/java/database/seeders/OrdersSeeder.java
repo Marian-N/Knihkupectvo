@@ -13,14 +13,21 @@ public class OrdersSeeder {
         PreparedStatement statement = connection.prepareStatement(query);
         Database.emptyTable("orders");
         List<Integer> IDs = Database.getTableIDs("customers");
+        int inserted = 0;
         while(count-- > 0) {
             statement.setDate(1, RandomGenerator.getRandomDate(1989, 2020));
             statement.setDouble(2, RandomGenerator.getRandomPrice());
             statement.setString(3, RandomGenerator.getRandomStatus());
             int randomIndex = RandomGenerator.getRandomIntFromInterval(0, IDs.size() - 1);
             statement.setInt(4, IDs.get(randomIndex));
-            statement.executeUpdate();
+            statement.addBatch();
+            inserted++;
+            if(inserted % 100 == 0) {
+                statement.executeBatch();
+                inserted = 0;
+            }
         }
+        if(inserted > 0) statement.executeBatch();
         statement.close();
     }
 }

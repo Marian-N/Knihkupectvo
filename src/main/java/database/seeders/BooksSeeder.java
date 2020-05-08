@@ -16,6 +16,7 @@ public class BooksSeeder {
         PreparedStatement statement = connection.prepareStatement(query);
         Database.emptyTable("books");
         List<Integer> IDs = Database.getTableIDs("publishers");
+        int inserted = 0;
         while(count-- > 0) {
             statement.setString(1, faker.book().title());
             statement.setDouble(2, RandomGenerator.getRandomPrice());
@@ -24,8 +25,14 @@ public class BooksSeeder {
             statement.setString(5, faker.backToTheFuture().quote());
             int randomIndex = RandomGenerator.getRandomIntFromInterval(0, IDs.size() - 1);
             statement.setInt(6, IDs.get(randomIndex));
-            statement.executeUpdate();
+            statement.addBatch();
+            inserted++;
+            if(inserted % 100 == 0) {
+                statement.executeBatch();
+                inserted = 0;
+            }
         }
+        if(inserted > 0) statement.executeBatch();
         statement.close();
     }
 }

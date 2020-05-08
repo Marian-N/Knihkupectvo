@@ -11,10 +11,17 @@ public class AuthorsSeeder {
         String query = "INSERT INTO authors (name) VALUES (?)";
         PreparedStatement statement = connection.prepareStatement(query);
         Database.emptyTable("authors");
+        int inserted = 0;
         while(count-- > 0) {
             statement.setString(1, faker.book().author());
-            statement.executeUpdate();
+            statement.addBatch();
+            inserted++;
+            if(inserted % 100 == 0) {
+                statement.executeBatch();
+                inserted = 0;
+            }
         }
+        if(inserted > 0) statement.executeBatch();
         statement.close();
     }
 }
