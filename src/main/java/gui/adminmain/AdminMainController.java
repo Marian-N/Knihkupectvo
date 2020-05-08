@@ -190,7 +190,11 @@ public class AdminMainController implements Initializable {
         createBooksTable();
         createOrderByBooksComboBox();
         //findBook();
-        paginationBooks.setPageCount(1000);
+        try {
+            paginationBooks.setPageCount((int) Math.ceil((double) Database.getRowsCount("books")/100));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         paginationBooks.setPageFactory(new Callback<Integer, Node>() {
             @Override
             public Node call(Integer pageIndex) {
@@ -256,28 +260,6 @@ public class AdminMainController implements Initializable {
                 return new SimpleObjectProperty(String.join(", ", authorName));
             }
         });
-//        genreColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, List<String>>, ObservableValue<List<String>>>() {
-//            @Override
-//            public ObservableValue<List<String>> call(TableColumn.CellDataFeatures<Book, List<String>> param) {
-//                List<Integer> genreId = null;
-//                try {
-//                    genreId = bookGenreController.getGenres(param.getValue().getID());
-//                } catch (SQLException e) {
-//                    return new SimpleObjectProperty("-");
-//                }
-//
-//                //all genres with their ids as keys
-//
-//                List<String> genreName = new ArrayList<>();
-//                //taking only names from hashmap
-//                for (Integer id : genreId){
-//                    genreName.add(genresFromMap.get(id).getName());
-//                }
-//                return new SimpleObjectProperty(String.join(", ", genreName));
-//            }
-//        });
-        //bookOverviewTable.setItems(books);
-        //return books; //bookOverviewTable.setItems(books);
     }
 
     private Node createBooksPage(int pageNum){
@@ -337,7 +319,7 @@ public class AdminMainController implements Initializable {
         }
     }
 
-    public void handleGoToPage(ActionEvent actionEvent) {
+    public void handleGoToPage(ActionEvent actionEvent) throws SQLException {
         int pageId = 0;
         try{
             pageId =Integer.parseInt(setPageBooksTextField.getText());
@@ -345,7 +327,7 @@ public class AdminMainController implements Initializable {
             pageId = 0;
         }
 
-        if(pageId > 0 && pageId <= 1000){
+        if(pageId > 0 && pageId <= (int) Math.ceil((double) Database.getRowsCount("books")/100)){
             paginationBooks.setCurrentPageIndex(pageId - 1);
         }
         createBooksPage(paginationBooks.getCurrentPageIndex());

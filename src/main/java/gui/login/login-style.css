@@ -26,13 +26,7 @@
     -fx-background-color: #424242;
 }
 
-
-.wrong-info{
-    -fx-prompt-text-fill: #ff7961;
-    -fx-opacity: 0.3;
-}
 .wrong-info-label{
-    -fx-opacity: 0;
     -fx-font-size: 13;
     -fx-text-fill: #ff7961;
 }

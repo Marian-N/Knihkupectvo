@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controller.*;
+import database.Database;
 import gui.ScreenConfiguration;
 import gui.usermain.confirmation.CancelConfirmation;
 import gui.usermain.makeorder.MakeOrderController;
@@ -14,8 +15,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -79,15 +78,11 @@ public class UserMainController implements Initializable {
     @FXML
     private TableColumn<Order, Integer> orderIDColumn;
     @FXML
-    private TableColumn<Order, String> orderCustomerColumn;
-    @FXML
     private TableColumn<Order, Integer> orderPriceColumn;
     @FXML
     private TableColumn<Order, Date> orderDateColumn;
     @FXML
     private TableColumn<Order, String> orderStatusColumn;
-    @FXML
-    private TableColumn<Order, String> orderCustomerIDColumn;
     @FXML
     private TableView<OrderContent> orderDetailTable;
     @FXML
@@ -101,17 +96,13 @@ public class UserMainController implements Initializable {
     private BooksController booksController = BooksController.getInstance();
     private AuthorBookController authorBookController = AuthorBookController.getInstance();
     private AuthorsController authorsController = AuthorsController.getInstance();
-    private BookGenreController bookGenreController = BookGenreController.getInstance();
-    private GenresController genresController = GenresController.getInstance();
     private OrdersController ordersController = OrdersController.getInstance();
-    MakeOrderController makeOrderController = new MakeOrderController();
 
     ObservableList<Book> books = FXCollections.observableArrayList();
     ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
-    ObservableMap<Integer, Genre> genresFromMap = FXCollections.observableHashMap();
     ObservableList<Order> orders = FXCollections.observableArrayList();
     ObservableList<OrderContent> newOrder = FXCollections.observableArrayList();
-
+    Customer loggedUser;
 
     public UserMainController() throws SQLException, ClassNotFoundException {
     }
@@ -119,17 +110,15 @@ public class UserMainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         authorsFromMap = authorsController.getAuthors();
-        //genresFromMap = genresController.getGenres();
         createBooksTable();
         createOrderByBooksComboBox();
-        //findBook();
-        paginationBooks.setPageCount(1000);
-        paginationBooks.setPageFactory(new Callback<Integer, Node>() {
-            @Override
-            public Node call(Integer pageIndex) {
-                return createBooksPage(pageIndex);
-            }
-        });
+
+        try {
+            paginationBooks.setPageCount((int) Math.ceil((double) Database.getRowsCount("books")/100));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        paginationBooks.setPageFactory(this::createBooksPage);
 
         addToOrderButton.setOnAction(e->{
             if(bookOverviewTable.getSelectionModel().getSelectedItem() != null &&
@@ -154,8 +143,9 @@ public class UserMainController implements Initializable {
         newOrder.removeAll();
     }
 
-    public void initData(int userId){
-        userIdTextField.setText(String.valueOf(userId));
+    public void initData(Customer gotUser){
+        loggedUser = gotUser;
+        userIdTextField.setText(String.valueOf(loggedUser.getFirstName() + " " + loggedUser.getLastName()));
     }
 
     private void createOrderByBooksComboBox() {
@@ -295,7 +285,7 @@ public class UserMainController implements Initializable {
 
     public ObservableList<OrderContent> handleOrderBooks(ObservableList<OrderContent> newOrder) throws IOException {
         ScreenConfiguration screenConfiguration = new ScreenConfiguration();
-        int userId = Integer.parseInt(userIdTextField.getText());
+        int userId = loggedUser.getID();
         newOrder = screenConfiguration.setMakeOrderScene(newOrder, userId);
         return newOrder;
     }
@@ -310,7 +300,7 @@ public class UserMainController implements Initializable {
         createBooksPage(paginationBooks.getCurrentPageIndex());
     }
 
-    public void handleGoToPage(ActionEvent actionEvent) {
+    public void handleGoToPage(ActionEvent actionEvent) throws SQLException {
         int pageId = 0;
         try{
             pageId =Integer.parseInt(setPageBooksTextField.getText());
@@ -318,7 +308,7 @@ public class UserMainController implements Initializable {
             pageId = 0;
         }
 
-        if(pageId > 0 && pageId <= 1000){
+        if(pageId > 0 && pageId <= (int) Math.ceil((double) Database.getRowsCount("books")/100)){
             paginationBooks.setCurrentPageIndex(pageId - 1);
         }
         createBooksPage(paginationBooks.getCurrentPageIndex());
@@ -343,7 +333,7 @@ public class UserMainController implements Initializable {
     public void handleOrdersHistorySelected(Event event) throws SQLException, ClassNotFoundException {
         createOrderTable();
         createOrderDetailTable();
-        int customerID= Integer.parseInt(userIdTextField.getText());
+        int customerID= loggedUser.getID();
         orders = ordersController.getOrders(customerID);
         orderOverviewTable.setItems(orders);
     }
@@ -384,10 +374,10 @@ public class UserMainController implements Initializable {
     }
 
 
-    public void handleOrderCancel(ActionEvent event) throws SQLException, ClassNotFoundException, IOException {
+    public void handleOrderCancel(ActionEvent event) throws IOException {
         Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
         if (order != null && order.getStatus().equals("nevybavená")){
-            CancelConfirmation cancelConfirmation = new CancelConfirmation();
+            //CancelConfirmation cancelConfirmation = new CancelConfirmation();
             ScreenConfiguration screenConfiguration = new ScreenConfiguration();
             screenConfiguration.setCancelConfirmationScene(order);
             orderOverviewTable.refresh();

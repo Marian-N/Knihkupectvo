@@ -10,10 +10,10 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.control.TextField?>
 
 <AnchorPane prefHeight="800.0" prefWidth="1500.0" stylesheets="@user-style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.usermain.UserMainController">
     <children>
@@ -25,7 +25,6 @@
                             <children>
                                 <JFXTextField fx:id="searchBookText" focusColor="darkorange" layoutX="12.0" layoutY="62.0" prefHeight="40.0" prefWidth="219.0" promptText="Search" />
                                 <JFXButton fx:id="searchBookButton" layoutX="75.0" layoutY="128.0" onAction="#handleSearchBook" prefHeight="40.0" prefWidth="100.0" ripplerFill="darkorange" text="Search" />
-                                <!--<Label fx:id="searchBookLabel" layoutX="80.0" layoutY="128.0" prefHeight="40.0" prefWidth="100.0" text="Search" />-->
                                 <JFXTextArea fx:id="synopsisText" editable="false" focusColor="darkorange" focusTraversable="false" layoutX="18.0" layoutY="327.0" mouseTransparent="true" prefHeight="209.0" prefWidth="211.0" />
                                 <JFXButton fx:id="orderBooksButton" layoutX="54.0" layoutY="632.0" prefHeight="40.0" ripplerFill="darkorange" text="Make order" />
                         <Pagination fx:id="paginationBooks" layoutX="248.0" layoutY="1.0" prefHeight="717.0" prefWidth="1253.0" />
@@ -78,8 +77,8 @@
             <children>
             <AnchorPane prefHeight="77.0" prefWidth="572.0">
                <children>
-                  <TextField fx:id="userIdTextField" editable="false" layoutX="53.0" layoutY="16.0" mouseTransparent="true" prefHeight="9.0" prefWidth="68.0" styleClass="user-id-text-field" />
-                  <Label layoutX="14.0" layoutY="23.0" text="ID:" />
+                  <TextField fx:id="userIdTextField" editable="false" layoutX="110.0" layoutY="17.0" mouseTransparent="true" prefHeight="44.0" prefWidth="332.0" styleClass="user-id-text-field" />
+                  <Label layoutX="14.0" layoutY="23.0" text="Welcome" />
                   <JFXButton fx:id="logoutButton" layoutX="473.0" onAction="#handleLogout" prefHeight="77.0" prefWidth="99.0" text="Logout" />
                </children>
             </AnchorPane>

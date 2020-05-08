@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Book;
+import model.Customer;
 import model.Order;
 import model.OrderContent;
 
@@ -33,14 +34,25 @@ public class ScreenConfiguration {
     }
 
     // change scene to user
-    public void setMainUserScene(javafx.event.ActionEvent event, int userId) throws Exception {
+    public void setMainUserScene(javafx.event.ActionEvent event, Customer customer) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/usermain/user_main.fxml"));
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene((Pane) loader.load()));
 
         UserMainController userMainController = loader.<UserMainController>getController();
-        userMainController.initData(userId);
+        userMainController.initData(customer);
 
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    //change scene to admin
+    public void setMainAdminScene(javafx.event.ActionEvent event) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("/gui/adminmain/admin_main.fxml"));
+        Scene mainScene = new Scene(root);
+        //get info about stage
+        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(mainScene);
         stage.setResizable(false);
         stage.show();
     }
@@ -94,5 +106,6 @@ public class ScreenConfiguration {
         stage.showAndWait();
         return makeOrderController.getNewOrder();
     }
+
 
 }
