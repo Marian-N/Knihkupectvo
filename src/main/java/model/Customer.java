@@ -38,6 +38,17 @@ public class Customer {
 
     public Customer() {}
 
+    public Customer(String firstName, String lastName, String mail, String city, String zip, String address, int role, String encryptedPassword) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.mail = mail;
+        this.city = city;
+        this.zip = zip;
+        this.address = address;
+        this.role = role;
+        this.encryptedPassword = encryptedPassword;
+    }
+
     public Customer(int ID, String firstName, String lastName, String mail, String city, String zip, String address) {
         this.ID = ID;
         this.firstName = firstName;
