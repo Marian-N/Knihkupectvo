@@ -5,6 +5,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customer;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import security.Encoder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -83,5 +85,44 @@ public class CustomerController {
         EntityManager entityManager = session.getEntityManagerFactory().createEntityManager();
         Customer customer = entityManager.createQuery(query).setMaxResults(20).getResultList().get(0);
         return customer;
+    }
+
+    public boolean addCustomer(Customer customer) throws SQLException, ClassNotFoundException {
+        if(customer != null && getCustomer(customer.getMail()) == null) {
+            Session session = Database.getInstance().getSessionFactory().openSession();
+            Transaction transaction = session.beginTransaction();
+            session.saveOrUpdate(customer);
+            transaction.commit();
+            session.close();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean changeRole(String mail, int role) {
+        Customer customer = getCustomer(mail);
+        if(customer != null) {
+            Session session = Database.getSessionFactory().openSession();
+            Transaction transaction = session.beginTransaction();
+            customer.setRole(role);
+            session.saveOrUpdate(customer);
+            transaction.commit();
+            session.close();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean changePassword(Customer customer, String newPassword) {
+        if(customer != null) {
+            Session session = Database.getSessionFactory().openSession();
+            Transaction transaction = session.beginTransaction();
+            customer.setEncryptedPassword(Encoder.encode(newPassword));
+            session.saveOrUpdate(customer);
+            transaction.commit();
+            session.close();
+            return true;
+        }
+        return false;
     }
 }
