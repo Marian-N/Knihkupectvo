@@ -1,9 +1,17 @@
 package controller;
 
 import database.Database;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import model.Customer;
+import org.hibernate.Session;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.sql.*;
+import java.util.List;
 
 public class CustomerController {
     private static CustomerController instance = null;
@@ -62,5 +70,18 @@ public class CustomerController {
         resultSet.close();
         preparedStatement.close();
         return customersIDs;
+    }
+
+    public Customer getCustomer(String mail) {
+        Session session = Database.getSessionFactory().openSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Customer> query = criteriaBuilder.createQuery(Customer.class);
+        Root<Customer> rootEntry = query.from(Customer.class);
+        query.select(rootEntry);
+        query.where(criteriaBuilder.
+                equal(rootEntry.get("mail"), mail));
+        EntityManager entityManager = session.getEntityManagerFactory().createEntityManager();
+        Customer customer = entityManager.createQuery(query).setMaxResults(20).getResultList().get(0);
+        return customer;
     }
 }

@@ -24,5 +24,6 @@
         <mapping class="model.Publisher"/>
         <mapping class="model.Genre"/>
         <mapping class="model.Author"/>
+        <mapping class="model.Customer"/>
     </session-factory>
 </hibernate-configuration>

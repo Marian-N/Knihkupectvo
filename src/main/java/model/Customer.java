@@ -1,16 +1,42 @@
 package model;
 
+import javax.persistence.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Entity
+@Table(name = "customers")
 public class Customer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int ID;
+
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "mail")
     private String mail;
+
+    @Column(name = "city")
     private String city;
+
+    @Column(name = "zip")
     private String zip;
+
+    @Column(name = "address")
     private String address;
+
+    @Column(name = "role")
+    private int role;
+
+    @Column(name = "password")
+    private String encryptedPassword;
+
+    public Customer() {}
 
     public Customer(int ID, String firstName, String lastName, String mail, String city, String zip, String address) {
         this.ID = ID;
@@ -89,5 +115,21 @@ public class Customer {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
+    public String getEncryptedPassword() {
+        return encryptedPassword;
+    }
+
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
     }
 }
