@@ -123,6 +123,7 @@ public class UserRegisterController {
                     ex.printStackTrace();
                 }
             }
+            stage.close();
 
         });
     }
