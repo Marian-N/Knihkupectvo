@@ -1,11 +1,5 @@
-/*@font-face {
-    font-family: 'Roboto', sans-serif;
-    src: url('Roboto-Bold.ttf');
-}*/
-
 .root{
     -fx-background-color: #383838;
-/*    -fx-font-family: 'Roboto';*/
 }
 
 .button{
@@ -15,6 +9,7 @@
     -fx-background-radius: 0;
     -fx-border-width: 0 0 0 1;
     -fx-border-color: #424242;
+    -jfx-rippler-fill: darkorange;
 }
 
 .button:hover{
@@ -27,6 +22,7 @@
 
 .text-area{
     -fx-text-fill: lightgray;
+    -jfx-focus-color: darkorange;
 }
 
 .label{
@@ -91,14 +87,6 @@
 }
 
 
-/* vertical border*/
-/*.table-view .table-cell{*/
-/*    -fx-text-fill: #eeeeee;*/
-/*    -fx-background-color: #383838;*/
-/*    -fx-border-width: 0;*/
-/*}*/
-
-
 .table-row-cell:hover .table-cell{
     -fx-background-color: #424242;
     -fx-text-fill: #a4a4a4;
@@ -119,21 +107,6 @@
 .table-row-cell {
     -fx-cell-size: 30px;
 }
-
-/*.table-view .scroll-bar:horizontal .track,*/
-/*.table-view .scroll-bar:vertical .track{*/
-/*    -fx-background-color: #383838;*/
-/*    -fx-border-color:#383838;*/
-/*    -fx-background-radius: 0;*/
-/*    -fx-border-radius: 0;*/
-/*}*/
-
-/*.table-view .scroll-bar:horizontal .thumb,*/
-/*.table-view .scroll-bar:vertical .thumb {*/
-/*    -fx-background-color: #a4a4a4;*/
-/*    -fx-background-insets: 0, 0, 0;*/
-/*    -fx-background-radius: 0;*/
-/*}*/
 
 .scroll-bar{
     -fx-background-color: #383838;
@@ -180,6 +153,10 @@
     -fx-border-width: 0 0 0 0;
     /*-fx-min-width: 30;
     -fx-min-height: 30;*/
+}
+
+.combo-box{
+    -jfx-focus-color: darkorange;
 }
 
 .combo-box > .list-cell {

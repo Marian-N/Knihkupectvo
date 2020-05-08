@@ -11,10 +11,10 @@
       <Label layoutX="46.0" layoutY="235.0" text="Price" />
       <Label layoutX="46.0" layoutY="300.0" text="Stock" />
       <Label fx:id="bookInfoLabel" layoutX="30.0" layoutY="35.0" prefHeight="30.0" prefWidth="56.0" text="Book:" />
-      <JFXTextField fx:id="changePriceTextField" focusColor="darkorange" layoutX="121.0" layoutY="228.0" prefHeight="44.0" prefWidth="175.0" styleClass="text-field-book-change" />
-      <JFXTextField fx:id="changeStockTextField" focusColor="darkorange" layoutX="121.0" layoutY="293.0" prefHeight="44.0" prefWidth="175.0" styleClass="text-field-book-change" />
-      <JFXButton fx:id="changePriceButton" layoutX="332.0" layoutY="228.0" ripplerFill="darkorange" text="Change price" />
-      <JFXButton fx:id="changeStockButton" layoutX="331.0" layoutY="293.0" ripplerFill="darkorange" text="Change stock quantity" />
+      <JFXTextField fx:id="changePriceTextField" layoutX="121.0" layoutY="228.0" prefHeight="44.0" prefWidth="175.0" styleClass="text-field-book-change" />
+      <JFXTextField fx:id="changeStockTextField" layoutX="121.0" layoutY="293.0" prefHeight="44.0" prefWidth="175.0" styleClass="text-field-book-change" />
+      <JFXButton fx:id="changePriceButton" layoutX="332.0" layoutY="228.0" text="Change price" />
+      <JFXButton fx:id="changeStockButton" layoutX="331.0" layoutY="293.0" text="Change stock quantity" />
       <TextField fx:id="bookTitle" editable="false" layoutX="91.0" layoutY="28.0" mouseTransparent="true" prefHeight="44.0" prefWidth="433.0" styleClass="text-field-book-change" />
       <Label layoutX="34.0" layoutY="109.0" text="ID:" />
       <TextField fx:id="bookId" editable="false" layoutX="67.0" layoutY="102.0" mouseTransparent="true" prefHeight="44.0" prefWidth="80.0" styleClass="text-field-book-change" />

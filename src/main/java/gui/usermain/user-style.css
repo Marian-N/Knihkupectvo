@@ -9,6 +9,7 @@
     -fx-background-radius: 0;
     -fx-border-width: 0 0 0 1;
     -fx-border-color: #424242;
+    -jfx-rippler-fill: darkorange;
 }
 
 .button:hover{
@@ -21,6 +22,7 @@
 
 .text-area{
     -fx-text-fill: lightgray;
+    -jfx-focus-color: darkorange;
 }
 
 .label{
@@ -144,6 +146,10 @@
     -fx-background-color: transparent;
     -fx-text-fill: white;
     -fx-border-width: 0 0 0 0;
+}
+
+.combo-box{
+    -jfx-focus-color: darkorange;
 }
 
 .combo-box > .list-cell {

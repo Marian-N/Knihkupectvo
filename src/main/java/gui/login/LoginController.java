@@ -4,11 +4,14 @@ package gui.login;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import gui.ScreenConfiguration;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import model.Customer;
 import security.Login;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -58,5 +61,9 @@ public class LoginController implements Initializable {
     // change scene to user
     private void loadMainUserScene(javafx.event.ActionEvent event, Customer customer) throws Exception {
         screenConfiguration.setMainUserScene(event, customer);
+    }
+
+    public void handleCreateUser(javafx.event.ActionEvent event) throws IOException {
+        screenConfiguration.setCreateUser();
     }
 }

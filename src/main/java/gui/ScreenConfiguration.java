@@ -2,6 +2,7 @@ package gui;
 
 import gui.adminchangebook.ChangeBookController;
 import gui.adminmain.AdminMainController;
+import gui.login.userregister.UserRegisterController;
 import gui.usermain.UserMainController;
 import gui.usermain.confirmation.CancelConfirmation;
 import gui.usermain.makeorder.MakeOrderController;
@@ -108,4 +109,16 @@ public class ScreenConfiguration {
     }
 
 
+    public void setCreateUser() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/login/userregister/user_register.fxml"));
+        Stage stage = new Stage();
+        stage.setScene(new Scene((Pane) loader.load()));
+        UserRegisterController userRegisterController = loader.<UserRegisterController>getController();
+        userRegisterController.createUser(stage);
+
+        stage.setResizable(false);
+        stage.setTitle("Create User");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+    }
 }

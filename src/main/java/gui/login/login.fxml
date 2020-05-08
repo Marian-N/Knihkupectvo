@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<?import com.jfoenix.controls.JFXPasswordField?>
 <AnchorPane fx:id="loginScene" prefHeight="500.0" prefWidth="900.0" stylesheets="@login-style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.login.LoginController">
     <children>
-        <JFXTextField fx:id="nameLogin" focusColor="darkorange" layoutX="362.0" layoutY="214.0" prefHeight="36.0" prefWidth="177.0" promptText="Name" />
-        <JFXPasswordField fx:id="passwordLogin" focusColor="darkorange" layoutX="362.0" layoutY="262.0" prefHeight="36.0" prefWidth="177.0" promptText="Password" />
-        <JFXButton fx:id="loginButton" layoutX="389.0" layoutY="324.0" onAction="#handleLogin" prefHeight="36.0" prefWidth="123.0" ripplerFill="darkorange" text="Login" textFill="WHITE" />
-        <Label layoutX="380.0" layoutY="149.0" text="Book Store login" />
-        <Label fx:id="wrongInfo" layoutX="375.0" layoutY="375.0" styleClass="wrong-info-label" visible="false" text="Wrong Name or Password" />
+        <JFXTextField fx:id="nameLogin" layoutX="345.0" layoutY="214.0" prefHeight="36.0" prefWidth="212.0" promptText="Name" />
+        <JFXPasswordField fx:id="passwordLogin" layoutX="345.0" layoutY="261.0" prefHeight="36.0" prefWidth="212.0" promptText="Password" />
+        <JFXButton fx:id="loginButton" layoutX="389.0" layoutY="324.0" onAction="#handleLogin" prefHeight="36.0" prefWidth="123.0" text="Login" textFill="WHITE" />
+        <Label layoutX="377.0" layoutY="148.0" text="Book Store login" />
+        <Label fx:id="wrongInfo" layoutX="375.0" layoutY="375.0" styleClass="wrong-info-label" text="Wrong Name or Password" visible="false" />
+      <JFXButton fx:id="createUserButton" onAction="#handleCreateUser" layoutX="389.0" layoutY="394.0" prefHeight="36.0" prefWidth="123.0" text="Create User" />
     </children>
 </AnchorPane>

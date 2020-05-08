@@ -616,6 +616,7 @@ public class AdminMainController implements Initializable {
             addBookClear();
 
         }
+        bookOverviewTable.refresh();
 
     }
 
