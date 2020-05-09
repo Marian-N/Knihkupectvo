@@ -1,7 +1,7 @@
 CREATE TABLE books(
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
-    price DECIMAL(4, 2) NOT NULL,
+    price DECIMAL(6, 2) NOT NULL,
     stock_quantity INT,
     publication_date DATE NOT NULL,
     publisher_id INT NOT NULL,

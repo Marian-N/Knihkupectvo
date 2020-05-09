@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import controller.OrdersController;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
-import model.Book;
 import model.Order;
 
 import java.sql.SQLException;
@@ -26,9 +25,7 @@ public class CancelConfirmation {
         yesButton.setOnAction(e->{
             try {
                 ordersController.changeStatus(order, "zrušená");
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            } catch (ClassNotFoundException ex) {
+            } catch (SQLException | ClassNotFoundException ex) {
                 ex.printStackTrace();
             }
             stage.close();

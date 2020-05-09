@@ -55,7 +55,7 @@
                                       </columns>
                                   </TableView>
                         <JFXButton fx:id="setPageBooksButton" layoutX="444.0" layoutY="644.0" onAction="#handleGoToPage" text="Go to page" />
-                        <JFXTextField fx:id="setPageBooksTextField" layoutX="374.0" layoutY="654.0" prefHeight="25.0" prefWidth="43.0" />
+                        <JFXTextField fx:id="setPageBooksTextField" layoutX="355.0" layoutY="644.0" prefHeight="44.0" prefWidth="68.0" />
                         <JFXComboBox fx:id="orderByBooksComboBox" layoutX="30.0" layoutY="275.0" onAction="#handleBookOrderChange" prefHeight="25.0" prefWidth="188.0" />
                         <Label layoutX="80.0" layoutY="245.0" text="Order by:" />
                             </children></AnchorPane>

@@ -14,9 +14,9 @@ public class Seeder {
             CustomersSeeder.run(connection,1000, faker);
             OrdersSeeder.run(connection, 1000);
             PublishersSeeder.run(connection, 1000, faker);
-            BooksSeeder.run(connection, 1000, faker);
+            BooksSeeder.run(connection, 100000, faker);
             OrderBookSeeder.run(connection);
-            AuthorsSeeder.run(connection, 1000, faker);
+            AuthorsSeeder.run(connection, 100000, faker);
             AuthorBookSeeder.run(connection);
             GenresSeeder.run(connection, 1000, faker);
             BookGenreSeeder.run(connection);

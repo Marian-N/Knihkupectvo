@@ -4,7 +4,6 @@ package gui.login;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import gui.ScreenConfiguration;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -63,7 +62,7 @@ public class LoginController implements Initializable {
         screenConfiguration.setMainUserScene(event, customer);
     }
 
-    public void handleCreateUser(javafx.event.ActionEvent event) throws IOException {
+    public void handleCreateUser() throws IOException {
         screenConfiguration.setCreateUser();
     }
 }

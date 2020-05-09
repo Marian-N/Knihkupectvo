@@ -117,9 +117,7 @@ public class UserRegisterController {
                 System.out.println(newCustomer.getFirstName());
                 try {
                     customerController.addCustomer(newCustomer);
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                } catch (ClassNotFoundException ex) {
+                } catch (SQLException | ClassNotFoundException ex) {
                     ex.printStackTrace();
                 }
             }

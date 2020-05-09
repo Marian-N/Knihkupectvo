@@ -99,7 +99,7 @@ public class UserMainController implements Initializable {
     private OrdersController ordersController = OrdersController.getInstance();
 
     ObservableList<Book> books = FXCollections.observableArrayList();
-    ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
+    //ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
     ObservableList<Order> orders = FXCollections.observableArrayList();
     ObservableList<OrderContent> newOrder = FXCollections.observableArrayList();
     Customer loggedUser;
@@ -109,7 +109,7 @@ public class UserMainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        authorsFromMap = authorsController.getAuthors();
+        //authorsFromMap = authorsController.getAuthors();
         createBooksTable();
         createOrderByBooksComboBox();
 
@@ -138,14 +138,14 @@ public class UserMainController implements Initializable {
 
     }
 
-    public void deleteNewOrder(){
-        System.out.println(newOrder);
-        newOrder.removeAll();
-    }
+//    public void deleteNewOrder(){
+//        System.out.println(newOrder);
+//        newOrder.removeAll();
+//    }
 
     public void initData(Customer gotUser){
         loggedUser = gotUser;
-        userIdTextField.setText(String.valueOf(loggedUser.getFirstName() + " " + loggedUser.getLastName()));
+        userIdTextField.setText(loggedUser.getFirstName() + " " + loggedUser.getLastName());
     }
 
     private void createOrderByBooksComboBox() {
@@ -167,60 +167,29 @@ public class UserMainController implements Initializable {
 
     public void createBooksTable(){
         bookNameColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        publisherColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Book, String> param) {
-                return new SimpleStringProperty(param.getValue().getPublisher().getName());
-            }
-        });
+        publisherColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getPublisher().getName()));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("publicationDate"));
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
-        genreColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, List<String>>, ObservableValue<List<String>>>() {
-            @Override
-            public ObservableValue<List<String>> call(TableColumn.CellDataFeatures<Book, List<String>> param) {
-                return new SimpleObjectProperty(param.getValue().getGenres().getStringGenres());
+        genreColumn.setCellValueFactory(param -> new SimpleObjectProperty(param.getValue().getGenres().getStringGenres()));
+        authorColumn.setCellValueFactory(param -> {
+            List<Integer> authorId = null;
+            try {
+                authorId = authorBookController.getAuthors(param.getValue().getID());
+            } catch (SQLException e) {
+                return new SimpleObjectProperty("-");
             }
-        });
-        authorColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, List<String>>, ObservableValue<List<String>>>() {
-            @Override
-            public ObservableValue<List<String>> call(TableColumn.CellDataFeatures<Book, List<String>> param) {
-                List<Integer> authorId = null;
-                try {
-                    authorId = authorBookController.getAuthors(param.getValue().getID());
-                } catch (SQLException e) {
-                    return new SimpleObjectProperty("-");
-                }
-                //all authors with their ids as keys
-                List<String> authorName = new ArrayList<>();
-                //taking only names from hashmap
-                for (Integer id : authorId){
-                    authorName.add(authorsFromMap.get(id).getName());
-                }
-                return new SimpleObjectProperty(String.join(", ", authorName));
+
+            //all authors with their ids as keys
+            List<String> authorName = new ArrayList<>();
+
+            //taking only names from hashmap
+            for (Integer id : authorId){
+                authorName.add(authorsController.getAuthor(id).getName());
+               // authorName.add(authorsFromMap.get(id).getName());
             }
+            return new SimpleObjectProperty(String.join(", ", authorName));
         });
-//        genreColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Book, List<String>>, ObservableValue<List<String>>>() {
-//            @Override
-//            public ObservableValue<List<String>> call(TableColumn.CellDataFeatures<Book, List<String>> param) {
-//                List<Integer> genreId = null;
-//                try {
-//                    genreId = bookGenreController.getGenres(param.getValue().getID());
-//                } catch (SQLException e) {
-//                    return new SimpleObjectProperty("-");
-//                }
-//
-//                //all genres with their ids as keys
-//                List<String> genreName = new ArrayList<>();
-//                //taking only names from hashmap
-//                for (Integer id : genreId){
-//                    genreName.add(genresFromMap.get(id).getName());
-//                }
-//                return new SimpleObjectProperty(String.join(", ", genreName));
-//            }
-//        });
-        //bookOverviewTable.setItems(books);
-        //return books; //bookOverviewTable.setItems(books);
     }
 
 
@@ -263,9 +232,7 @@ public class UserMainController implements Initializable {
             else{
                 books = booksController.getBooks(pageNum, "id");
             }
-        } catch (SQLException e) {
-            books = null;
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             books = null;
         }
         bookOverviewTable.setItems(books);
@@ -274,7 +241,7 @@ public class UserMainController implements Initializable {
 
 
 
-    public void handleBookSelected(MouseEvent mouseEvent){
+    public void handleBookSelected(){
         Book book = bookOverviewTable.getSelectionModel().getSelectedItem();
 
         if(book != null){
@@ -296,12 +263,12 @@ public class UserMainController implements Initializable {
         return newOrder;
     }
 
-    public void handleBookOrderChange(ActionEvent actionEvent) {
+    public void handleBookOrderChange() {
         createBooksPage(paginationBooks.getCurrentPageIndex());
     }
 
-    public void handleGoToPage(ActionEvent actionEvent) throws SQLException {
-        int pageId = 0;
+    public void handleGoToPage() throws SQLException {
+        int pageId;
         try{
             pageId =Integer.parseInt(setPageBooksTextField.getText());
         } catch (NumberFormatException e){
@@ -315,7 +282,7 @@ public class UserMainController implements Initializable {
     }
 
     //Searching of book by title
-    public void handleSearchBook(ActionEvent actionEvent){
+    public void handleSearchBook(){
         String bookToFind = searchBookText.getText();
         if (bookToFind.equals("")){
             createBooksPage(paginationBooks.getCurrentPageIndex());
@@ -323,14 +290,13 @@ public class UserMainController implements Initializable {
         else{
             try {
                 bookOverviewTable.setItems(booksController.findBook(bookToFind));
-            } catch (SQLException e) {
-            } catch (ClassNotFoundException e) {
+            } catch (SQLException | ClassNotFoundException ignored) {
             }
         }
     }
 
     //Orders history controllers
-    public void handleOrdersHistorySelected(Event event) throws SQLException, ClassNotFoundException {
+    public void handleOrdersHistorySelected() throws SQLException, ClassNotFoundException {
         createOrderTable();
         createOrderDetailTable();
         int customerID= loggedUser.getID();
@@ -347,23 +313,13 @@ public class UserMainController implements Initializable {
     }
 
     public void createOrderDetailTable(){
-        orderDetailBookColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<OrderContent, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<OrderContent, String> param) {
-                return new SimpleStringProperty(param.getValue().getBook().getTitle());
-            }
-        });
+        orderDetailBookColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getBook().getTitle()));
         orderDetailQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-        orderDetailPriceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<OrderContent, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<OrderContent, String> param) {
-                return new SimpleStringProperty(String.valueOf(param.getValue().getBook().getPrice()));
-            }
-        });
+        orderDetailPriceColumn.setCellValueFactory(param -> new SimpleStringProperty(String.valueOf(param.getValue().getBook().getPrice())));
     }
 
 
-    public void handleOrderSelected(MouseEvent mouseEvent) {
+    public void handleOrderSelected() {
         //fill detail table
         Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
 
@@ -374,7 +330,7 @@ public class UserMainController implements Initializable {
     }
 
 
-    public void handleOrderCancel(ActionEvent event) throws IOException {
+    public void handleOrderCancel() throws IOException {
         Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
         if (order != null && order.getStatus().equals("nevybavená")){
             //CancelConfirmation cancelConfirmation = new CancelConfirmation();
@@ -389,7 +345,7 @@ public class UserMainController implements Initializable {
         ScreenConfiguration screenConfiguration = new ScreenConfiguration();
         screenConfiguration.setLoginScene(event);
     }
-    public void handleExit(javafx.event.ActionEvent actionEvent) {
+    public void handleExit() {
         Stage stage = (Stage) exitButton.getScene().getWindow();
         stage.close();
     }
