@@ -72,4 +72,10 @@ public class AuthorsController {
         }
         session.close();
     }
+
+    public Author getAuthor(int ID) {
+        Session session = Database.getSessionFactory().openSession();
+        Author author = session.get(Author.class, ID);
+        return author;
+    }
 }

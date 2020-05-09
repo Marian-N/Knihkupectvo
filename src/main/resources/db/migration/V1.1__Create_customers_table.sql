@@ -6,6 +6,6 @@ CREATE TABLE customers (
     city VARCHAR(50),
     zip VARCHAR(15),
     address VARCHAR(255),
-    role smallint,
-    password VARCHAR(60)
+    role smallint NOT NULL,
+    password VARCHAR(60) NOT NULL
 );
