@@ -4,11 +4,15 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import controller.CustomerController;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Customer;
 
+
 import java.sql.SQLException;
+
 
 public class UserRegisterController {
 
@@ -61,68 +65,96 @@ public class UserRegisterController {
             String newAddress = null;
             String newPassword = null;
 
+
             int counter = 0;
-            if(!firstNameField.getText().isEmpty()){
+            if(this.validateName(firstNameField, wrongFirstName)){
                 wrongFirstName.setVisible(false);
                 counter++;
                 newName = firstNameField.getText();
             } else{
                 wrongFirstName.setVisible(true);
             }
-            if(!lastNameField.getText().isEmpty()){
-                wrongLastName.setVisible(false);
-                counter++;
-                newSurname = lastNameField.getText();
-            } else{
-                wrongLastName.setVisible(true);
-            }
-            if(!mailField.getText().isEmpty()){
-                wrongMail.setVisible(false);
-                counter++;
-                newMail = mailField.getText();
-            } else{
-                wrongMail.setVisible(true);
-            }
-            if(!cityField.getText().isEmpty()){
-                wrongCity.setVisible(false);
-                counter++;
-                newCity = cityField.getText();
-            } else{
-                wrongCity.setVisible(true);
-            }
-            if(!zipField.getText().isEmpty()){
-                wrongZip.setVisible(false);
-                counter++;
-                newZip = zipField.getText();
-            } else{
-                wrongZip.setVisible(true);
-            }
-            if(!addressField.getText().isEmpty()){
-                wrongAddress.setVisible(false);
-                counter++;
-                newAddress = addressField.getText();
-            } else{
-                wrongAddress.setVisible(true);
-            }
-            if(!passwordField.getText().isEmpty()){
-                wrongPassword.setVisible(false);
-                counter++;
-                newPassword = passwordField.getText();
-            } else{
-                wrongPassword.setVisible(true);
-            }
 
-            if (counter == 7){
-                Customer newCustomer = new Customer(newName, newSurname, newMail, newCity, newZip, newAddress,0, newPassword);
-                System.out.println(newCustomer.getFirstName());
-                try {
-                    customerController.addCustomer(newCustomer);
-                } catch (SQLException | ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                }
-            }
+//            int counter = 0;
+//            if(!firstNameField.getText().isEmpty()){
+//                wrongFirstName.setVisible(false);
+//                counter++;
+//                newName = firstNameField.getText();
+//            } else{
+//                wrongFirstName.setVisible(true);
+//            }
+//            if(!lastNameField.getText().isEmpty()){
+//                wrongLastName.setVisible(false);
+//                counter++;
+//                newSurname = lastNameField.getText();
+//            } else{
+//                wrongLastName.setVisible(true);
+//            }
+//            if(!mailField.getText().isEmpty()){
+//                wrongMail.setVisible(false);
+//                counter++;
+//                newMail = mailField.getText();
+//            } else{
+//                wrongMail.setVisible(true);
+//            }
+//            if(!cityField.getText().isEmpty()){
+//                wrongCity.setVisible(false);
+//                counter++;
+//                newCity = cityField.getText();
+//            } else{
+//                wrongCity.setVisible(true);
+//            }
+//            if(!zipField.getText().isEmpty()){
+//                wrongZip.setVisible(false);
+//                counter++;
+//                newZip = zipField.getText();
+//            } else{
+//                wrongZip.setVisible(true);
+//            }
+//            if(!addressField.getText().isEmpty()){
+//                wrongAddress.setVisible(false);
+//                counter++;
+//                newAddress = addressField.getText();
+//            } else{
+//                wrongAddress.setVisible(true);
+//            }
+//            if(!passwordField.getText().isEmpty()){
+//                wrongPassword.setVisible(false);
+//                counter++;
+//                newPassword = passwordField.getText();
+//            } else{
+//                wrongPassword.setVisible(true);
+//            }
+//
+//            if (counter == 7){
+//                Customer newCustomer = new Customer(newName, newSurname, newMail, newCity, newZip, newAddress,0, newPassword);
+//                System.out.println(newCustomer.getFirstName());
+//                try {
+//                    customerController.addCustomer(newCustomer);
+//                } catch (SQLException | ClassNotFoundException ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
             stage.close();
 
         });
+    }
+    public boolean validateName(TextField name, Text wrongName){
+        if (name.getText().isEmpty() || name.getText().trim().length() == 0 || name.getText().length() > 255){
+            wrongName.setVisible(true);
+            return false;
+        } else{
+            wrongName.setVisible(false);
+            return true;
+        }
+    }
+    public boolean validateZip(TextField zip, Text wrongZip){
+        if (zip.getText().isEmpty() || zip.getText().trim().length() == 0 || zip.getText().length() > 15){
+            wrongZip.setVisible(true);
+            return false;
+        } else{
+            wrongZip.setVisible(false);
+            return true;
+        }
     }
 }

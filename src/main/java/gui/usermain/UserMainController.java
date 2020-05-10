@@ -103,6 +103,7 @@ public class UserMainController implements Initializable {
     ObservableList<Order> orders = FXCollections.observableArrayList();
     ObservableList<OrderContent> newOrder = FXCollections.observableArrayList();
     Customer loggedUser;
+    private String searchingForBook = null;
 
     public UserMainController() throws SQLException, ClassNotFoundException {
     }
@@ -135,6 +136,17 @@ public class UserMainController implements Initializable {
                 ex.printStackTrace();
             }
         });
+        searchBookText.textProperty().addListener((v, oldText, newText) -> {
+            if (newText.isEmpty()){
+                searchingForBook = null;
+                createBooksPage(0);
+                try {
+                    paginationBooks.setPageCount((int) Math.ceil((double) Database.getRowsCount("books")/100));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
     }
 
@@ -145,7 +157,7 @@ public class UserMainController implements Initializable {
 
     public void initData(Customer gotUser){
         loggedUser = gotUser;
-        userIdTextField.setText(loggedUser.getFirstName() + " " + loggedUser.getLastName());
+        userIdTextField.setText(loggedUser.getFirstName() + " " + loggedUser.getLastName() + "   ID: " + loggedUser.getID());
     }
 
     private void createOrderByBooksComboBox() {
@@ -196,41 +208,35 @@ public class UserMainController implements Initializable {
     private Node createBooksPage(int pageNum){
         String orderBy = orderByBooksComboBox.getValue();
         try {
-            if(orderBy == null){
-                books = booksController.getBooks(pageNum, "id");
+            if(searchingForBook != null){
+                books = (ObservableList<Book>) booksController.findBook(searchingForBook, pageNum)[1];
             }
-            else if(orderBy.equals("Book name - asc")){
-                books = booksController.getBooks(pageNum, "title");
-            }
-            else if(orderBy.equals("Book name - desc")){
-                books = booksController.getBooks(pageNum, "title", true);
-            }
-            else if(orderBy.equals("Author - asc")){
-                books = booksController.getBooks(pageNum, "author");
-            }
-            else if(orderBy.equals("Author - desc")){
-                books = booksController.getBooks(pageNum, "author", true);
-            }
-            else if(orderBy.equals("Price - asc")){
-                books = booksController.getBooks(pageNum, "price");
-            }
-            else if(orderBy.equals("Price - desc")){
-                books = booksController.getBooks(pageNum, "price", true);
-            }
-            else if(orderBy.equals("Date - asc")){
-                books = booksController.getBooks(pageNum, "publication_date");
-            }
-            else if(orderBy.equals("Date - desc")){
-                books = booksController.getBooks(pageNum, "publication_date", true);
-            }
-            else if(orderBy.equals("Popularity - asc")){
-                books = booksController.getBooks(pageNum, "popularity");
-            }
-            else if(orderBy.equals("Popularity - desc")){
-                books = booksController.getBooks(pageNum, "popularity", true);
-            }
-            else{
-                books = booksController.getBooks(pageNum, "id");
+            else {
+                if (orderBy == null) {
+                    books = booksController.getBooks(pageNum, "id");
+                } else if (orderBy.equals("Book name - asc")) {
+                    books = booksController.getBooks(pageNum, "title");
+                } else if (orderBy.equals("Book name - desc")) {
+                    books = booksController.getBooks(pageNum, "title", true);
+                } else if (orderBy.equals("Author - asc")) {
+                    books = booksController.getBooks(pageNum, "author");
+                } else if (orderBy.equals("Author - desc")) {
+                    books = booksController.getBooks(pageNum, "author", true);
+                } else if (orderBy.equals("Price - asc")) {
+                    books = booksController.getBooks(pageNum, "price");
+                } else if (orderBy.equals("Price - desc")) {
+                    books = booksController.getBooks(pageNum, "price", true);
+                } else if (orderBy.equals("Date - asc")) {
+                    books = booksController.getBooks(pageNum, "publication_date");
+                } else if (orderBy.equals("Date - desc")) {
+                    books = booksController.getBooks(pageNum, "publication_date", true);
+                } else if (orderBy.equals("Popularity - asc")) {
+                    books = booksController.getBooks(pageNum, "popularity");
+                } else if (orderBy.equals("Popularity - desc")) {
+                    books = booksController.getBooks(pageNum, "popularity", true);
+                } else {
+                    books = booksController.getBooks(pageNum, "id");
+                }
             }
         } catch (SQLException | ClassNotFoundException e) {
             books = null;
@@ -267,16 +273,21 @@ public class UserMainController implements Initializable {
         createBooksPage(paginationBooks.getCurrentPageIndex());
     }
 
-    public void handleGoToPage() throws SQLException {
+    public void handleGoToPage() throws SQLException, ClassNotFoundException {
         int pageId;
         try{
             pageId =Integer.parseInt(setPageBooksTextField.getText());
         } catch (NumberFormatException e){
             pageId = 0;
         }
-
-        if(pageId > 0 && pageId <= (int) Math.ceil((double) Database.getRowsCount("books")/100)){
-            paginationBooks.setCurrentPageIndex(pageId - 1);
+        if(searchingForBook != null){
+            if(pageId > 0 && pageId <= (int) Math.ceil((int) booksController.findBook(searchingForBook, 0)[0]/100.0)){
+                paginationBooks.setCurrentPageIndex(pageId - 1);
+            }
+        } else {
+            if (pageId > 0 && pageId <= (int) Math.ceil((double) Database.getRowsCount("books") / 100)) {
+                paginationBooks.setCurrentPageIndex(pageId - 1);
+            }
         }
         createBooksPage(paginationBooks.getCurrentPageIndex());
     }
@@ -289,7 +300,10 @@ public class UserMainController implements Initializable {
         }
         else{
             try {
-                bookOverviewTable.setItems(booksController.findBook(bookToFind));
+                bookOverviewTable.setItems((ObservableList<Book>) booksController.findBook(bookToFind, 0)[1]);
+                searchingForBook = bookToFind;
+                paginationBooks.setPageCount((int)Math.ceil((int)booksController.findBook(searchingForBook, 0)[0]/100.0));
+                paginationBooks.setCurrentPageIndex(0);
             } catch (SQLException | ClassNotFoundException ignored) {
             }
         }

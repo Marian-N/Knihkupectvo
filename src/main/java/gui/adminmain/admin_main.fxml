@@ -131,12 +131,12 @@
                               </TableView>
                               <Label layoutX="246.0" layoutY="227.0" text="Order detail" />
                               <Label layoutX="55.0" layoutY="138.0" text="Customer ID:" />
-                              <JFXTextField fx:id="searchCustomerTextField" layoutX="211.0" layoutY="141.0" prefHeight="25.0" prefWidth="71.0" />
-                              <JFXButton fx:id="searchCustomerButton" layoutX="327.0" layoutY="132.0" onAction="#handleLoadOrders" text="Search" />
+                              <JFXTextField fx:id="searchCustomerTextField" layoutX="211.0" layoutY="131.0" prefHeight="25.0" prefWidth="71.0" />
+                              <JFXButton fx:id="searchCustomerButton" layoutX="327.0" layoutY="131.0" onAction="#handleLoadOrders" text="Search" />
                               <JFXComboBox fx:id="orderStatusChangeComboBox" layoutX="269.0" layoutY="609.0" onAction="#handleOrderStatusChange" prefHeight="31.0" prefWidth="165.0" />
                               <Label layoutX="55.0" layoutY="609.0" text="Change order status" />
                               <Label layoutX="55.0" layoutY="71.0" text="Best customers: " />
-                              <TextField fx:id="bestCustomersTextField" editable="false" layoutX="195.0" layoutY="64.0" prefHeight="44.0" prefWidth="233.0" styleClass="text-field-book-change" />
+                              <TextField fx:id="bestCustomersTextField" editable="false" layoutX="195.0" layoutY="64.0" mouseTransparent="true" prefHeight="44.0" prefWidth="355.0" styleClass="text-field-book-change" />
                            </children>
                         </AnchorPane>
                      </children></AnchorPane>

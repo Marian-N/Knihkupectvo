@@ -146,6 +146,7 @@ public class AdminMainController implements Initializable {
     ObservableList<Book> books = FXCollections.observableArrayList();
     //ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
     ObservableList<Order> orders = FXCollections.observableArrayList();
+    private String searchingForBook = null;
 
     ScreenConfiguration screenConfiguration = new ScreenConfiguration();
 
@@ -158,6 +159,17 @@ public class AdminMainController implements Initializable {
         //authorsFromMap = authorsController.getAuthors();
         createBooksTable();
         createOrderByBooksComboBox();
+        searchBookText.textProperty().addListener((v, oldText, newText) -> {
+            if (newText.isEmpty()){
+                searchingForBook = null;
+                createBooksPage(0);
+                try {
+                    paginationBooks.setPageCount((int) Math.ceil((double) Database.getRowsCount("books")/100));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         try {
             paginationBooks.setPageCount((int) Math.ceil((double) Database.getRowsCount("books")/100));
@@ -217,36 +229,42 @@ public class AdminMainController implements Initializable {
     private Node createBooksPage(int pageNum){
         String orderBy = orderByBooksComboBox.getValue();
         try {
-            if(orderBy == null){
-                books = booksController.getBooks(pageNum, "id");
-            }
-            else if(orderBy.equals("Book name - asc")){
-                books = booksController.getBooks(pageNum, "title");
-            }
-            else if(orderBy.equals("Book name - desc")){
-                books = booksController.getBooks(pageNum, "title", true);
-            }
-            else if(orderBy.equals("Author - asc")){
-                books = booksController.getBooks(pageNum, "author");
-            }
-            else if(orderBy.equals("Author - desc")){
-                books = booksController.getBooks(pageNum, "author", true);
-            }
-            else if(orderBy.equals("Price - asc")){
-                books = booksController.getBooks(pageNum, "price");
-            }
-            else if(orderBy.equals("Price - desc")){
-                books = booksController.getBooks(pageNum, "price", true);
-            }
-            else if(orderBy.equals("Date - asc")){
-                books = booksController.getBooks(pageNum, "publication_date");
-            }
-            else if(orderBy.equals("Date - desc")){
-                books = booksController.getBooks(pageNum, "publication_date", true);
+            if(searchingForBook != null){
+                books = (ObservableList<Book>) booksController.findBook(searchingForBook, pageNum)[1];
             }
             else{
-                books = booksController.getBooks(pageNum, "id");
+                if(orderBy == null){
+                    books = booksController.getBooks(pageNum, "id");
+                }
+                else if(orderBy.equals("Book name - asc")){
+                    books = booksController.getBooks(pageNum, "title");
+                }
+                else if(orderBy.equals("Book name - desc")){
+                    books = booksController.getBooks(pageNum, "title", true);
+                }
+                else if(orderBy.equals("Author - asc")){
+                    books = booksController.getBooks(pageNum, "author");
+                }
+                else if(orderBy.equals("Author - desc")){
+                    books = booksController.getBooks(pageNum, "author", true);
+                }
+                else if(orderBy.equals("Price - asc")){
+                    books = booksController.getBooks(pageNum, "price");
+                }
+                else if(orderBy.equals("Price - desc")){
+                    books = booksController.getBooks(pageNum, "price", true);
+                }
+                else if(orderBy.equals("Date - asc")){
+                    books = booksController.getBooks(pageNum, "publication_date");
+                }
+                else if(orderBy.equals("Date - desc")){
+                    books = booksController.getBooks(pageNum, "publication_date", true);
+                }
+                else{
+                    books = booksController.getBooks(pageNum, "id");
+                }
             }
+
         } catch (SQLException | ClassNotFoundException e) {
             books = null;
         }
@@ -269,16 +287,21 @@ public class AdminMainController implements Initializable {
         }
     }
 
-    public void handleGoToPage() throws SQLException {
+    public void handleGoToPage() throws SQLException, ClassNotFoundException {
         int pageId;
         try{
             pageId = Integer.parseInt(setPageBooksTextField.getText());
         } catch (NumberFormatException e){
             pageId = 0;
         }
-
-        if(pageId > 0 && pageId <= (int) Math.ceil((double) Database.getRowsCount("books")/100)){
-            paginationBooks.setCurrentPageIndex(pageId - 1);
+        if(searchingForBook != null){
+            if(pageId > 0 && pageId <= (int) Math.ceil((int) booksController.findBook(searchingForBook, 0)[0]/100.0)){
+                paginationBooks.setCurrentPageIndex(pageId - 1);
+            }
+        } else{
+            if(pageId > 0 && pageId <= (int) Math.ceil((double) Database.getRowsCount("books")/100)){
+                paginationBooks.setCurrentPageIndex(pageId - 1);
+            }
         }
         createBooksPage(paginationBooks.getCurrentPageIndex());
     }
@@ -295,7 +318,10 @@ public class AdminMainController implements Initializable {
         }
         else{
             try {
-                bookOverviewTable.setItems(booksController.findBook(bookToFind));
+                bookOverviewTable.setItems((ObservableList<Book>) booksController.findBook(bookToFind, 0)[1]);
+                searchingForBook = bookToFind;
+                paginationBooks.setPageCount((int)Math.ceil((int)booksController.findBook(searchingForBook, 0)[0]/100.0));
+                paginationBooks.setCurrentPageIndex(0);
             } catch (SQLException | ClassNotFoundException ignored) {
             }
         }
@@ -318,8 +344,6 @@ public class AdminMainController implements Initializable {
             System.out.println("Book deleted: " + deleted);
             paginationBooks.setPageCount((int) Math.ceil((double) Database.getRowsCount("books")/100));
             createBooksPage(paginationBooks.getCurrentPageIndex());
-            //paginationBooks.setPageFactory(this::createBooksPage);
-            //bookOverviewTable.refresh();
         }
     }
 
@@ -385,8 +409,8 @@ public class AdminMainController implements Initializable {
             if(order.getStatus().equals("nevybavená")){
                 ordersController.changeStatus(order, orderStatusChangeComboBox.getValue());
                 orderOverviewTable.refresh();
+                bookOverviewTable.refresh();
             }
-
         }
     }
 
@@ -538,7 +562,7 @@ public class AdminMainController implements Initializable {
             counter++;
         }
 
-        System.out.println(counter);
+        //System.out.println(counter);
         if(counter == 8){
             Book book = new Book(newTitle, newPrice, newStock, newPublisher,
                                  newPublicationDate, newSynopsis, newGenres, newAuthors);
