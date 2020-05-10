@@ -16,8 +16,13 @@ public class Login {
         catch(Exception e) {
             return null;
         }
-        if(passwordEncoder.matches(password, customer.getEncryptedPassword()))
-            return customer;
+        try {
+            if (passwordEncoder.matches(password, customer.getEncryptedPassword()))
+                return customer;
+        }
+        catch(Exception e) {
+            return null;
+        }
         return null;
     }
 }
