@@ -27,8 +27,8 @@ public class Publisher {
     }
 
     public Publisher(ResultSet resultSet) throws SQLException {
-        this.ID = resultSet.getInt(6);
-        this.name = resultSet.getString(8);
+        this.ID = resultSet.getInt("publisher_id");
+        this.name = resultSet.getString("publisher_name");
     }
 
     public int getID() {

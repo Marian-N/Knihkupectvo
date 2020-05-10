@@ -26,6 +26,32 @@ public class BooksController {
         return _instance;
     }
 
+    private Object[] getListWithCount(ResultSet resultSet) throws SQLException, ClassNotFoundException {
+        ObservableList<Book> books = FXCollections.observableArrayList();
+        int count = 0;
+
+        while(resultSet.next()){
+            count = resultSet.getInt(1);
+            int id = resultSet.getInt(2);
+            String title = resultSet.getString(3);
+            double price = resultSet.getDouble(4);
+            int stockQuantity = resultSet.getInt(5);
+            Date publicationDate = resultSet.getDate(6);
+            String description = resultSet.getString(8);
+            Publisher publisher = new Publisher(resultSet);
+            Genres genres = GenresController.getInstance().getBookGenres(id);
+            Book book = new Book(id, title, price, stockQuantity, publisher, publicationDate, description, genres);
+            books.add(book);
+        }
+        resultSet.close();
+
+        Object[] result = new Object[2];
+        result[0] = count;
+        result[1] = books;
+
+        return result;
+    }
+
     private ObservableList<Book> getList(ResultSet resultSet) throws SQLException, ClassNotFoundException {
         ObservableList<Book> books = FXCollections.observableArrayList();
 
@@ -149,16 +175,25 @@ public class BooksController {
         return books;
     }
 
-    public ObservableList<Book> findBook(String title) throws SQLException, ClassNotFoundException {
-        String query = "SELECT b.*, p.name publisher_name FROM books b " +
+    public Object[] findBook(String title, int page) throws SQLException, ClassNotFoundException {
+        String query = "SELECT COUNT(*) OVER() as count," +
+                "b.*, p.name publisher_name FROM books b " +
                 "JOIN publishers p ON p.id=b.publisher_id " +
-                "WHERE LOWER(title) LIKE ?";
+                "WHERE LOWER(title) LIKE ?" +
+                "ORDER BY b.id " +
+                "OFFSET ? ROWS " +
+                "FETCH FIRST ? ROWS ONLY";
+        int booksPerPage = 100;
+        int offset = booksPerPage * page;
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, String.format("%c%s%c", '%', title.toLowerCase(), '%'));
+        statement.setInt(2, offset);
+        statement.setInt(3, booksPerPage);
         ResultSet resultSet = statement.executeQuery();
-        ObservableList<Book> books = getList(resultSet);
+        Object[] result = getListWithCount(resultSet);
         statement.close();
-        return books;
+
+        return result;
     }
 
     public void changeBook(int bookID, double price) throws SQLException, ClassNotFoundException {
