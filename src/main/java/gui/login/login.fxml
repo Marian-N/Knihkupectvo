@@ -8,11 +8,11 @@
 
 <AnchorPane fx:id="loginScene" prefHeight="500.0" prefWidth="900.0" stylesheets="@login-style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.login.LoginController">
     <children>
-        <JFXTextField fx:id="nameLogin" layoutX="345.0" layoutY="214.0" prefHeight="36.0" prefWidth="212.0" promptText="Name" />
-        <JFXPasswordField fx:id="passwordLogin" layoutX="345.0" layoutY="261.0" prefHeight="36.0" prefWidth="212.0" promptText="Password" />
+        <JFXTextField fx:id="nameLogin" labelFloat="true" layoutX="344.0" layoutY="195.0" prefHeight="36.0" prefWidth="212.0" promptText="Name" />
+        <JFXPasswordField fx:id="passwordLogin" labelFloat="true" layoutX="345.0" layoutY="261.0" prefHeight="36.0" prefWidth="212.0" promptText="Password" />
         <JFXButton fx:id="loginButton" layoutX="389.0" layoutY="324.0" onAction="#handleLogin" prefHeight="36.0" prefWidth="123.0" text="Login" textFill="WHITE" />
-        <Label layoutX="377.0" layoutY="148.0" text="Book Store login" />
-        <Label fx:id="wrongInfo" layoutX="375.0" layoutY="375.0" styleClass="wrong-info-label" text="Wrong Name or Password" visible="false" />
-      <JFXButton fx:id="createUserButton" onAction="#handleCreateUser" layoutX="389.0" layoutY="394.0" prefHeight="36.0" prefWidth="123.0" text="Create User" />
+        <Label layoutX="377.0" layoutY="121.0" text="Book Store login" />
+        <Label fx:id="wrongInfo" layoutX="376.0" layoutY="368.0" styleClass="wrong-info-label" text="Wrong Name or Password" visible="false" />
+      <JFXButton fx:id="createUserButton" layoutX="389.0" layoutY="394.0" onAction="#handleCreateUser" prefHeight="36.0" prefWidth="123.0" text="Create User" />
     </children>
 </AnchorPane>

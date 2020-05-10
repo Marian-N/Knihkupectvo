@@ -495,8 +495,13 @@ public class AdminMainController implements Initializable {
         double newPrice = 0;
         try{
             newPrice = Double.parseDouble(df.format(Double.parseDouble(addBookPrice.getText())));
-            wrongPrice.setVisible(false);
-            counter++;
+            if((int)newPrice <= 9999){
+                wrongPrice.setVisible(false);
+                counter++;
+            } else{
+                wrongPrice.setVisible(true);
+            }
+
         } catch(NumberFormatException e){
             wrongPrice.setVisible(true);
         }
@@ -510,7 +515,7 @@ public class AdminMainController implements Initializable {
         }
 
         String newTitle = null;
-        if(addBookTitle.getText().isEmpty()){
+        if(addBookTitle.getText().isEmpty() || addBookTitle.getText().trim().length() == 0){
             wrongTitle.setVisible(true);
         } else{
             newTitle = addBookTitle.getText();

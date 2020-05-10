@@ -6,12 +6,14 @@ import controller.CustomerController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Customer;
 
 
 import java.sql.SQLException;
+import java.util.regex.Pattern;
 
 
 public class UserRegisterController {
@@ -67,79 +69,74 @@ public class UserRegisterController {
 
 
             int counter = 0;
-            if(this.validateName(firstNameField, wrongFirstName)){
-                wrongFirstName.setVisible(false);
+            if(validateName(firstNameField, wrongFirstName)){
                 counter++;
                 newName = firstNameField.getText();
-            } else{
-                wrongFirstName.setVisible(true);
+            }
+            if(validateName(lastNameField, wrongLastName)){
+                counter++;
+                newSurname = lastNameField.getText();
+            }
+            if(validateMail(mailField, wrongMail)){
+                counter++;
+                newMail = mailField.getText();
+            }
+            if(validateName(cityField, wrongCity)){
+                counter++;
+                newCity = cityField.getText();
+            }
+            if(validateZip(zipField, wrongZip)){
+                counter++;
+                newZip = zipField.getText();
+            }
+            if(validateName(addressField, wrongAddress)){
+                counter++;
+                newAddress = addressField.getText();
+            }
+            if(validatePassword(passwordField, wrongPassword)){
+                counter++;
+                newPassword = passwordField.getText();
             }
 
-//            int counter = 0;
-//            if(!firstNameField.getText().isEmpty()){
-//                wrongFirstName.setVisible(false);
-//                counter++;
-//                newName = firstNameField.getText();
-//            } else{
-//                wrongFirstName.setVisible(true);
-//            }
-//            if(!lastNameField.getText().isEmpty()){
-//                wrongLastName.setVisible(false);
-//                counter++;
-//                newSurname = lastNameField.getText();
-//            } else{
-//                wrongLastName.setVisible(true);
-//            }
-//            if(!mailField.getText().isEmpty()){
-//                wrongMail.setVisible(false);
-//                counter++;
-//                newMail = mailField.getText();
-//            } else{
-//                wrongMail.setVisible(true);
-//            }
-//            if(!cityField.getText().isEmpty()){
-//                wrongCity.setVisible(false);
-//                counter++;
-//                newCity = cityField.getText();
-//            } else{
-//                wrongCity.setVisible(true);
-//            }
-//            if(!zipField.getText().isEmpty()){
-//                wrongZip.setVisible(false);
-//                counter++;
-//                newZip = zipField.getText();
-//            } else{
-//                wrongZip.setVisible(true);
-//            }
-//            if(!addressField.getText().isEmpty()){
-//                wrongAddress.setVisible(false);
-//                counter++;
-//                newAddress = addressField.getText();
-//            } else{
-//                wrongAddress.setVisible(true);
-//            }
-//            if(!passwordField.getText().isEmpty()){
-//                wrongPassword.setVisible(false);
-//                counter++;
-//                newPassword = passwordField.getText();
-//            } else{
-//                wrongPassword.setVisible(true);
-//            }
-//
-//            if (counter == 7){
-//                Customer newCustomer = new Customer(newName, newSurname, newMail, newCity, newZip, newAddress,0, newPassword);
-//                System.out.println(newCustomer.getFirstName());
-//                try {
-//                    customerController.addCustomer(newCustomer);
-//                } catch (SQLException | ClassNotFoundException ex) {
-//                    ex.printStackTrace();
-//                }
-//            }
+            if (counter == 7){
+                Customer newCustomer = new Customer(newName, newSurname, newMail, newCity, newZip, newAddress,0, newPassword);
+                try {
+                    customerController.addCustomer(newCustomer);
+                } catch (SQLException | ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                }
+            }
             stage.close();
 
         });
     }
-    public boolean validateName(TextField name, Text wrongName){
+
+    private boolean validatePassword(JFXTextField password, Text wrongPassword) {
+        if (password.getText().isEmpty() || password.getText().trim().length() == 0 || password.getText().length() > 60){
+            wrongPassword.setVisible(true);
+            return false;
+        } else{
+            wrongPassword.setVisible(false);
+            return true;
+        }
+    }
+
+    private boolean validateMail(JFXTextField mail, Text wrongMail) {
+        String mailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                "[a-zA-Z0-9_+&*-]+)*@" +
+                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                "A-Z]{2,7}$";
+        Pattern mailPattern = Pattern.compile(mailRegex);
+        if(!mailPattern.matcher(mail.getText()).matches()){
+            wrongMail.setVisible(true);
+            return false;
+        } else{
+            wrongMail.setVisible(false);
+            return true;
+        }
+    }
+
+    private boolean validateName(JFXTextField name, Text wrongName){
         if (name.getText().isEmpty() || name.getText().trim().length() == 0 || name.getText().length() > 255){
             wrongName.setVisible(true);
             return false;
@@ -148,7 +145,7 @@ public class UserRegisterController {
             return true;
         }
     }
-    public boolean validateZip(TextField zip, Text wrongZip){
+    private boolean validateZip(JFXTextField zip, Text wrongZip){
         if (zip.getText().isEmpty() || zip.getText().trim().length() == 0 || zip.getText().length() > 15){
             wrongZip.setVisible(true);
             return false;
