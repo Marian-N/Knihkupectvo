@@ -152,9 +152,9 @@ public class BooksController {
     public ObservableList<Book> findBook(String title) throws SQLException, ClassNotFoundException {
         String query = "SELECT b.*, p.name publisher_name FROM books b " +
                 "JOIN publishers p ON p.id=b.publisher_id " +
-                "WHERE title LIKE ?";
+                "WHERE LOWER(title) LIKE ?";
         PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, String.format("%c%s%c", '%', title, '%'));
+        statement.setString(1, String.format("%c%s%c", '%', title.toLowerCase(), '%'));
         ResultSet resultSet = statement.executeQuery();
         ObservableList<Book> books = getList(resultSet);
         statement.close();
