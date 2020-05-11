@@ -14,6 +14,10 @@ public class OrdersSeeder {
         Database.emptyTable("orders");
         List<Integer> IDs = Database.getTableIDs("customers");
         int inserted = 0;
+        int total = 0;
+        int total_count = count;
+        long startTime = System.currentTimeMillis();
+        System.out.println("Starting orders seeder.");
         while(count-- > 0) {
             statement.setDate(1, RandomGenerator.getRandomDate(1989, 2020));
             statement.setDouble(2, RandomGenerator.getRandomPrice());
@@ -22,12 +26,20 @@ public class OrdersSeeder {
             statement.setInt(4, IDs.get(randomIndex));
             statement.addBatch();
             inserted++;
+            total++;
             if(inserted % 100 == 0) {
+                System.out.printf("%.2f%c\n", (float) total / total_count * 100, '%');
                 statement.executeBatch();
                 inserted = 0;
             }
         }
-        if(inserted > 0) statement.executeBatch();
+        long endTime = System.currentTimeMillis();
+        float time = (endTime - startTime) / 1000F;
+        if(inserted > 0) {
+            System.out.printf("%.2f%c\n", (float) total / total_count * 100, '%');
+            statement.executeBatch();
+        }
+        System.out.println("Orders seeder finished successfully after " + time + "s.");
         statement.close();
     }
 }

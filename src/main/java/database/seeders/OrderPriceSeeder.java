@@ -9,7 +9,6 @@ import model.Book;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 public class OrderPriceSeeder {
@@ -21,6 +20,10 @@ public class OrderPriceSeeder {
         List<Integer> orders = database.getTableIDs("orders");
         double orderPrice = 0;
         int inserted = 0;
+        int total = 0;
+        int total_count = orders.size();
+        long startTime = System.currentTimeMillis();
+        System.out.println("Starting OrderPrice seeder.");
         for(int order : orders){
             orderPrice = 0;
             List<int[]> orderContents = OrderBookController.getInstance().getOrderContents(order);
@@ -34,12 +37,20 @@ public class OrderPriceSeeder {
             preparedStatement.setInt(2, order);
             preparedStatement.addBatch();
             inserted++;
+            total++;
             if(inserted % 100 == 0) {
+                System.out.printf("%.2f%c\n", (float) total / total_count * 100, '%');
                 preparedStatement.executeBatch();
                 inserted = 0;
             }
         }
-        if(inserted > 0) preparedStatement.executeBatch();
+        long endTime = System.currentTimeMillis();
+        float time = (endTime - startTime) / 1000F;
+        if(inserted > 0) {
+            System.out.printf("%.2f%c\n", (float) total / total_count * 100, '%');
+            preparedStatement.executeBatch();
+        }
+        System.out.println("OrderPrice seeder finished successfully after " + time + "s.");
         preparedStatement.close();
     }
 }

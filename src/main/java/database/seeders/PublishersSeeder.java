@@ -12,16 +12,28 @@ public class PublishersSeeder {
         PreparedStatement statement = connection.prepareStatement(query);
         Database.emptyTable("publishers");
         int inserted = 0;
+        int total = 0;
+        int total_count = count;
+        long startTime = System.currentTimeMillis();
+        System.out.println("Starting publishers seeder.");
         while(count-- > 0) {
             statement.setString(1, faker.book().publisher());
             statement.addBatch();
             inserted++;
+            total++;
             if(inserted % 100 == 0) {
+                System.out.printf("%.2f%c\n", (float) total / total_count * 100, '%');
                 statement.executeBatch();
                 inserted = 0;
             }
         }
-        if(inserted > 0) statement.executeBatch();
+        long endTime = System.currentTimeMillis();
+        float time = (endTime - startTime) / 1000F;
+        if(inserted > 0) {
+            System.out.printf("%.2f%c\n", (float) total / total_count * 100, '%');
+            statement.executeBatch();
+        }
+        System.out.println("Publishers seeder finished successfully after " + time + "s.");
         statement.close();
     }
 }

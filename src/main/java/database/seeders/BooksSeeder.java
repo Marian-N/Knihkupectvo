@@ -17,6 +17,10 @@ public class BooksSeeder {
         Database.emptyTable("books");
         List<Integer> IDs = Database.getTableIDs("publishers");
         int inserted = 0;
+        int total = 0;
+        int total_count = count;
+        long startTime = System.currentTimeMillis();
+        System.out.println("Starting books seeder.");
         while(count-- > 0) {
             statement.setString(1, faker.book().title());
             statement.setDouble(2, RandomGenerator.getRandomPrice());
@@ -27,12 +31,20 @@ public class BooksSeeder {
             statement.setInt(6, IDs.get(randomIndex));
             statement.addBatch();
             inserted++;
+            total++;
             if(inserted % 100 == 0) {
+                System.out.printf("%.2f%c\n", (float) total / total_count * 100, '%');
                 statement.executeBatch();
                 inserted = 0;
             }
         }
-        if(inserted > 0) statement.executeBatch();
+        long endTime = System.currentTimeMillis();
+        float time = (endTime - startTime) / 1000F;
+        if(inserted > 0) {
+            System.out.printf("%.2f%c\n", (float) total / total_count * 100, '%');
+            statement.executeBatch();
+        }
+        System.out.println("Books seeder finished successfully after " + time + "s.");
         statement.close();
     }
 }

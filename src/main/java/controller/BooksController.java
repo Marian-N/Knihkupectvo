@@ -16,7 +16,7 @@ import java.sql.*;
 
 public class BooksController {
     private static BooksController _instance = null;
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger(BooksController.class);
     private Connection connection;
 
     private BooksController() throws SQLException, ClassNotFoundException {
@@ -170,7 +170,9 @@ public class BooksController {
      * @return all ObservableMap of all book from database
      */
     public ObservableMap<Integer, Book> getAllBooks() throws SQLException, ClassNotFoundException {
-        String query = "SELECT * FROM books";
+        String query = "SELECT b.*, p.id as publisher_id, p.name as publisher_name " +
+                "FROM books b " +
+                "JOIN publishers p on b.publisher_id = p.id;";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         ObservableMap<Integer, Book> books = getObservableMap(resultSet);
