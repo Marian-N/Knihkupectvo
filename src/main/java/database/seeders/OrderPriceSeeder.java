@@ -9,12 +9,13 @@ import model.Book;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 public class OrderPriceSeeder {
     public static void run(Connection connection) throws SQLException, ClassNotFoundException {
         Database database = Database.getInstance();
-        ObservableMap<Integer, Book> books = BooksController.getInstance().getAllBooks();
+        HashMap<Integer, Book> books = BooksController.getInstance().getAllBookPrices();
         String query = "UPDATE orders SET price = ? WHERE id = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         List<Integer> orders = database.getTableIDs("orders");

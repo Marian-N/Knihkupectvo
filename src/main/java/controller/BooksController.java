@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.sql.*;
+import java.util.HashMap;
 
 public class BooksController {
     private static BooksController _instance = null;
@@ -170,7 +171,7 @@ public class BooksController {
      * @return all ObservableMap of all book from database
      */
     public ObservableMap<Integer, Book> getAllBooks() throws SQLException, ClassNotFoundException {
-        String query = "SELECT b.*, p.id as publisher_id, p.name as publisher_name " +
+        String query = "SELECT b.id, p.price as publisher_id, p.name as publisher_name " +
                 "FROM books b " +
                 "JOIN publishers p on b.publisher_id = p.id;";
         Statement statement = connection.createStatement();
@@ -179,6 +180,25 @@ public class BooksController {
         statement.close();
 
         return books;
+    }
+
+    public HashMap<Integer, Book> getAllBookPrices() throws SQLException {
+        HashMap<Integer, Book> booksPrices = new HashMap<Integer, Book>();
+        String query = "SELECT b.id, b.price FROM books b;";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+        while(resultSet.next()){
+            int id = resultSet.getInt("id");
+            double price = resultSet.getDouble("price");
+            Book book = new Book();
+            book.setID(id);
+            book.setPrice(price);
+            booksPrices.put(id, book);
+        }
+        resultSet.close();
+        statement.close();
+
+        return booksPrices;
     }
 
     public Object[] findBook(String title, int page) throws SQLException, ClassNotFoundException {
