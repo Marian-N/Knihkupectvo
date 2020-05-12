@@ -198,6 +198,7 @@ Administrátor ma rolu 1 a užívateľ 0. Uložené heslá v databáze sú zahas
 z frameworku [Spring security crypto](https://docs.spring.io/spring-security/site/docs/3.1.x/reference/crypto.html).
 Okrem popísaných scenárov sme pridali aj ďalšiu funkcionalitu a to vytvorenie nového usera - customera. Pri logine je nové 
 tlačidlo Create user, ktoré zobrazí formulár pre vyplnenie informácií o novom userovi. Po vyplnení sa nový user môže vytvoriť.
+Zmenili sme aj seedere tak, aby pridávali údaje v batchoch, aby sme zrýchlili seedovanie.
 #### Netriviálny dopyt
 **Vyhľadávanie knihy podľa názvu so stránkovaním** - Zákazník má možnosť vyhľadať si knihy podľa názvu.
 ```sql
