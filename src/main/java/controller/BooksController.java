@@ -7,8 +7,6 @@ import javafx.collections.ObservableMap;
 import model.Book;
 import model.Genres;
 import model.Publisher;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -17,11 +15,9 @@ import java.util.HashMap;
 
 public class BooksController {
     private static BooksController _instance = null;
-    private static final Logger log = LogManager.getLogger(BooksController.class);
     private Connection connection;
 
     private BooksController() throws SQLException, ClassNotFoundException {
-        log.info("Create books controller");
         connection = Database.getInstance().getConnection();
     }
 
