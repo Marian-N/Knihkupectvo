@@ -31,9 +31,9 @@ Na generovanie databázy využívame vlastnoručne písané seedery a [Java Fake
 
 ## Dátový model <a name="datovy-model"></a>
 ### Logický model
-![Logicky model](images/logicky_model.png)
+![Logicky model](images/logicky_model_final.png)
 ### Fyzický model
-![Fyzicky model](images/fyzicky_model.png)
+![Fyzicky model](images/fyzicky_model_final.png)
 
 ## Scenáre <a name="scenare"></a>
 1. **Výber kníh**(implementované v [1. etape](#etapa1)) <a name="scenar1"></a><br>
