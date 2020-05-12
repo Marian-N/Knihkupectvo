@@ -318,7 +318,7 @@ ktorý naplní databázu údajmi generovanými pomocou [Java Faker](https://gith
 #### Export databáz <a name="export_databaz"></a>
 [Google Drive - Etapa 1](https://drive.google.com/file/d/10_1a6zxI6u-q__fV3ZZxqXKEFXR0yoAC/view?usp=sharing) <br>
 [Google Drive - Etapa 2](https://drive.google.com/file/d/1hcdluf6yAbdTpovGVR07NJLWzllRrKNz/view?usp=sharing) <br>
-[Google Drive - Etapa 3](https://drive.google.com/open?id=1J5XQK-Cs0Z03EKDCmomPwXIjMOHsa1yC)
+[Google Drive - Etapa 3](https://drive.google.com/file/d/1ze40H1-P6VF5__hqzeHeXpGtSit4FDv8/view?usp=sharing)
 
 ### Užitočné odkazy <a name="uzitocne_odkazy"></a>
 [Github Classroom](https://github.com/FIIT-DBS2020/project-rauchova_nisky) <br>
