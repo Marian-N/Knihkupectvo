@@ -33,6 +33,23 @@ public class OrderBookController {
         return orderContents;
     }
 
+    public double getTotalPrice(int orderID) throws SQLException {
+        String query = String.format(
+                "SELECT SUM(ob.quantity * b.price) as total_price " +
+                "FROM orders o " +
+                "JOIN order_book ob on ob.order_id = o.id " +
+                "JOIN books b on b.id = ob.book_id " +
+                "WHERE o.id = %s;", orderID);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+        resultSet.next();
+        double totalPrice = resultSet.getInt(1);
+        resultSet.close();
+        statement.close();
+
+        return totalPrice;
+    }
+
     public static OrderBookController getInstance() throws SQLException, ClassNotFoundException {
         if(_instance == null)
             _instance = new OrderBookController();

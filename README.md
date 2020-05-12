@@ -9,7 +9,7 @@ Administrátor má na starosti aj správu objednávok, a teda vybavovanie a zami
 **[Technická realizácia](#technicka-realizacia)**<br>
 **[Dátový model](#datovy-model)**<br>
 **[Scenáre](#scenare)** <br>
-**[Etapy](#etapy)([1](#etapa1), [2](#etapa2))** <br>
+**[Etapy](#etapy)([1](#etapa1), [2](#etapa2), [3](#etapa3))** <br>
 **[Práca s maven, flyway a konfigurácia](#navod)** <br>
 **[Export databáz](#export_databaz)** <br>
 **[Užitočné odkazy](#uzitocne_odkazy)** <br>
@@ -45,7 +45,7 @@ Výber kníh<br>
 zobrazí sa mu jej popis a následne bude vedieť prejsť na jej objednanie ([Scenár 3](#objednanie-knihy)). <br>
 (b) **Adminstrátorom** - 
 bude si ju vedieť takisto pozrieť ale ju aj spravovať ([Scenár 2](#sprava-knih))
-2. **Správa kníh** <br> <a name="sprava-knih"></a>
+2. **Správa kníh**(implementované v [3. etape](#etapa3)) <br> <a name="sprava-knih"></a>
 K tomuto vie pristúpiť iba administrátor. <br>
 Knihu vie: <br>
 (a) **Pridať** -
@@ -66,7 +66,7 @@ Závisí to od administrátora a vypĺňa sa to manuálne. <br>
 (b) **Nevybavená** - začiatočný stav objednávky. <br>
 (c) **Zamietnutá** - zamietnutá môže byť objednávka v prípade, že nastala situácia ktorá spôsobila vyčerpanie zásob danej knihy. 
 Tento stav vyhodnocuje administrátor.
-5. **Prihlásenie** <br>
+5. **Prihlásenie** (implementované v [3. etape](#etapa3)) <br> <a name="prihlasenie"></a>
 Prihlasovania sú dve. Jedno pre administrátora a jedno pre zákazníka.
 Na základe prihlasovacích údajov sa určia práva, ktoré budú používatelia v systéme mať. Tie sú popísané vo zvyšných scenároch.
 
@@ -189,6 +189,115 @@ Prihlasuje sa zadaním *admin* do kolónky *name*. Po pristúpení do časti __*
 Zobrazia sa nám, podobne ako pri zákazníkovi, jeho objednávky so statusom a po kliknutí na nejakú aj jej detaily.
 Administrátor následne vie vybranú objednávku vybaviť alebo zamietnuť, pokiaľ je ešte nevybavená.
 
+### Etapa 3 <a name="etapa3"></a>
+V poslednej etape sme dokončili posledné dva scenáre a to [2.scenár](#sprava-knih) - Správa kníh a [5.scenár](#prihlasenie) -
+Prihlásenie. Správa kníh obsahuje pridanie knihy, autora, žánru, vydavateľa, vymazanie knihy a zmenu knihy.
+V poslednej etape sme používali ORM, konkrétne [Hibernate](https://hibernate.org/orm/).
+Pre prihlásenie sme potrebovali, aby každý užívateľ mal heslo a aj rolu. Tieto veci sme pridali do tabuľky customers.
+Administrátor ma rolu 1 a užívateľ 0. Uložené heslá v databáze sú zahashované pomocou [Bcrypt-u](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/crypto/bcrypt/BCrypt.html) 
+z frameworku [Spring security crypto](https://docs.spring.io/spring-security/site/docs/3.1.x/reference/crypto.html).
+Okrem popísaných scenárov sme pridali aj ďalšiu funkcionalitu a to vytvorenie nového usera - customera. Pri logine je nové 
+tlačidlo Create user, ktoré zobrazí formulár pre vyplnenie informácií o novom userovi. Po vyplnení sa nový user môže vytvoriť.
+#### Netriviálny dopyt
+**Vyhľadávanie knihy podľa názvu so stránkovaním** - Zákazník má možnosť vyhľadať si knihy podľa názvu.
+```sql
+//src/main/java/controller/BooksController.java
+SELECT COUNT(*) OVER() as count,
+    b.*, p.name publisher_name FROM books b
+    JOIN publishers p ON p.id=b.publisher_id
+    WHERE LOWER(title) LIKE '%?%'
+    ORDER BY b.id
+    OFFSET ? ROWS
+    FETCH FIRST ? ROWS ONLY;
+```
+#### Využitie ORM
+Na _ORM_ využívame [Hibernate](https://hibernate.org/orm/). Objekty referencujeme pomocou anotácií. Napríklad _@Table (name = "books")_ znamená že hovoríme o tabuľke s názvom _"books"_ a _@Column(name = "title")_ znamená že premenná _String title_ sa
+nachádza v stĺpci s názvom _"title"_. Rovnako ako premenné si vieme referencovať aj ďalšie entity ako napríklad _@OneToOne_
+pre classu _Publisher_(ktorá v sebe tiež má namapovanú tabuľku). <br>
+**Model Book**
+```java
+//src/main/java/model/Book.java
+@Entity
+@Table(name = "books")
+public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int ID;
+    
+    @Column(name = "title")
+    private String title;
+    
+    @Column(name = "price")
+    private double price;
+    
+    @Column(name = "stock_quantity")
+    private int stockQuantity;
+    
+    @Column(name = "publication_date")
+    private Date publicationDate;
+    
+    @Column(name = "description")
+    private String description;
+    
+    @OneToOne
+    @JoinColumn(name = "publisher_id", referencedColumnName = "id")
+    private Publisher publisher;
+    
+    @OneToMany
+    @JoinTable(name = "book_genre",
+        joinColumns = @JoinColumn(name = "book_id"),
+        inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    private List<Genre> genresList;
+    
+    @OneToMany
+    @JoinTable(name = "author_book",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
+    private List<Author> authorsList;
+}
+```
+**Model Publisher**
+```java
+//src/main/java/model/Publisher.java
+@Entity
+@Table(name = "publishers")
+public class Publisher {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int ID;
+
+    @Column(name = "name")
+    private String name;
+}
+```
+**Práca s ORM v programe** Takto sa uloží celá classa _Book_ do databázy pomocou ORM.
+```java
+//src/main/java/controller/BooksController.java
+public void addBook(Book book) {
+        Session session = Database.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+
+        if(book != null) {
+            session.saveOrUpdate(book);
+            transaction.commit();
+        }
+        session.close();
+    }
+```
+#### Práca s programom
+Prihlásenie - pre prihlásenie treba zadať meno - email a heslo. Pre vygenerovaných používateľov je heslo "password". 
+Administrátor sa prihlasuje pomocou mena "admin" a hesla "admin".
+Správa kníh obsahuje 3 časti, všetky sú prístupne po prihlásení sa ako administrátor:
+1. **Pridanie knihy** - tab Add Book - po vyplnení všetkých políčok môže kliknúť na Add book, čo pridá knihu. Túto časť sme
+taktiež doplnili o pridanie autora, žánru a vydavateľa. Stačí do príslušného políčka zadať meno a kliknúť na vytvorenie. Ak chce
+admin iba vybrať z existujúcich, treba do toho istého políčka zadať meno, ale kliknúť na vyhľadanie. Následne si vie vybrať z
+vyhľadaných.
+2. **Vymazanie knihy** - tab Books - v prehľade kních si stačí vybrať knihu a kliknúť na tlačidlo Delete. Kniha sa následne
+vymaže, pokiaľ nebola objednaná.
+3. **Upravenie knihy** - tab Books - Po kliknutí na knihu v prehľade kníh a kliknutí na tlačidlo Change sa zobrazí okno s popisom knihy a následnou možnosťou zmeniť Stock alebo Cenu.
+
 ### Práca s maven, flyway a konfigurácia <a name="navod"></a>
 * V *src/main/resources/* sa nachádza vzorový súbor *configuration_example.properties* kde je konfigurácia pre pripojenie do databázy.
 Je potrebné tam zadať usera, heslo a url k databáze a premenovať ho z *configuration_example.properties* na *configuration.properties*.
@@ -208,7 +317,8 @@ ktorý naplní databázu údajmi generovanými pomocou [Java Faker](https://gith
 
 #### Export databáz <a name="export_databaz"></a>
 [Google Drive - Etapa 1](https://drive.google.com/file/d/10_1a6zxI6u-q__fV3ZZxqXKEFXR0yoAC/view?usp=sharing) <br>
-[Google Drive - Etapa 2](https://drive.google.com/file/d/1hcdluf6yAbdTpovGVR07NJLWzllRrKNz/view?usp=sharing)
+[Google Drive - Etapa 2](https://drive.google.com/file/d/1hcdluf6yAbdTpovGVR07NJLWzllRrKNz/view?usp=sharing) <br>
+[Google Drive - Etapa 3](https://drive.google.com/open?id=1J5XQK-Cs0Z03EKDCmomPwXIjMOHsa1yC)
 
 ### Užitočné odkazy <a name="uzitocne_odkazy"></a>
 [Github Classroom](https://github.com/FIIT-DBS2020/project-rauchova_nisky) <br>
@@ -217,5 +327,7 @@ ktorý naplní databázu údajmi generovanými pomocou [Java Faker](https://gith
 [PostgreSQL](https://www.postgresql.org/) <br>
 [JavaFX](https://openjfx.io/) <br>
 [Java Faker](https://github.com/DiUS/java-faker) <br>
-[Maven](https://maven.apache.org/what-is-maven.html)
+[Maven](https://maven.apache.org/what-is-maven.html) <br>
+[Hibernate](https://hibernate.org/orm/) <br>
+[Spring Security](https://spring.io/projects/spring-security)
 
