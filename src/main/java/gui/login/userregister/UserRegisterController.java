@@ -105,8 +105,8 @@ public class UserRegisterController {
                 } catch (SQLException | ClassNotFoundException ex) {
                     ex.printStackTrace();
                 }
+                stage.close();
             }
-            stage.close();
 
         });
     }

@@ -594,6 +594,8 @@ public class AdminMainController implements Initializable {
         addBookSPublisherT.clear();
         addBookSGenreT.clear();
         addBookAuthorChoice.getSelectionModel().clearSelection();
+        addBookPublisherChoice.getSelectionModel().clearSelection();
+        addBookGenreChoice.getSelectionModel().clearSelection();
 
         wrongPrice.setVisible(false);
         wrongPublisher.setVisible(false);
