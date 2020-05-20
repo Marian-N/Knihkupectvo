@@ -9,11 +9,13 @@ import model.Genres;
 import model.Publisher;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.HashMap;
 
 public class BooksController {
+    private Logger logger = LoggerFactory.getLogger(BooksController.class);
     private static BooksController _instance = null;
     private Connection connection;
 
@@ -163,40 +165,6 @@ public class BooksController {
         return executeQuery(page, order, desc);
     }
 
-    /**
-     * @return all ObservableMap of all book from database
-     */
-    public ObservableMap<Integer, Book> getAllBooks() throws SQLException, ClassNotFoundException {
-        String query = "SELECT b.id, p.price as publisher_id, p.name as publisher_name " +
-                "FROM books b " +
-                "JOIN publishers p on b.publisher_id = p.id;";
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
-        ObservableMap<Integer, Book> books = getObservableMap(resultSet);
-        statement.close();
-
-        return books;
-    }
-
-    public HashMap<Integer, Book> getAllBookPrices() throws SQLException {
-        HashMap<Integer, Book> booksPrices = new HashMap<Integer, Book>();
-        String query = "SELECT b.id, b.price FROM books b;";
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
-        while(resultSet.next()){
-            int id = resultSet.getInt("id");
-            double price = resultSet.getDouble("price");
-            Book book = new Book();
-            book.setID(id);
-            book.setPrice(price);
-            booksPrices.put(id, book);
-        }
-        resultSet.close();
-        statement.close();
-
-        return booksPrices;
-    }
-
     public Object[] findBook(String title, int page) throws SQLException, ClassNotFoundException {
         String query = "SELECT COUNT(*) OVER() as count," +
                 "b.*, p.name publisher_name FROM books b " +
@@ -218,20 +186,22 @@ public class BooksController {
         return result;
     }
 
-    public void changeBook(int bookID, double price) throws SQLException, ClassNotFoundException {
+    public void changeBook(int bookID, double price) {
         Session session = Database.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Book book = session.get(Book.class, bookID);
+        logger.info(String.format("Changed book(ID = %d) price from %.2f to %.2f.", bookID, book.getPrice(), price));
         book.setPrice(price);
         session.saveOrUpdate(book);
         transaction.commit();
         session.close();
     }
 
-    public void changeBook(int bookID, int quantity) throws SQLException, ClassNotFoundException {
+    public void changeBook(int bookID, int quantity) {
         Session session = Database.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Book book = session.get(Book.class, bookID);
+        logger.info(String.format("Changed book(ID = %d) quantity from %d to %d.", bookID, book.getStockQuantity(), quantity));
         book.setStockQuantity(quantity);
         session.saveOrUpdate(book);
         transaction.commit();
@@ -247,6 +217,7 @@ public class BooksController {
             session.delete(book);
             transaction.commit();
             session.close();
+            logger.info(String.format("Removed book(ID = %d).", bookID));
             return true;
         }
         transaction.commit();
@@ -259,6 +230,9 @@ public class BooksController {
         Transaction transaction = session.beginTransaction();
 
         if(book != null) {
+            String message = String.format("Add new book title = %s, price = %.2f, quantity = %d.",
+                    book.getTitle(), book.getPrice(), book.getStockQuantity());
+            logger.info(message);
             session.saveOrUpdate(book);
             transaction.commit();
         }

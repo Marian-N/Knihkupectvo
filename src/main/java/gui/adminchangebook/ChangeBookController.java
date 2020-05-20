@@ -51,7 +51,6 @@ public class ChangeBookController {
             double newPrice = Double.parseDouble(df.format(Double.parseDouble(changePriceTextField.getText())));
             booksController.changeBook(book.getID(), newPrice);
             book.setPrice(newPrice);
-        } catch (SQLException | ClassNotFoundException ignored) {
         } catch(NumberFormatException ex) {
             changePriceTextField.clear();
         }
@@ -62,7 +61,6 @@ public class ChangeBookController {
             int newStock = Integer.parseInt(changeStockTextField.getText());
             booksController.changeBook(book.getID(), newStock);
             book.setStockQuantity(newStock);
-        } catch (SQLException | ClassNotFoundException ignored) {
         } catch(NumberFormatException ex) {
             changeStockTextField.clear();
         }
