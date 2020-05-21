@@ -7,6 +7,8 @@ import javafx.collections.ObservableMap;
 import model.Author;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -19,6 +21,7 @@ import java.sql.Statement;
 import java.util.List;
 
 public class AuthorsController {
+    private Logger logger = LoggerFactory.getLogger(AuthorsController.class);
     private static AuthorsController _instance = null;
     private Connection connection;
     private ObservableMap<Integer, Author> authors = FXCollections.observableHashMap();
@@ -67,6 +70,7 @@ public class AuthorsController {
         Transaction transaction = session.beginTransaction();
 
         if(author != null) {
+            logger.info(String.format("Added author name = %s.", author.getName()));
             session.saveOrUpdate(author);
             transaction.commit();
         }

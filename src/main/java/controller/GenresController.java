@@ -8,6 +8,8 @@ import model.Genre;
 import model.Genres;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -21,6 +23,7 @@ import java.util.List;
 
 public class GenresController {
     private static GenresController _instance = null;
+    private Logger logger = LoggerFactory.getLogger(GenresController.class);
     private Connection connection;
     private ObservableMap<Integer, Genre> genres = FXCollections.observableHashMap();
 
@@ -72,6 +75,7 @@ public class GenresController {
         Transaction transaction = session.beginTransaction();
 
         if(genre != null) {
+            logger.info(String.format("Added genre name = %s.", genre.getName()));
             session.saveOrUpdate(genre);
             transaction.commit();
         }

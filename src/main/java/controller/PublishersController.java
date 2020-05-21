@@ -7,6 +7,8 @@ import javafx.collections.ObservableMap;
 import model.Publisher;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -19,6 +21,7 @@ import java.sql.Statement;
 import java.util.List;
 
 public class PublishersController {
+    private Logger logger = LoggerFactory.getLogger(PublishersController.class);
     private static PublishersController _instance = null;
     private Connection connection;
     private ObservableMap<Integer, Publisher> publishers = FXCollections.observableHashMap();
@@ -67,6 +70,7 @@ public class PublishersController {
         Transaction transaction = session.beginTransaction();
 
         if(publisher != null) {
+            logger.info(String.format("Added publisher name = %s.", publisher.getName()));
             session.saveOrUpdate(publisher);
             transaction.commit();
         }

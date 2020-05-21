@@ -1,11 +1,11 @@
 package controller;
 
 import database.Database;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import model.Customer;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import security.Encoder;
 
 import javax.persistence.EntityManager;
@@ -13,9 +13,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.sql.*;
-import java.util.List;
 
 public class CustomerController {
+    private Logger logger = LoggerFactory.getLogger(CustomerController.class);
     private static CustomerController instance = null;
     private Connection connection;
 
@@ -95,6 +95,11 @@ public class CustomerController {
 
     public boolean addCustomer(Customer customer) throws SQLException, ClassNotFoundException {
         if(customer != null && getCustomer(customer.getMail()) == null) {
+            String first = customer.getFirstName();
+            String last = customer.getLastName();
+            String mail = customer.getMail();
+            String message = String.format("%s %s created account, mail = %s.", first, last, mail);
+            logger.info(message);
             Session session = Database.getInstance().getSessionFactory().openSession();
             Transaction transaction = session.beginTransaction();
             session.saveOrUpdate(customer);
