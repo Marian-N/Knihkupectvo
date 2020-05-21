@@ -7,9 +7,9 @@
         </encoder>
     </appender>
 
-    <appender name="FILE_INFO"
+    <appender name="CONTROLLERS"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_DIR}/app_info.log</file>
+        <file>${LOG_DIR}/admin_changes.log</file>
         <encoder
                 class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
@@ -20,7 +20,49 @@
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>${LOG_DIR}/app_info.%d{yyyy-MM-dd}.%i.log
+            <fileNamePattern>${LOG_DIR}/admin_changes.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="ORDERS"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/orders.log</file>
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} %msg%n
+            </Pattern>
+        </encoder>
+
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${LOG_DIR}/orders.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="CUSTOMERS"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/customers.log</file>
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} %msg%n
+            </Pattern>
+        </encoder>
+
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${LOG_DIR}/customers.%d{yyyy-MM-dd}.%i.log
             </fileNamePattern>
             <maxFileSize>50MB</maxFileSize>
             <maxHistory>30</maxHistory>
@@ -32,7 +74,17 @@
 
     <logger name="controller" level="info"
             additivity="false">
-        <appender-ref ref="FILE_INFO" />
+        <appender-ref ref="CONTROLLERS" />
+    </logger>
+
+    <logger name="controller.CustomerController" level="info"
+            additivity="false">
+        <appender-ref ref="CUSTOMERS"/>
+    </logger>
+
+    <logger name="model.Order" level="info"
+            additivity="false">
+        <appender-ref ref="ORDERS" />
     </logger>
 
     <root level="trace">

@@ -75,7 +75,7 @@ public class GenresController {
         Transaction transaction = session.beginTransaction();
 
         if(genre != null) {
-            logger.info(String.format("Added genre name = %s.", genre.getName()));
+            logger.info(String.format("Added genre, name = %s.", genre.getName()));
             session.saveOrUpdate(genre);
             transaction.commit();
         }

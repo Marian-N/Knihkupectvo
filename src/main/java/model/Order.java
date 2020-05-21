@@ -3,10 +3,13 @@ package model;
 import database.Database;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 
 public class Order {
+    private Logger logger = LoggerFactory.getLogger(Order.class);
     private int ID;
     private Date date;
     private Customer customer;
@@ -45,6 +48,9 @@ public class Order {
         rs.close();
         statement.close();
         addToOrderBook();
+        String message = String.format("User %s(ID = %d) created order(ID = %d), price = %.2f.",
+                customer.getMail(), customer.getID(), this.ID, this.price);
+        logger.info(message);
     }
 
     private void addToOrderBook() throws SQLException, ClassNotFoundException {
@@ -118,8 +124,11 @@ public class Order {
         String query = String.format("UPDATE orders " +
                 "SET status = \'%s\' " +
                 "WHERE id = %s;", status, this.ID);
-        Database.getInstance().executeQuery(query);
+        String message = String.format("Order(ID = %d) status changed from %s to %s",
+                this.ID, this.status, status);
+        logger.info(message);
         this.status = status;
+        Database.getInstance().executeQuery(query);
 
         if(status.equals("zamietnutá") || status.equals("zrušená")){
             String quantityQuery = "UPDATE books SET stock_quantity = stock_quantity + ? WHERE id=?";

@@ -70,7 +70,7 @@ public class AuthorsController {
         Transaction transaction = session.beginTransaction();
 
         if(author != null) {
-            logger.info(String.format("Added author name = %s.", author.getName()));
+            logger.info(String.format("Added author, name = %s.", author.getName()));
             session.saveOrUpdate(author);
             transaction.commit();
         }

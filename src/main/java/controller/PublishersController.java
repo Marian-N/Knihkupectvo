@@ -70,7 +70,7 @@ public class PublishersController {
         Transaction transaction = session.beginTransaction();
 
         if(publisher != null) {
-            logger.info(String.format("Added publisher name = %s.", publisher.getName()));
+            logger.info(String.format("Added publisher, name = %s.", publisher.getName()));
             session.saveOrUpdate(publisher);
             transaction.commit();
         }

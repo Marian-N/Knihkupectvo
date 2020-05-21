@@ -230,7 +230,7 @@ public class BooksController {
         Transaction transaction = session.beginTransaction();
 
         if(book != null) {
-            String message = String.format("Add new book title = %s, price = %.2f, quantity = %d.",
+            String message = String.format("Add new book, title = %s, price = %.2f, quantity = %d.",
                     book.getTitle(), book.getPrice(), book.getStockQuantity());
             logger.info(message);
             session.saveOrUpdate(book);
