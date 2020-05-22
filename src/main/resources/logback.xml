@@ -20,7 +20,7 @@
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>${LOG_DIR}/admin_changes.%d{yyyy-MM-dd}.%i.log
+            <fileNamePattern>${LOG_DIR}/archived/admin_changes.%d{yyyy-MM-dd}.%i.log
             </fileNamePattern>
             <maxFileSize>50MB</maxFileSize>
             <maxHistory>30</maxHistory>
@@ -41,7 +41,7 @@
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>${LOG_DIR}/orders.%d{yyyy-MM-dd}.%i.log
+            <fileNamePattern>${LOG_DIR}/archived/orders.%d{yyyy-MM-dd}.%i.log
             </fileNamePattern>
             <maxFileSize>50MB</maxFileSize>
             <maxHistory>30</maxHistory>
@@ -62,7 +62,7 @@
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>${LOG_DIR}/customers.%d{yyyy-MM-dd}.%i.log
+            <fileNamePattern>${LOG_DIR}/archived/customers.%d{yyyy-MM-dd}.%i.log
             </fileNamePattern>
             <maxFileSize>50MB</maxFileSize>
             <maxHistory>30</maxHistory>
