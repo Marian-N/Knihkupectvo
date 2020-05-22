@@ -64,6 +64,17 @@ public class Book {
 
     public Book() {}
 
+    /**
+     * Create book without ID for inserting to database so book doesn't have ID yet
+     * @param title
+     * @param price
+     * @param stockQuantity
+     * @param publisher
+     * @param publicationDate
+     * @param description
+     * @param genres
+     * @param authors
+     */
     public Book(String title, double price, int stockQuantity, Publisher publisher,
                 Date publicationDate, String description, List<Genre> genres, List<Author> authors) {
         this.title = title;

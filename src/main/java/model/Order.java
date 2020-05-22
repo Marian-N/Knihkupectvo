@@ -26,6 +26,13 @@ public class Order {
         this.orderContents = orderContents;
     }
 
+    /**
+     * Create new order in database
+     * @param customer
+     * @param orderContents
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public Order(Customer customer, ObservableList<OrderContent> orderContents) throws SQLException, ClassNotFoundException {
         this.customer = customer;
         this.orderContents = FXCollections.observableArrayList(orderContents);
@@ -53,6 +60,11 @@ public class Order {
         logger.info(message);
     }
 
+    /**
+     * Add order contents to many-to-many table order_book
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     private void addToOrderBook() throws SQLException, ClassNotFoundException {
         String insertQuery = "INSERT INTO order_book (order_id, book_id, quantity) VALUES (?, ?, ?)";
         String quantityQuery = "UPDATE books SET stock_quantity = stock_quantity - ? WHERE id=?";
@@ -120,6 +132,12 @@ public class Order {
         return status;
     }
 
+    /**
+     * Set status of order
+     * @param status
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void setStatus(String status) throws SQLException, ClassNotFoundException {
         String query = String.format("UPDATE orders " +
                 "SET status = \'%s\' " +

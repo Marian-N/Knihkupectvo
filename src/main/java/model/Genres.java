@@ -13,6 +13,12 @@ public class Genres {
     private List<Genre> genres;
     private SimpleObjectProperty<String> stringGenres;
 
+    /**
+     * Create genres for book with given ID
+     * @param bookID
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public Genres(int bookID) throws SQLException, ClassNotFoundException {
         genres = new ArrayList<>();
         String query = "SELECT g.id genre_id, g.name genre_name " +

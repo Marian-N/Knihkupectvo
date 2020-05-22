@@ -11,6 +11,9 @@ public final class Configuration {
     static private String databasePassword = null;
     static private String databaseUrl = null;
 
+    /**
+     * Load database configuration from file
+     */
     private Configuration(){
         try {
             InputStream configuration_file = new FileInputStream(new File("src/main/resources/configuration.properties"));

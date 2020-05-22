@@ -20,6 +20,13 @@ public class OrdersController {
         return instance;
     }
 
+    /**
+     * Change status of order
+     * @param order
+     * @param status
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void changeStatus(Order order, String status) throws SQLException, ClassNotFoundException {
         order.setStatus(status);
     }
@@ -91,6 +98,12 @@ public class OrdersController {
         return orders;
     }
 
+    /**
+     * Return true if book has any orders
+     * @param bookID
+     * @return boolean
+     * @throws SQLException
+     */
     public boolean hasOrders(int bookID) throws SQLException {
         String query = "SELECT COUNT(ob.book_id) FROM order_book ob " +
                 "WHERE ob.book_id = ?;";

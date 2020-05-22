@@ -40,6 +40,17 @@ public class Customer {
 
     public Customer() {}
 
+    /**
+     * Constructor without ID for creating object for inserting to database
+     * @param firstName
+     * @param lastName
+     * @param mail
+     * @param city
+     * @param zip
+     * @param address
+     * @param role
+     * @param encryptedPassword
+     */
     public Customer(String firstName, String lastName, String mail, String city, String zip, String address, int role, String encryptedPassword) {
         this.firstName = firstName;
         this.lastName = lastName;

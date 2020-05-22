@@ -16,6 +16,12 @@ public class AuthorBookController {
         connection = Database.getInstance().getConnection();
     }
 
+    /**
+     * Returns IDs of all authors with bookID
+     * @param bookID
+     * @return List of author IDs
+     * @throws SQLException
+     */
     public static List<Integer> getAuthors(int bookID) throws SQLException {
         List<Integer> IDs = new ArrayList<>();
         String query = String.format("SELECT author_id FROM author_book WHERE book_id = %d", bookID);
@@ -23,19 +29,6 @@ public class AuthorBookController {
         ResultSet resultSet = statement.executeQuery(query);
         while(resultSet.next()) {
             IDs.add(resultSet.getInt("author_id"));
-        }
-        statement.close();
-        resultSet.close();
-        return IDs;
-    }
-
-    public static List<Integer> getBooks(int authorID) throws SQLException {
-        List<Integer> IDs = new ArrayList<>();
-        String query = String.format("SELECT book_id FROM author_book WHERE author_id = %s", authorID);
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
-        while(resultSet.next()) {
-            IDs.add(resultSet.getInt("book_id"));
         }
         statement.close();
         resultSet.close();

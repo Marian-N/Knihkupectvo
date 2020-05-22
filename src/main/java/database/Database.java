@@ -2,8 +2,6 @@ package database;
 
 
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.service.ServiceRegistry;
 import utils.Configuration;
 
 import java.io.File;
@@ -29,6 +27,10 @@ public class Database {
         buildSessionFactory();
     }
 
+    /**
+     * Return sessionFactory for hibernate
+     * @return SessionFactory
+     */
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
@@ -39,12 +41,23 @@ public class Database {
         return _instance;
     }
 
+    /**
+     * Execute query on database
+     * @param query
+     * @throws SQLException
+     */
     public static void executeQuery(String query) throws SQLException {
         Statement statement = connection.createStatement();
         statement.execute(query);
         statement.close();
     }
 
+    /**
+     * Return number of rows in table
+     * @param tableName
+     * @return count of rows
+     * @throws SQLException
+     */
     public static int getRowsCount(String tableName) throws SQLException {
         String query = String.format("SELECT count(*) FROM %s", tableName);
         Statement statement = connection.createStatement();
@@ -55,20 +68,11 @@ public class Database {
         return count;
     }
 
-    public static double getOrderPrice(int ID) throws SQLException {
-        ArrayList<Integer> IDs = new ArrayList<>();
-        String query = String.format("SELECT book_id FROM order_book WHERE order_id=%s", ID);
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
-        while(resultSet.next()) {
-            IDs.add(resultSet.getInt("id"));
-        }
-        System.out.println(IDs);
-        resultSet.close();
-        statement.close();
-        return 0.2;
-    }
-
+    /**
+     * Remove everything from table
+     * @param tableName
+     * @throws SQLException
+     */
     public static void emptyTable(String tableName) throws SQLException {
         String query = String.format("TRUNCATE %s RESTART IDENTITY CASCADE;", tableName);
         PreparedStatement statement = null;
@@ -84,6 +88,12 @@ public class Database {
         }
     }
 
+    /**
+     * Get all IDs from table
+     * @param tableName
+     * @return List of IDs
+     * @throws SQLException
+     */
     public static List<Integer> getTableIDs(String tableName) throws SQLException {
         List<Integer> IDs = new ArrayList<>();
         String query = String.format("SELECT id FROM %s", tableName);
@@ -97,6 +107,9 @@ public class Database {
         return IDs;
     }
 
+    /**
+     * Create new session factory from hibernate.cfg.xml file
+     */
     private static void buildSessionFactory() {
         File cfgFile = new File("src\\main\\resources\\hibernate.cfg.xml");
         sessionFactory = new org.hibernate.cfg.Configuration().configure(cfgFile).buildSessionFactory();

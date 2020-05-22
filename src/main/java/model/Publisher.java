@@ -26,6 +26,11 @@ public class Publisher {
         this.name = name;
     }
 
+    /**
+     * Create publisher from result set
+     * @param resultSet
+     * @throws SQLException
+     */
     public Publisher(ResultSet resultSet) throws SQLException {
         this.ID = resultSet.getInt("publisher_id");
         this.name = resultSet.getString("publisher_name");

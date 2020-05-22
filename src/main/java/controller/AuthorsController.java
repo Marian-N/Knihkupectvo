@@ -51,6 +51,11 @@ public class AuthorsController {
         return authors;
     }
 
+    /**
+     * Return all authors that match name with pattern %name%, not case sensitive
+     * @param name
+     * @return ObservableList of Author models
+     */
     public ObservableList<Author> getAuthor(String name) {
         Session session = Database.getSessionFactory().openSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -65,6 +70,10 @@ public class AuthorsController {
         return FXCollections.observableList(authors);
     }
 
+    /**
+     * Add author to database
+     * @param author
+     */
     public void addAuthor(Author author) {
         Session session = Database.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
@@ -77,6 +86,11 @@ public class AuthorsController {
         session.close();
     }
 
+    /**
+     * Return author from database
+     * @param ID
+     * @return Author
+     */
     public Author getAuthor(int ID) {
         Session session = Database.getSessionFactory().openSession();
         Author author = session.get(Author.class, ID);

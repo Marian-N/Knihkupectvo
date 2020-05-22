@@ -37,25 +37,22 @@ public class GenresController {
         return _instance;
     }
 
+    /**
+     * Return genres of book
+     * @param bookID
+     * @return Genres
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public Genres getBookGenres(int bookID) throws SQLException, ClassNotFoundException {
         return new Genres(bookID);
     }
 
-    public ObservableMap<Integer, Genre> getGenres() throws SQLException {
-        String query = "SELECT * from genres";
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
-        while(resultSet.next()){
-            int id = resultSet.getInt("id");
-            String name = resultSet.getString("name");
-            Genre genre = new Genre(id, name);
-            genres.put(id, genre);
-        }
-        statement.close();
-        resultSet.close();
-        return genres;
-    }
-
+    /**
+     * Return genre that matches patter %name%, not case sensitive
+     * @param name
+     * @return ObservableList<Genre>
+     */
     public ObservableList<Genre> getGenre(String name) {
         Session session = Database.getSessionFactory().openSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -70,6 +67,10 @@ public class GenresController {
         return FXCollections.observableList(genres);
     }
 
+    /**
+     * Add genre to database
+     * @param genre
+     */
     public void addGenre(Genre genre) {
         Session session = Database.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();

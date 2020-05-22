@@ -26,6 +26,11 @@ public class Author {
         this.name = name;
     }
 
+    /**
+     * Create author from result set
+     * @param resultSet
+     * @throws SQLException
+     */
     public Author(ResultSet resultSet) throws SQLException {
         this.ID = resultSet.getInt("author_id");
         this.name = resultSet.getString("author_name");

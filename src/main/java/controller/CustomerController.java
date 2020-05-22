@@ -28,6 +28,12 @@ public class CustomerController {
         return instance;
     }
 
+    /**
+     * Create customer from result set
+     * @param resultSet
+     * @return Customer
+     * @throws SQLException
+     */
     public Customer getCustomerFromRS(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("customer_id");
         String firstName = resultSet.getString("first_name");
@@ -39,6 +45,12 @@ public class CustomerController {
         return new Customer(id, firstName, lastName, mail, city, zip, address);
     }
 
+    /**
+     * Get customer from database
+     * @param id
+     * @return Customer
+     * @throws SQLException
+     */
     public Customer getCustomer(int id) throws SQLException {
         String query = "SELECT * FROM customers WHERE id = ?";
         PreparedStatement statement = connection.prepareStatement(query);
@@ -49,6 +61,12 @@ public class CustomerController {
         return customer;
     }
 
+    /**
+     * Get id of customers that have at least 5 orders
+     * @param count number of customers to return
+     * @return String of customer ids separated by ','
+     * @throws SQLException
+     */
     public String getBestCustomers(int count) throws SQLException {
         String query = "SELECT c.id FROM customers c " +
                 "JOIN orders o ON c.id=o.customer_id " +
@@ -74,6 +92,11 @@ public class CustomerController {
         return customersIDs;
     }
 
+    /**
+     * Return customer with given mail
+     * @param mail
+     * @return Customer
+     */
     public Customer getCustomer(String mail) {
         Session session = Database.getSessionFactory().openSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -93,6 +116,13 @@ public class CustomerController {
         return customer;
     }
 
+    /**
+     * Add customer to database
+     * @param customer
+     * @return true if customer already does not exists
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public boolean addCustomer(Customer customer) throws SQLException, ClassNotFoundException {
         if(customer != null && getCustomer(customer.getMail()) == null) {
             String first = customer.getFirstName();
@@ -110,6 +140,12 @@ public class CustomerController {
         return false;
     }
 
+    /**
+     * Change role of user
+     * @param mail of customer
+     * @param role new role
+     * @return true if successful, else false
+     */
     public boolean changeRole(String mail, int role) {
         Customer customer = getCustomer(mail);
         if(customer != null) {
@@ -124,6 +160,12 @@ public class CustomerController {
         return false;
     }
 
+    /**
+     * Change password of user
+     * @param customer
+     * @param newPassword
+     * @return true is successful, else false
+     */
     public boolean changePassword(Customer customer, String newPassword) {
         if(customer != null) {
             Session session = Database.getSessionFactory().openSession();

@@ -47,10 +47,11 @@ public class PublishersController {
         return _instance;
     }
 
-    public ObservableMap<Integer, Publisher> getPublishers() {
-        return publishers;
-    }
-
+    /**
+     * Return publishers that matches name pattern %name%, not case sensitive
+     * @param name
+     * @return ObservableList<Publisher>
+     */
     public ObservableList<Publisher> getPublisher(String name) {
         Session session = Database.getSessionFactory().openSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -65,6 +66,10 @@ public class PublishersController {
         return FXCollections.observableList(publishers);
     }
 
+    /**
+     * Add publisher to database
+     * @param publisher
+     */
     public void addPublisher(Publisher publisher) {
         Session session = Database.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();

@@ -29,6 +29,13 @@ public class BooksController {
         return _instance;
     }
 
+    /**
+     * Return books with pagination and count of all books that matches name pattern for displaying number of pages
+     * @param resultSet
+     * @return [int count, ObservableList<Book> books]
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     private Object[] getListWithCount(ResultSet resultSet) throws SQLException, ClassNotFoundException {
         ObservableList<Book> books = FXCollections.observableArrayList();
         int count = 0;
@@ -55,6 +62,13 @@ public class BooksController {
         return result;
     }
 
+    /**
+     * Return observable list of books from result set
+     * @param resultSet
+     * @return ObservableList<Book> books
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     private ObservableList<Book> getList(ResultSet resultSet) throws SQLException, ClassNotFoundException {
         ObservableList<Book> books = FXCollections.observableArrayList();
 
@@ -99,6 +113,15 @@ public class BooksController {
         return books;
     }
 
+    /**
+     * Return observable list of book ordered by author, popularity or default(id) on given page
+     * @param page
+     * @param orderBy
+     * @param desc
+     * @return ObservableList of books
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     private ObservableList<Book> executeQuery(int page, String orderBy, Boolean desc) throws SQLException, ClassNotFoundException {
         if(page < 0) return null;
         int booksPerPage = 100;
@@ -165,6 +188,14 @@ public class BooksController {
         return executeQuery(page, order, desc);
     }
 
+    /**
+     * Return all books that matches patter %title% on given page and count of all books that match pattern
+     * @param title
+     * @param page
+     * @return [int count, ObservableList<Book>]
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public Object[] findBook(String title, int page) throws SQLException, ClassNotFoundException {
         String query = "SELECT COUNT(*) OVER() as count," +
                 "b.*, p.name publisher_name FROM books b " +
@@ -186,6 +217,11 @@ public class BooksController {
         return result;
     }
 
+    /**
+     * Change price of book in database
+     * @param bookID
+     * @param price
+     */
     public void changeBook(int bookID, double price) {
         Session session = Database.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
@@ -197,6 +233,11 @@ public class BooksController {
         session.close();
     }
 
+    /**
+     * Change stock quantity of book in database
+     * @param bookID
+     * @param quantity
+     */
     public void changeBook(int bookID, int quantity) {
         Session session = Database.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
@@ -208,6 +249,13 @@ public class BooksController {
         session.close();
     }
 
+    /**
+     * Remove book from database if it does not have any orders
+     * @param bookID
+     * @return true if successful
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public boolean removeBook(int bookID) throws SQLException, ClassNotFoundException {
         Session session = Database.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
@@ -225,6 +273,10 @@ public class BooksController {
         return false;
     }
 
+    /**
+     * Add book to database
+     * @param book
+     */
     public void addBook(Book book) {
         Session session = Database.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();

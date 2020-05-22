@@ -7,6 +7,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.sql.SQLException;
 
 public class Login {
+
+    /**
+     * Return user with given mail and password
+     * @param mail
+     * @param password
+     * @return Customer or null if user does not exist
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public static Customer verify(String mail, String password) throws SQLException, ClassNotFoundException {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Customer customer;
