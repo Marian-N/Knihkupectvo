@@ -71,6 +71,11 @@
     </appender>
 
     <logger name="org.hibernate" level="OFF"></logger>
+    <logger name="org.springframework" level="OFF"></logger>
+    <logger name="org.apache.tomcat" level="OFF"></logger>
+    <logger name="javafx" level="OFF"></logger>
+    <logger name="org.postgresql" level="OFF"></logger>
+
 
     <logger name="controller" level="info"
             additivity="false">
@@ -87,7 +92,7 @@
         <appender-ref ref="ORDERS" />
     </logger>
 
-    <root level="trace">
+    <root level="off">
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>

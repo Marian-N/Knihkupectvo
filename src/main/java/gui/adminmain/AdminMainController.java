@@ -1,9 +1,11 @@
 package gui.adminmain;
 
+import application.FxmlView;
+import application.StageManager;
 import com.jfoenix.controls.*;
 import controller.*;
 import database.Database;
-import gui.ScreenConfiguration;
+import application.ScreenConfiguration;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -18,6 +20,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import model.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
@@ -28,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+@Component
 public class AdminMainController implements Initializable {
 
     @FXML
@@ -149,9 +156,12 @@ public class AdminMainController implements Initializable {
     private String searchingForBook = null;
 
     ScreenConfiguration screenConfiguration = new ScreenConfiguration();
+    private final StageManager stageManager;
 
-
-    public AdminMainController() throws SQLException, ClassNotFoundException {
+    @Autowired
+    @Lazy
+    public AdminMainController(StageManager stageManager) throws SQLException, ClassNotFoundException {
+        this.stageManager = stageManager;
     }
 
     @Override
@@ -422,8 +432,9 @@ public class AdminMainController implements Initializable {
     }
 
     public void handleLogout(javafx.event.ActionEvent event) throws IOException {
-        ScreenConfiguration screenConfiguration = new ScreenConfiguration();
-        screenConfiguration.setLoginScene(event);
+//        ScreenConfiguration screenConfiguration = new ScreenConfiguration();
+//        screenConfiguration.setLoginScene(event);
+        stageManager.switchScene(FxmlView.LOGIN);
     }
 
     //Adding book

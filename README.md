@@ -314,7 +314,7 @@ Je potrebné tam zadať usera, heslo a url k databáze a premenovať ho z *confi
   * *mvn flyway:clean* vymaže všetko z databázy
 * Údaje v databáze sa generujú spustením *src/main/java/database/Seeder.java* 
 ktorý naplní databázu údajmi generovanými pomocou [Java Faker](https://github.com/DiUS/java-faker) ([Príklad seederu](#priklad_faker))
-* Program sa spúšťa spustením *src/main/java/Main.java*
+* Program sa spúšťa spustením *src/main/java/application.Main.java*
 
 #### Export databáz <a name="export_databaz"></a>
 [Google Drive - Etapa 1](https://drive.google.com/file/d/10_1a6zxI6u-q__fV3ZZxqXKEFXR0yoAC/view?usp=sharing) <br>

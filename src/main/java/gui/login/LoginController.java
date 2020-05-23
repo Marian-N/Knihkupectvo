@@ -1,22 +1,27 @@
 package gui.login;
 
 
+import application.FxmlView;
+import application.StageManager;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import gui.ScreenConfiguration;
+import application.ScreenConfiguration;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import model.Customer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 import security.Login;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LoginController implements Initializable {
+@Component
+public class LoginController implements Initializable{
 
-    @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
 
@@ -27,9 +32,16 @@ public class LoginController implements Initializable {
     @FXML
     private Label wrongInfo;
 
+    private final StageManager stageManager;
+
     ScreenConfiguration screenConfiguration = new ScreenConfiguration();
     Customer user;
 
+    @Autowired
+    @Lazy
+    public LoginController(StageManager stageManager){
+        this.stageManager = stageManager;
+    }
 
     @FXML
     private void handleLogin(javafx.event.ActionEvent event) throws Exception {
@@ -54,12 +66,15 @@ public class LoginController implements Initializable {
 
     //change scene to admin
     private void loadMainAdminScene(javafx.event.ActionEvent event) throws Exception {
-        screenConfiguration.setMainAdminScene(event);
+        //screenConfiguration.setMainAdminScene(event);
+        stageManager.switchScene(FxmlView.ADMIN);
     }
 
     // change scene to user
     private void loadMainUserScene(javafx.event.ActionEvent event, Customer customer) throws Exception {
-        screenConfiguration.setMainUserScene(event, customer);
+//        screenConfiguration.setMainUserScene(event, customer);
+
+        stageManager.switchScene(FxmlView.USER, customer);
     }
 
     public void handleCreateUser() throws IOException {

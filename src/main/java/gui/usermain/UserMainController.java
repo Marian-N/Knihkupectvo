@@ -1,22 +1,18 @@
 package gui.usermain;
 
+import application.FxmlView;
+import application.StageManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controller.*;
 import database.Database;
-import gui.ScreenConfiguration;
-import gui.usermain.confirmation.CancelConfirmation;
-import gui.usermain.makeorder.MakeOrderController;
+import application.ScreenConfiguration;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -25,10 +21,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import model.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URL;
@@ -38,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+@Component
 public class UserMainController implements Initializable {
     @FXML
     private JFXButton exitButton;
@@ -104,8 +102,12 @@ public class UserMainController implements Initializable {
     ObservableList<OrderContent> newOrder = FXCollections.observableArrayList();
     Customer loggedUser;
     private String searchingForBook = null;
+    private final StageManager stageManager;
 
-    public UserMainController() throws SQLException, ClassNotFoundException {
+    @Autowired
+    @Lazy
+    public UserMainController(StageManager stageManager) throws SQLException, ClassNotFoundException {
+        this.stageManager = stageManager;
     }
 
     @Override
@@ -150,12 +152,8 @@ public class UserMainController implements Initializable {
 
     }
 
-//    public void deleteNewOrder(){
-//        System.out.println(newOrder);
-//        newOrder.removeAll();
-//    }
 
-    public void initData(Customer gotUser){
+    public void initData(Customer gotUser){//Customer gotUser){
         loggedUser = gotUser;
         userIdTextField.setText(loggedUser.getFirstName() + " " + loggedUser.getLastName() + "   ID: " + loggedUser.getID());
     }
@@ -356,8 +354,10 @@ public class UserMainController implements Initializable {
     }
 
     public void handleLogout(javafx.event.ActionEvent event) throws IOException {
-        ScreenConfiguration screenConfiguration = new ScreenConfiguration();
-        screenConfiguration.setLoginScene(event);
+//        ScreenConfiguration screenConfiguration = new ScreenConfiguration();
+//        screenConfiguration.setLoginScene(event);
+
+        stageManager.switchScene(FxmlView.LOGIN);
     }
     public void handleExit() {
         Stage stage = (Stage) exitButton.getScene().getWindow();
