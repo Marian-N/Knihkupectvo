@@ -18,10 +18,11 @@ public class PdfGenerator {
     private static Font fontTitleName = FontFactory.getFont(FontFactory.COURIER_BOLD, 24, BaseColor.BLACK);
     private static Font fontTitle = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
     private static Font fontParagraph = FontFactory.getFont(FontFactory.COURIER, 8, BaseColor.BLACK);
+    private static LanguageResource lr = LanguageResource.getInstance();
 
     public static void generateOrderPDF(Order order) throws FileNotFoundException, DocumentException {
         Document document = new Document();
-        String fileName = String.format("order%s.pdf", order.getID());
+        String fileName = String.format("%s%s.pdf",lr.getResources().getString("order_save_pdf"), order.getID());
         PdfWriter.getInstance(document, new FileOutputStream(fileName));
 
         document.open();
@@ -29,10 +30,11 @@ public class PdfGenerator {
         // Paragraph for order contents and ID
         Paragraph titleParagraph = new Paragraph();
         titleParagraph.setFont(fontParagraph);
-        Chunk chunk = new Chunk("KNIHKUPECTVO", fontTitleName);
+        Chunk chunk = new Chunk(lr.getResources().getString("bookstore_pdf"), fontTitleName);
         titleParagraph.add(chunk);
         newLine(titleParagraph, 2);
-        chunk = new Chunk(String.format("Order %d, DATE: %s", order.getID(), order.getDate().toString()), fontTitle);
+        chunk = new Chunk(String.format("%s %d, %s: %s", lr.getResources().getString("order_pdf"),
+                order.getID(), lr.getResources().getString("date_pdf"), order.getDate().toString()), fontTitle);
         titleParagraph.add(chunk);
         newLine(titleParagraph);
 
@@ -60,9 +62,11 @@ public class PdfGenerator {
         Paragraph totalParagraph = new Paragraph();
         totalParagraph.setFont(fontParagraph);
         totalParagraph.setAlignment(Element.ALIGN_RIGHT);
-        chunk = new Chunk(String.format("Subtotal = %.2f\n" +
-                "Tax 10%c = %.2f\n" +
-                "TOTAL = %.2f", totalPrice, '%', totalPrice * 0.10, totalPrice + totalPrice * 0.10));
+        chunk = new Chunk(String.format("%s = %.2f\n" +
+                "%s 10%c = %.2f\n" +
+                "%s = %.2f", lr.getResources().getString("subtotal_pdf"), totalPrice,
+                lr.getResources().getString("tax_pdf"),'%', totalPrice * 0.10,
+                lr.getResources().getString("total_pdf"), totalPrice + totalPrice * 0.10));
         totalParagraph.add(chunk);
 
         document.add(titleParagraph);
@@ -73,7 +77,9 @@ public class PdfGenerator {
     }
 
     private static void addTableHeader(PdfPTable table) {
-        Stream.of("BOOK ID", "BOOK NAME", "QTY", "UNIT PRICE", "AMOUNT")
+        Stream.of(lr.getResources().getString("book_id_pdf"), lr.getResources().getString("book_name_pdf"),
+                lr.getResources().getString("qty_pdf"), lr.getResources().getString("unit_price_pdf"),
+                lr.getResources().getString("amount_pdf"))
                 .forEach(columnTitle ->{
                     PdfPCell header = new PdfPCell();
                     header.setBackgroundColor(BaseColor.LIGHT_GRAY);
