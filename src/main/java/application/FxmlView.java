@@ -1,11 +1,12 @@
 package application;
 
-public enum FxmlView {
+import utils.LanguageResource;
 
+public enum FxmlView {
     LOGIN{
         @Override
         String getTitle(){
-            return ("Bookstore login");
+            return getTitleFromResources("login_title");
         }
         @Override
         String getFxmlFile(){
@@ -14,7 +15,7 @@ public enum FxmlView {
     }, USERREGISTER{
         @Override
         String getTitle(){
-            return ("Registration");
+            return getTitleFromResources("registration_title");
         }
         @Override
         String getFxmlFile(){
@@ -23,7 +24,7 @@ public enum FxmlView {
     }, ADMIN{
         @Override
         String getTitle(){
-            return ("Bookstore");
+            return getTitleFromResources("main_title");
         }
         @Override
         String getFxmlFile(){
@@ -32,7 +33,7 @@ public enum FxmlView {
     }, ADMINCHANGEBOOK{
         @Override
         String getTitle(){
-            return ("Book change");
+            return getTitleFromResources("change_book_title");
         }
         @Override
         String getFxmlFile(){
@@ -41,7 +42,7 @@ public enum FxmlView {
     }, USER{
         @Override
         String getTitle(){
-            return ("Bookstore");
+            return getTitleFromResources("main_title");
         }
         @Override
         String getFxmlFile(){
@@ -50,7 +51,7 @@ public enum FxmlView {
     }, USERCANCELCONFIRM{
         @Override
         String getTitle(){
-            return ("Cancel order");
+            return getTitleFromResources("cancel_order_title");
         }
         @Override
         String getFxmlFile(){
@@ -59,7 +60,7 @@ public enum FxmlView {
     }, USERMAKEORDER{
         @Override
         String getTitle(){
-            return ("Complete order");
+            return getTitleFromResources("complete_order_title");
         }
         @Override
         String getFxmlFile(){
@@ -69,4 +70,8 @@ public enum FxmlView {
 
     abstract String getTitle();
     abstract String getFxmlFile();
+    String getTitleFromResources(String key){
+        LanguageResource lr = LanguageResource.getInstance();
+        return lr.getResources().getString(key);
+    }
 }

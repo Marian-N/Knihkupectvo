@@ -15,8 +15,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import utils.LanguageResource;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 
 @SpringBootApplication
@@ -26,30 +29,19 @@ public class Main extends Application {
 
     protected ConfigurableApplicationContext springContext;
     protected StageManager stageManager = null;
-//    private Parent root;
+    private LanguageResource lr = LanguageResource.getInstance();
 
     @Override
     public void init() throws IOException {
+        Locale locale = new Locale("en", "US");
+        lr.setResources(ResourceBundle.getBundle("Lang", locale));
         springContext = bootstrapSpringApplicationContext();
-//        springContext = SpringApplication.run(Main.class);
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource(FxmlView.LOGIN.getFxmlFile()));
-//        loader.setControllerFactory(springContext::getBean);
-//        root = loader.load();
     }
 
     @Override
     public void start(Stage stage) throws Exception{
-//        Parent root = FXMLLoader.load(getClass().getResource("/gui/login/login.fxml"));
-//        primaryStage.setTitle("Knihkupectvo");
-//        primaryStage.setScene(new Scene(root, 900, 500));
-//        primaryStage.setResizable(false);
-//        primaryStage.show();
-
         stageManager = springContext.getBean(StageManager.class, stage);
         displayInitialScene();
-//        stage.setScene(new Scene(root));
-//        stage.show();
-
     }
     @Override
     public void stop(){

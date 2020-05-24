@@ -11,16 +11,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import utils.LanguageResource;
 
 import java.util.ResourceBundle;
 
 @Configuration
 public class SpringApplicaitonConfig {
     @Autowired SpringFXMLLoader springFXMLLoader;
-//    @Bean
-//    public ResourceBundle rb(){
-//        return ResourceBundle.getBundle("Bundle");
-//    }
+    @Bean
+    public ResourceBundle rb(){
+        return ResourceBundle.getBundle("Lang");
+    }
 
     @Bean
     @Lazy

@@ -6,8 +6,8 @@
 
 <AnchorPane prefHeight="254.0" prefWidth="424.0" stylesheets="@../user-style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.usermain.confirmation.CancelConfirmation">
    <children>
-      <JFXButton fx:id="yesButton" layoutX="127.0" layoutY="137.0" text="Yes" />
-      <JFXButton fx:id="noButton" layoutX="246.0" layoutY="137.0" text="No" />
-      <Label layoutX="40.0" layoutY="70.0" text="Are you sure you want to cancel order?" />
+      <JFXButton fx:id="yesButton" layoutX="127.0" layoutY="137.0" text="%yes_b" />
+      <JFXButton fx:id="noButton" layoutX="246.0" layoutY="137.0" text="%no_b" />
+      <Label layoutX="40.0" layoutY="70.0" text="%question_cancel" />
    </children>
 </AnchorPane>

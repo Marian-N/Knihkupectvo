@@ -6,17 +6,22 @@ import application.StageManager;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import application.ScreenConfiguration;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 import model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import security.Login;
+import utils.LanguageResource;
+import utils.UTF8Control;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 @Component
@@ -36,10 +41,13 @@ public class LoginController implements Initializable{
 
     ScreenConfiguration screenConfiguration = new ScreenConfiguration();
     Customer user;
+    ResourceBundle rb;
+    LanguageResource lr = LanguageResource.getInstance();
 
     @Autowired
     @Lazy
-    public LoginController(StageManager stageManager){
+    public LoginController(StageManager stageManager, ResourceBundle rb){
+        this.rb = rb;
         this.stageManager = stageManager;
     }
 
@@ -79,5 +87,20 @@ public class LoginController implements Initializable{
 
     public void handleCreateUser() throws IOException {
         screenConfiguration.setCreateUser();
+    }
+
+    public void handleSlovakLanguage(ActionEvent event) throws IOException {
+        Locale locale = new Locale("sk", "SK");
+        ResourceBundle bundle = ResourceBundle.getBundle("Lang", locale, new UTF8Control());
+        lr.setResources(bundle);
+        stageManager.switchScene(FxmlView.LOGIN);
+    }
+
+    public void handleEnglishLanguage(ActionEvent event) throws IOException {
+        Locale locale = new Locale("en", "US");
+        ResourceBundle bundle = ResourceBundle.getBundle("Lang", locale, new UTF8Control());
+        lr.setResources(bundle);
+
+        stageManager.switchScene(FxmlView.LOGIN);
     }
 }

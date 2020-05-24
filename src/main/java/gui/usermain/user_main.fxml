@@ -69,6 +69,7 @@
                                 <Label layoutX="343.0" layoutY="153.0" text="Order detail" />
                         <JFXButton fx:id="cancelOrderButton" layoutX="326.0" layoutY="573.0" onAction="#handleOrderCancel" text="Cancel order" />
                         <Label layoutX="1006.0" layoutY="72.0" text="Orders" />
+                        <JFXButton fx:id="getPDFButton" layoutX="298.0" layoutY="80.0" prefHeight="44.0" prefWidth="197.0" text="Download PDF" />
                             </children></AnchorPane>
                     </content>
                 </Tab>

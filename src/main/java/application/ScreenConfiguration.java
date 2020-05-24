@@ -13,14 +13,16 @@ import javafx.stage.Stage;
 import model.Book;
 import model.Order;
 import model.OrderContent;
+import utils.LanguageResource;
 
 import java.io.IOException;
 
 
 public class ScreenConfiguration {
+    private LanguageResource lr = LanguageResource.getInstance();
 
     public void setChangeBookScene(Book book) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(FxmlView.ADMINCHANGEBOOK.getFxmlFile()));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(FxmlView.ADMINCHANGEBOOK.getFxmlFile()), lr.getResources());
         Stage stage = new Stage();
         stage.setScene(new Scene((Pane) loader.load()));
         ChangeBookController changeBookController = loader.<ChangeBookController>getController();
@@ -33,7 +35,7 @@ public class ScreenConfiguration {
     }
 
     public void setCancelConfirmationScene(Order order) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(FxmlView.USERCANCELCONFIRM.getFxmlFile()));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(FxmlView.USERCANCELCONFIRM.getFxmlFile()), lr.getResources());
         Stage stage = new Stage();
         stage.setScene(new Scene((Pane) loader.load()));
         CancelConfirmation cancelConfirmation = loader.<CancelConfirmation>getController();
@@ -48,7 +50,7 @@ public class ScreenConfiguration {
     }
 
     public ObservableList<OrderContent> setMakeOrderScene(ObservableList<OrderContent> newOrder, int userId) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(FxmlView.USERMAKEORDER.getFxmlFile()));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(FxmlView.USERMAKEORDER.getFxmlFile()), lr.getResources());
         Stage stage = new Stage();
         stage.setScene(new Scene((Pane) loader.load()));
         MakeOrderController makeOrderController = loader.<MakeOrderController>getController();
@@ -62,7 +64,7 @@ public class ScreenConfiguration {
 
 
     public void setCreateUser() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(FxmlView.USERREGISTER.getFxmlFile()));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(FxmlView.USERREGISTER.getFxmlFile()), lr.getResources());
         Stage stage = new Stage();
         stage.setScene(new Scene((Pane) loader.load()));
         UserRegisterController userRegisterController = loader.<UserRegisterController>getController();
