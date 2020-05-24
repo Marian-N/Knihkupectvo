@@ -1,6 +1,7 @@
 package utils;
 
 import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -10,20 +11,33 @@ import model.Customer;
 import model.Order;
 import model.OrderContent;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.stream.Stream;
 
 public class PdfGenerator {
+    private static BaseFont font;
+
+    static {
+        try {
+            font = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1250, BaseFont.EMBEDDED);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static Font fontTitleName = FontFactory.getFont(FontFactory.COURIER_BOLD, 24, BaseColor.BLACK);
-    private static Font fontTitle = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-    private static Font fontParagraph = FontFactory.getFont(FontFactory.COURIER, 8, BaseColor.BLACK);
+    private static Font fontTitle = new Font(font, 16, Font.NORMAL);
+    private static Font fontParagraph = new Font(font, 8, Font.NORMAL);
     private static LanguageResource lr = LanguageResource.getInstance();
 
-    public static void generateOrderPDF(Order order) throws FileNotFoundException, DocumentException {
+    public static void generateOrderPDF(Order order) throws IOException, DocumentException {
         Document document = new Document();
         String fileName = String.format("%s%s.pdf",lr.getResources().getString("order_save_pdf"), order.getID());
-        PdfWriter.getInstance(document, new FileOutputStream(fileName));
+        FileOutputStream file = new FileOutputStream(fileName);
+        PdfWriter.getInstance(document, file);
 
         document.open();
 
@@ -74,6 +88,7 @@ public class PdfGenerator {
         document.add(orderParagraph);
         document.add(totalParagraph);
         document.close();
+        file.close();
     }
 
     private static void addTableHeader(PdfPTable table) {

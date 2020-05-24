@@ -381,7 +381,7 @@ public class UserMainController implements Initializable {
         stage.close();
     }
 
-    public void handleGetPDF(ActionEvent event) throws FileNotFoundException, DocumentException {
+    public void handleGetPDF(ActionEvent event) throws IOException, DocumentException {
         Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
         if (order != null){
             PdfGenerator.generateOrderPDF(order);
