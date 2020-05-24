@@ -26,6 +26,7 @@ import model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import utils.LanguageResource;
 
 import java.io.IOException;
 import java.net.URL;
@@ -103,6 +104,7 @@ public class UserMainController implements Initializable {
     Customer loggedUser;
     private String searchingForBook = null;
     private final StageManager stageManager;
+    private LanguageResource lr = LanguageResource.getInstance();
 
     @Autowired
     @Lazy
@@ -161,16 +163,16 @@ public class UserMainController implements Initializable {
     private void createOrderByBooksComboBox() {
         orderByBooksComboBox.getItems().addAll(
                 "-----",
-                "Book name - asc",
-                "Book name - desc",
-                "Author - asc",
-                "Author - desc",
-                "Price - asc",
-                "Price - desc",
-                "Date - asc",
-                "Date - desc",
-                "Popularity - asc",
-                "Popularity - desc"
+                lr.getResources().getString("sort_by_title_asc"),       //"Book name - asc",
+                lr.getResources().getString("sort_by_title_desc"),      //"Book name - desc",
+                lr.getResources().getString("sort_by_author_asc"),      //"Author - asc",
+                lr.getResources().getString("sort_by_author_desc"),     //"Author - desc",
+                lr.getResources().getString("sort_by_price_asc"),       //"Price - asc",
+                lr.getResources().getString("sort_by_price_desc"),      //"Price - desc",
+                lr.getResources().getString("sort_by_date_asc"),        //"Date - asc",
+                lr.getResources().getString("sort_by_date_desc"),       //"Date - desc",
+                lr.getResources().getString("sort_by_popularity_asc"),  //"Popularity - asc",
+                lr.getResources().getString("sort_by_popularity_desc")  //"Popularity - desc"
         );
         orderByBooksComboBox.setValue("-----");
     }
@@ -212,25 +214,25 @@ public class UserMainController implements Initializable {
             else {
                 if (orderBy == null) {
                     books = booksController.getBooks(pageNum, "id");
-                } else if (orderBy.equals("Book name - asc")) {
+                } else if (orderBy.equals(lr.getResources().getString("sort_by_title_asc"))) {
                     books = booksController.getBooks(pageNum, "title");
-                } else if (orderBy.equals("Book name - desc")) {
+                } else if (orderBy.equals(lr.getResources().getString("sort_by_title_desc"))) {
                     books = booksController.getBooks(pageNum, "title", true);
-                } else if (orderBy.equals("Author - asc")) {
+                } else if (orderBy.equals(lr.getResources().getString("sort_by_author_asc"))) {
                     books = booksController.getBooks(pageNum, "author");
-                } else if (orderBy.equals("Author - desc")) {
+                } else if (orderBy.equals(lr.getResources().getString("sort_by_author_desc"))) {
                     books = booksController.getBooks(pageNum, "author", true);
-                } else if (orderBy.equals("Price - asc")) {
+                } else if (orderBy.equals(lr.getResources().getString("sort_by_price_asc"))) {
                     books = booksController.getBooks(pageNum, "price");
-                } else if (orderBy.equals("Price - desc")) {
+                } else if (orderBy.equals(lr.getResources().getString("sort_by_price_desc"))) {
                     books = booksController.getBooks(pageNum, "price", true);
-                } else if (orderBy.equals("Date - asc")) {
+                } else if (orderBy.equals(lr.getResources().getString("sort_by_date_asc"))) {
                     books = booksController.getBooks(pageNum, "publication_date");
-                } else if (orderBy.equals("Date - desc")) {
+                } else if (orderBy.equals(lr.getResources().getString("sort_by_date_desc"))) {
                     books = booksController.getBooks(pageNum, "publication_date", true);
-                } else if (orderBy.equals("Popularity - asc")) {
+                } else if (orderBy.equals(lr.getResources().getString("sort_by_popularity_asc"))) {
                     books = booksController.getBooks(pageNum, "popularity");
-                } else if (orderBy.equals("Popularity - desc")) {
+                } else if (orderBy.equals(lr.getResources().getString("sort_by_popularity_desc"))) {
                     books = booksController.getBooks(pageNum, "popularity", true);
                 } else {
                     books = booksController.getBooks(pageNum, "id");
@@ -249,8 +251,7 @@ public class UserMainController implements Initializable {
         Book book = bookOverviewTable.getSelectionModel().getSelectedItem();
 
         if(book != null){
-            synopsisText.setText("Synopsis\n\n");
-            synopsisText.appendText(book.getDescription());
+            synopsisText.setText(book.getDescription());
         }
     }
 

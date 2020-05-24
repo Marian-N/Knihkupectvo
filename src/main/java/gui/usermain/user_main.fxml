@@ -24,7 +24,7 @@
                             <children>
                                 <JFXTextField fx:id="searchBookText" layoutX="12.0" layoutY="62.0" prefHeight="40.0" prefWidth="219.0" promptText="%search_prompt" />
                                 <JFXButton fx:id="searchBookButton" alignment="CENTER" layoutX="55.0" layoutY="126.0" onAction="#handleSearchBook" prefHeight="44.0" prefWidth="133.0" text="%search_button" />
-                                <JFXTextArea fx:id="synopsisText" editable="false" focusTraversable="false" layoutX="18.0" layoutY="368.0" mouseTransparent="true" prefHeight="168.0" prefWidth="211.0" />
+                                <JFXTextArea fx:id="synopsisText" editable="false" focusTraversable="false" layoutX="18.0" layoutY="373.0" mouseTransparent="true" prefHeight="163.0" prefWidth="211.0" />
                                 <JFXButton fx:id="orderBooksButton" alignment="CENTER" layoutX="24.0" layoutY="632.0" prefHeight="44.0" prefWidth="211.0" text="%make_order_button" />
                         <Pagination fx:id="paginationBooks" layoutX="248.0" layoutY="1.0" prefHeight="717.0" prefWidth="1253.0" />
                                   <TableView fx:id="bookOverviewTable" layoutX="245.0" onMouseClicked="#handleBookSelected" prefHeight="634.0" prefWidth="1257.0">
@@ -40,10 +40,10 @@
                                   </TableView>
                         <JFXButton fx:id="setPageBooksButton" layoutX="444.0" layoutY="644.0" onAction="#handleGoToPage" text="%go_to_page_button" />
                         <JFXTextField fx:id="setPageBooksTextField" layoutX="351.0" layoutY="654.0" prefHeight="25.0" prefWidth="66.0" />
-                        <JFXComboBox fx:id="orderByBooksComboBox" layoutX="30.0" layoutY="275.0" onAction="#handleBookOrderChange" prefHeight="25.0" prefWidth="188.0" />
-                        <Label alignment="CENTER" layoutX="24.0" layoutY="245.0" prefHeight="30.0" prefWidth="200.0" text="%order_by_label" />
+                        <JFXComboBox fx:id="orderByBooksComboBox" layoutX="31.0" layoutY="252.0" onAction="#handleBookOrderChange" prefHeight="25.0" prefWidth="188.0" />
+                        <Label alignment="CENTER" layoutX="25.0" layoutY="214.0" prefHeight="30.0" prefWidth="200.0" text="%order_by_label" />
                         <JFXButton fx:id="addToOrderButton" alignment="CENTER" layoutX="25.0" layoutY="571.0" prefHeight="44.0" prefWidth="211.0" text="%add_to_order_button" />
-                        <Label alignment="CENTER" layoutX="45.0" layoutY="330.0" prefHeight="30.0" prefWidth="159.0" text="%book_synopsis_label" />
+                        <Label alignment="CENTER" layoutX="46.0" layoutY="330.0" prefHeight="30.0" prefWidth="159.0" text="%book_synopsis_label" />
                             </children></AnchorPane>
                     </content>
                 </Tab>
