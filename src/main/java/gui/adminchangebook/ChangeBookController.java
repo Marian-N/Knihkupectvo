@@ -9,7 +9,10 @@ import javafx.scene.control.TextField;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 
-
+/**
+ * Class used by admin
+ * Handles changes of stock quantity and price of books
+ */
 public class ChangeBookController {
     @FXML
     private JFXTextField changePriceTextField;
@@ -33,7 +36,6 @@ public class ChangeBookController {
     public ChangeBookController() throws SQLException, ClassNotFoundException {
     }
 
-    //void initialize(){}
 
     public void initData(Book book){
         bookTitle.setText(String.valueOf(book.getTitle()));
@@ -49,8 +51,12 @@ public class ChangeBookController {
         DecimalFormat df = new DecimalFormat("#.##");
         try {
             double newPrice = Double.parseDouble(df.format(Double.parseDouble(changePriceTextField.getText())));
-            booksController.changeBook(book.getID(), newPrice);
-            book.setPrice(newPrice);
+            if(newPrice < 10000){   //price can be changed only if its less than 4 digits
+                booksController.changeBook(book.getID(), newPrice);
+                book.setPrice(newPrice);
+            } else{
+                changePriceTextField.clear();
+            }
         } catch(NumberFormatException ex) {
             changePriceTextField.clear();
         }

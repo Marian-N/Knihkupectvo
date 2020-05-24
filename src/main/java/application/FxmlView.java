@@ -2,6 +2,10 @@ package application;
 
 import utils.LanguageResource;
 
+/**
+ * Stores paths to fxml files and
+ * Title of each window, which is gotten from resource bundle
+ */
 public enum FxmlView {
     LOGIN{
         @Override

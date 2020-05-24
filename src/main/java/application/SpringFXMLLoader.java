@@ -1,10 +1,8 @@
 package application;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import utils.LanguageResource;
 
@@ -14,7 +12,6 @@ import java.util.ResourceBundle;
 /**
  * Coexisting of Spring and JavFX
  */
-
 @Component
 public class SpringFXMLLoader {
     private final ApplicationContext ac;
@@ -31,7 +28,7 @@ public class SpringFXMLLoader {
      * Setting spring as default loader
      * @param fxmlPath path to fxml file, which i want to load
      */
-    public FXMLLoader load(String fxmlPath) throws IOException {
+    public FXMLLoader load(String fxmlPath){
         FXMLLoader loader = new FXMLLoader();
         loader.setControllerFactory(ac::getBean);
         loader.setResources(lr.getResources());

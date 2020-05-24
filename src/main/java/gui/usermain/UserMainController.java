@@ -102,7 +102,6 @@ public class UserMainController implements Initializable {
     private OrdersController ordersController = OrdersController.getInstance();
 
     ObservableList<Book> books = FXCollections.observableArrayList();
-    //ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
     ObservableList<Order> orders = FXCollections.observableArrayList();
     ObservableList<OrderContent> newOrder = FXCollections.observableArrayList();
     Customer loggedUser;
@@ -118,7 +117,6 @@ public class UserMainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //authorsFromMap = authorsController.getAuthors();
         createBooksTable();
         createOrderByBooksComboBox();
 
@@ -128,13 +126,14 @@ public class UserMainController implements Initializable {
             e.printStackTrace();
         }
         paginationBooks.setPageFactory(this::createBooksPage);
-
+        //adds to order selected book
         addToOrderButton.setOnAction(e->{
             if(bookOverviewTable.getSelectionModel().getSelectedItem() != null &&
                bookOverviewTable.getSelectionModel().getSelectedItem().getStockQuantity() > 0){
                 newOrder.add(handleAddToOrderBook());
             }
         });
+        //goes to order book scene
         orderBooksButton.setOnAction(e-> {
             try {
                 newOrder = handleOrderBooks(newOrder);
@@ -144,6 +143,7 @@ public class UserMainController implements Initializable {
                 ex.printStackTrace();
             }
         });
+        //listens to text in search book - Title of book written - and when its null, refreshes table with all books
         searchBookText.textProperty().addListener((v, oldText, newText) -> {
             if (newText.isEmpty()){
                 searchingForBook = null;
@@ -158,12 +158,19 @@ public class UserMainController implements Initializable {
 
     }
 
-
-    public void initData(Customer gotUser){//Customer gotUser){
+    /**
+     * Initialize needed data for scene - Logged user - customer
+     * @param gotUser - logged user
+     */
+    public void initData(Customer gotUser){
         loggedUser = gotUser;
         userIdTextField.setText(loggedUser.getFirstName() + " " + loggedUser.getLastName() + "   ID: " + loggedUser.getID());
     }
-
+    /**
+     * In Books tab, creates combobox, containing possible sorting of books in books table
+     * From LanguageResource takes sorting possibilities in different languages
+     * Differs from Admins combobox -> contains sorting by popularity
+     */
     private void createOrderByBooksComboBox() {
         orderByBooksComboBox.getItems().addAll(
                 "-----",
@@ -202,13 +209,16 @@ public class UserMainController implements Initializable {
             //taking only names from hashmap
             for (Integer id : authorId){
                 authorName.add(authorsController.getAuthor(id).getName());
-               // authorName.add(authorsFromMap.get(id).getName());
             }
             return new SimpleObjectProperty(String.join(", ", authorName));
         });
     }
 
-
+    /**
+     * Creates corresponding page of books with correct sorting, taken from orderByBooksComboBox
+     * @param pageNum wanted page in books table, books tab
+     * @return page in books table
+     */
     private Node createBooksPage(int pageNum){
         String orderBy = orderByBooksComboBox.getValue();
         try {
@@ -249,8 +259,9 @@ public class UserMainController implements Initializable {
         return bookOverviewTable;
     }
 
-
-
+    /**
+     * When book is selected - shows its description
+     */
     public void handleBookSelected(){
         Book book = bookOverviewTable.getSelectionModel().getSelectedItem();
 
@@ -259,6 +270,12 @@ public class UserMainController implements Initializable {
         }
     }
 
+    /**
+     * Calls stage of completing order, gets created order from it
+     * @param newOrder list containing all books, which user wants to order
+     * @return created order
+     * @throws IOException
+     */
     public ObservableList<OrderContent> handleOrderBooks(ObservableList<OrderContent> newOrder) throws IOException {
         ScreenConfiguration screenConfiguration = new ScreenConfiguration();
         int userId = loggedUser.getID();
@@ -266,6 +283,10 @@ public class UserMainController implements Initializable {
         return newOrder;
     }
 
+    /**
+     * takes chosen book from table and returns it
+     * @return book to be added to list containing all books, which user wants to order
+     */
     public OrderContent handleAddToOrderBook() {
         Book chosenBook = bookOverviewTable.getSelectionModel().getSelectedItem();
         OrderContent newOrder = new OrderContent(chosenBook, 1);
@@ -276,6 +297,12 @@ public class UserMainController implements Initializable {
         createBooksPage(paginationBooks.getCurrentPageIndex());
     }
 
+    /**
+     * when valid number is entered, goes to page.
+     * When searching for books, corresponding number of pages are available for choosing
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void handleGoToPage() throws SQLException, ClassNotFoundException {
         int pageId;
         try{
@@ -284,10 +311,12 @@ public class UserMainController implements Initializable {
             pageId = 0;
         }
         if(searchingForBook != null){
+            //total pages when searching for book is double all found books / 100 => 100 pre page
             if(pageId > 0 && pageId <= (int) Math.ceil((int) booksController.findBook(searchingForBook, 0)[0]/100.0)){
                 paginationBooks.setCurrentPageIndex(pageId - 1);
             }
         } else {
+            //total pages = all books / 100 => 100 books per page. rounds up
             if (pageId > 0 && pageId <= (int) Math.ceil((double) Database.getRowsCount("books") / 100)) {
                 paginationBooks.setCurrentPageIndex(pageId - 1);
             }
@@ -295,7 +324,10 @@ public class UserMainController implements Initializable {
         createBooksPage(paginationBooks.getCurrentPageIndex());
     }
 
-    //Searching of book by title
+    /**
+     * searching books by title
+     * Changes paging, total page number, goes to 1.page
+     */
     public void handleSearchBook(){
         String bookToFind = searchBookText.getText();
         if (bookToFind.equals("")){
@@ -312,7 +344,12 @@ public class UserMainController implements Initializable {
         }
     }
 
-    //Orders history controllers
+    /**
+     * Initialization of History of orders Tab
+     * Creates table of orders, table of order details for logged user
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void handleOrdersHistorySelected() throws SQLException, ClassNotFoundException {
         createOrderTable();
         createOrderDetailTable();
@@ -321,7 +358,9 @@ public class UserMainController implements Initializable {
         orderOverviewTable.setItems(orders);
     }
 
-
+    /**
+     * Binds values to table, order status has corresponding language
+     */
     public void createOrderTable(){
         orderIDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         orderPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -347,7 +386,9 @@ public class UserMainController implements Initializable {
         orderDetailPriceColumn.setCellValueFactory(param -> new SimpleStringProperty(String.valueOf(param.getValue().getBook().getPrice())));
     }
 
-
+    /**
+     * Fills Order details table with data from chosen Order
+     */
     public void handleOrderSelected() {
         //fill detail table
         Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
@@ -358,11 +399,13 @@ public class UserMainController implements Initializable {
         }
     }
 
-
+    /**
+     * Changes status of chosen order to cancelled, if order was still pending
+     * @throws IOException
+     */
     public void handleOrderCancel() throws IOException {
         Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
         if (order != null && order.getStatus().equals("nevybavená")){
-            //CancelConfirmation cancelConfirmation = new CancelConfirmation();
             ScreenConfiguration screenConfiguration = new ScreenConfiguration();
             screenConfiguration.setCancelConfirmationScene(order);
             orderOverviewTable.refresh();
@@ -371,9 +414,6 @@ public class UserMainController implements Initializable {
     }
 
     public void handleLogout(javafx.event.ActionEvent event) throws IOException {
-//        ScreenConfiguration screenConfiguration = new ScreenConfiguration();
-//        screenConfiguration.setLoginScene(event);
-
         stageManager.switchScene(FxmlView.LOGIN);
     }
     public void handleExit() {
@@ -381,7 +421,12 @@ public class UserMainController implements Initializable {
         stage.close();
     }
 
-    public void handleGetPDF(ActionEvent event) throws IOException, DocumentException {
+    /**
+     * Creates PDF of order details of chosen order
+     * @throws IOException
+     * @throws DocumentException
+     */
+    public void handleGetPDF() throws IOException, DocumentException {
         Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
         if (order != null){
             PdfGenerator.generateOrderPDF(order);

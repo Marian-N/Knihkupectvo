@@ -17,7 +17,9 @@ import utils.LanguageResource;
 
 import java.io.IOException;
 
-
+/**
+ * Handles switching scenes of popup windows
+ */
 public class ScreenConfiguration {
     private LanguageResource lr = LanguageResource.getInstance();
 
@@ -40,8 +42,6 @@ public class ScreenConfiguration {
         stage.setScene(new Scene((Pane) loader.load()));
         CancelConfirmation cancelConfirmation = loader.<CancelConfirmation>getController();
         cancelConfirmation.cancelConfirm(order, stage);
-        //cancelConfirmation.initData(book);
-
         stage.setResizable(false);
         stage.setTitle(FxmlView.USERCANCELCONFIRM.getTitle());
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -69,7 +69,6 @@ public class ScreenConfiguration {
         stage.setScene(new Scene((Pane) loader.load()));
         UserRegisterController userRegisterController = loader.<UserRegisterController>getController();
         userRegisterController.createUser(stage);
-
         stage.setResizable(false);
         stage.setTitle(FxmlView.USERREGISTER.getTitle());
         stage.initModality(Modality.APPLICATION_MODAL);

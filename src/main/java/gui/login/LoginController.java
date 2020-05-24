@@ -10,7 +10,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 import model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -39,15 +38,13 @@ public class LoginController implements Initializable{
 
     private final StageManager stageManager;
 
-    ScreenConfiguration screenConfiguration = new ScreenConfiguration();
-    Customer user;
-    ResourceBundle rb;
-    LanguageResource lr = LanguageResource.getInstance();
+    private ScreenConfiguration screenConfiguration = new ScreenConfiguration();
+    private Customer user;
+    private LanguageResource lr = LanguageResource.getInstance();
 
     @Autowired
     @Lazy
-    public LoginController(StageManager stageManager, ResourceBundle rb){
-        this.rb = rb;
+    public LoginController(StageManager stageManager){
         this.stageManager = stageManager;
     }
 
@@ -74,14 +71,11 @@ public class LoginController implements Initializable{
 
     //change scene to admin
     private void loadMainAdminScene(javafx.event.ActionEvent event) throws Exception {
-        //screenConfiguration.setMainAdminScene(event);
         stageManager.switchScene(FxmlView.ADMIN);
     }
 
     // change scene to user
     private void loadMainUserScene(javafx.event.ActionEvent event, Customer customer) throws Exception {
-//        screenConfiguration.setMainUserScene(event, customer);
-
         stageManager.switchScene(FxmlView.USER, customer);
     }
 
@@ -89,18 +83,21 @@ public class LoginController implements Initializable{
         screenConfiguration.setCreateUser();
     }
 
-    public void handleSlovakLanguage(ActionEvent event) throws IOException {
+    /**
+     * Language change changes settings in LanguageResource singleton and reloads the scene
+     * Creates new resource bundle with UTF-8 coding
+     */
+    public void handleSlovakLanguage(){
         Locale locale = new Locale("sk", "SK");
         ResourceBundle bundle = ResourceBundle.getBundle("Lang", locale, new UTF8Control());
         lr.setResources(bundle);
         stageManager.switchScene(FxmlView.LOGIN);
     }
 
-    public void handleEnglishLanguage(ActionEvent event) throws IOException {
+    public void handleEnglishLanguage(){
         Locale locale = new Locale("en", "US");
         ResourceBundle bundle = ResourceBundle.getBundle("Lang", locale, new UTF8Control());
         lr.setResources(bundle);
-
         stageManager.switchScene(FxmlView.LOGIN);
     }
 }

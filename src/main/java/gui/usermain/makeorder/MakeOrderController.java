@@ -2,7 +2,6 @@ package gui.usermain.makeorder;
 
 import com.jfoenix.controls.JFXButton;
 import controller.CustomerController;
-import gui.usermain.UserMainController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -13,8 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import model.Book;
-import model.Customer;
 import model.Order;
 import model.OrderContent;
 
@@ -74,6 +71,7 @@ public class MakeOrderController {
                     int idOfOrder = newOrder.indexOf(orderMakeTable.getSelectionModel().getSelectedItem());
                     try{
                         int newQuantity = Integer.parseInt(changeQuantityTextField.getText());
+                        //changes quantity of book in order if there is enough of this book in stock
                         if(newOrder.get(idOfOrder).getBook().getStockQuantity() >= newQuantity && newQuantity > 0){
                             newOrderTaken.get(idOfOrder).setQuantity(newQuantity);
                             orderMakeTable.refresh();
@@ -97,10 +95,10 @@ public class MakeOrderController {
             completeOrderButton.setOnAction(e->{
                 if(newOrder.size() > 0){
                     ObservableList<OrderContent> newnewOrder = null;
-                    Order order = null;
                     try {
                         newnewOrder = newOrder;
-                        order = new Order(customerController.getCustomer(customerId), newnewOrder);
+                        //registers new order for user
+                        new Order(customerController.getCustomer(customerId), newnewOrder);
                     } catch (SQLException | ClassNotFoundException ex) {
                         ex.printStackTrace();
                     }
@@ -109,7 +107,6 @@ public class MakeOrderController {
                 stage.close();
             });
         }
-
     }
 
     private double getTotalPrice(ObservableList<OrderContent> newOrder) {
@@ -128,20 +125,8 @@ public class MakeOrderController {
     }
 
     public void createTable(){
-        booksInOrderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<OrderContent, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<OrderContent, String> param) {
-                return new SimpleStringProperty(param.getValue().getBook().getTitle());
-            }
-        });
-
-        priceOfBookColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<OrderContent, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<OrderContent, String> param) {
-                return new SimpleStringProperty(String.valueOf(param.getValue().getBook().getPrice()));
-            }
-        });
-
+        booksInOrderColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getBook().getTitle()));
+        priceOfBookColumn.setCellValueFactory(param -> new SimpleStringProperty(String.valueOf(param.getValue().getBook().getPrice())));
         quantityOfBooksColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
     }
 

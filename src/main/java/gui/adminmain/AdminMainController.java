@@ -152,13 +152,11 @@ public class AdminMainController implements Initializable {
     private PublishersController publishersController = PublishersController.getInstance();
 
     ObservableList<Book> books = FXCollections.observableArrayList();
-    //ObservableMap<Integer, Author> authorsFromMap = FXCollections.observableHashMap();
     ObservableList<Order> orders = FXCollections.observableArrayList();
     private String searchingForBook = null;
     private LanguageResource lr = LanguageResource.getInstance();
-
-    ScreenConfiguration screenConfiguration = new ScreenConfiguration();
-    private final StageManager stageManager;
+    ScreenConfiguration screenConfiguration = new ScreenConfiguration();    //calling popup windows
+    private final StageManager stageManager;                                //calling other scenes
 
     @Autowired
     @Lazy
@@ -168,9 +166,9 @@ public class AdminMainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //authorsFromMap = authorsController.getAuthors();
         createBooksTable();
         createOrderByBooksComboBox();
+        //listens to text in search book - Title of book written - and when its null, refreshes table with all books
         searchBookText.textProperty().addListener((v, oldText, newText) -> {
             if (newText.isEmpty()){
                 searchingForBook = null;
@@ -194,6 +192,10 @@ public class AdminMainController implements Initializable {
 
     }
 
+    /**
+     * In Books tab, creates combobox, containing possible sorting of books in books table
+     * From LanguageResource takes sorting possibilities in different languages
+     */
     private void createOrderByBooksComboBox() {
         orderByBooksComboBox.getItems().setAll(
                 "-----",
@@ -211,7 +213,6 @@ public class AdminMainController implements Initializable {
 
 
     public void createBooksTable(){
-
         bookNameColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         publisherColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getPublisher().getName()));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -227,20 +228,24 @@ public class AdminMainController implements Initializable {
                 return new SimpleObjectProperty("-");
             }
             //all authors with their ids as keys
-
             List<String> authorName = new ArrayList<>();
             //taking only names from hashmap
             for (Integer id : authorId){
                 authorName.add(authorsController.getAuthor(id).getName());
-                //authorName.add(authorsFromMap.get(id).getName());
             }
             return new SimpleObjectProperty(String.join(", ", authorName));
         });
     }
 
+    /**
+     * Creates corresponding page of books with correct sorting, taken from orderByBooksComboBox
+     * @param pageNum wanted page in books table, books tab
+     * @return page in books table
+     */
     private Node createBooksPage(int pageNum){
         String orderBy = orderByBooksComboBox.getValue();
         try {
+            //If im searching for book, default is to sort by id
             if(searchingForBook != null){
                 books = (ObservableList<Book>) booksController.findBook(searchingForBook, pageNum)[1];
             }
@@ -281,14 +286,22 @@ public class AdminMainController implements Initializable {
         stage.close();
     }
 
+    /**
+     * When book is selected - shows its description
+     */
     public void handleBookSelected(){
         Book book = bookOverviewTable.getSelectionModel().getSelectedItem();
-
         if(book != null){
             synopsisText.setText(book.getDescription());
         }
     }
 
+    /**
+     * when valid number is entered, goes to page.
+     * When searching for books, corresponding number of pages are available for choosing
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void handleGoToPage() throws SQLException, ClassNotFoundException {
         int pageId;
         try{
@@ -297,10 +310,12 @@ public class AdminMainController implements Initializable {
             pageId = 0;
         }
         if(searchingForBook != null){
+            //total pages when searching for book is double all found books / 100 => 100 pre page
             if(pageId > 0 && pageId <= (int) Math.ceil((int) booksController.findBook(searchingForBook, 0)[0]/100.0)){
                 paginationBooks.setCurrentPageIndex(pageId - 1);
             }
         } else{
+            //total pages = all books / 100 => 100 books per page. rounds up
             if(pageId > 0 && pageId <= (int) Math.ceil((double) Database.getRowsCount("books")/100)){
                 paginationBooks.setCurrentPageIndex(pageId - 1);
             }
@@ -312,7 +327,10 @@ public class AdminMainController implements Initializable {
         createBooksPage(paginationBooks.getCurrentPageIndex());
     }
 
-    //Searching of book by title
+    /**
+     * searching books by title
+     * Changes paging, total page number, goes to 1.page
+     */
     public void handleSearchBook(){
         String bookToFind = searchBookText.getText();
         if (bookToFind.equals("")){
@@ -320,6 +338,7 @@ public class AdminMainController implements Initializable {
         }
         else{
             try {
+                //get found books to table
                 bookOverviewTable.setItems((ObservableList<Book>) booksController.findBook(bookToFind, 0)[1]);
                 searchingForBook = bookToFind;
                 paginationBooks.setPageCount((int)Math.ceil((int)booksController.findBook(searchingForBook, 0)[0]/100.0));
@@ -331,7 +350,6 @@ public class AdminMainController implements Initializable {
     }
 
     public void handleChangeBook() throws IOException {
-        //ChangeBookController changeBookController = new ChangeBookController();
         Book book = bookOverviewTable.getSelectionModel().getSelectedItem();
         if(book != null){
             screenConfiguration.setChangeBookScene(book);
@@ -339,19 +357,27 @@ public class AdminMainController implements Initializable {
         }
     }
 
+    /**
+     * Sends signal to delete book
+     * Sets new total page count
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void handleDeleteBook() throws SQLException, ClassNotFoundException {
         Book book = bookOverviewTable.getSelectionModel().getSelectedItem();
         if(book != null) {
-            boolean deleted = booksController.removeBook(book.getID());
-            System.out.println("Book deleted: " + deleted);
+            booksController.removeBook(book.getID());
             paginationBooks.setPageCount((int) Math.ceil((double) Database.getRowsCount("books")/100));
             createBooksPage(paginationBooks.getCurrentPageIndex());
         }
     }
 
-    //load orders after searching of customer id
+    /**
+     * Loads orders after searching of customer id
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void handleLoadOrders() throws SQLException, ClassNotFoundException {
-
         int customerID;
         try{
             customerID = Integer.parseInt(searchCustomerTextField.getText());
@@ -364,6 +390,9 @@ public class AdminMainController implements Initializable {
 
     }
 
+    /**
+     * Binds values to table, order status has corresponding language
+     */
     public void createOrderTable(){
         orderIDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         orderPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -408,21 +437,28 @@ public class AdminMainController implements Initializable {
     }
 
     public void createOrderStatusComboBox(){
-
         orderStatusChangeComboBox.getItems().setAll(
-                lr.getResources().getString("order_completed_status"),//"vybavená",
-                lr.getResources().getString("order_rejected_status")//"zamietnutá"
+                lr.getResources().getString("order_completed_status"),  //"vybavená",
+                lr.getResources().getString("order_rejected_status")    //"zamietnutá"
         );
 
     }
 
+    /**
+     * Allows to change order status if its still pending
+     * Can be changed to completed or rejected
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void handleOrderStatusChange() throws SQLException, ClassNotFoundException {
         Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
         if (order != null && !orderStatusChangeComboBox.getValue().equals(" ")){
             if(order.getStatus().equals("nevybavená")){
+                //changes status to completed
                 if(orderStatusChangeComboBox.getValue().equals(lr.getResources().getString("order_completed_status"))){
                     ordersController.changeStatus(order, "vybavená");
                 }
+                //changes status to rejected
                 else if(orderStatusChangeComboBox.getValue().equals(lr.getResources().getString("order_rejected_status"))){
                     ordersController.changeStatus(order, "zamietnutá");
                 }
@@ -436,16 +472,20 @@ public class AdminMainController implements Initializable {
         createOrderTable();
         createOrderDetailTable();
         createOrderStatusComboBox();
+        //3 customers witch most orders
         bestCustomersTextField.setText(customerController.getBestCustomers(3));
     }
 
     public void handleLogout(javafx.event.ActionEvent event) throws IOException {
-//        ScreenConfiguration screenConfiguration = new ScreenConfiguration();
-//        screenConfiguration.setLoginScene(event);
         stageManager.switchScene(FxmlView.LOGIN);
     }
 
-    //Adding book
+    /**
+     * Initialization of Adding book Tab
+     * Initialize Adding Authors, Genres and Publisher
+     * On picking author from combobox he is added to all chosen authors, same with genres
+     * On picking Publisher, every time new one is chosen from combobox, old one is removed
+     */
     public void AddBookInitialization() {
         //Adding book initialization of author
         addBookAuthors.setCellFactory(param -> new ListCell<Author>(){
@@ -460,7 +500,7 @@ public class AdminMainController implements Initializable {
                 }
             }
         });
-
+        //when author is picked from combobox, he is added to list of all authors
         addBookAuthorChoice.valueProperty().addListener((v, oldValue, newValue) -> {
             if(newValue != null){
                 addBookAuthors.getItems().add(newValue);
@@ -479,7 +519,7 @@ public class AdminMainController implements Initializable {
                 }
             }
         });
-
+        //when publisher is picked from combobox, old one is replaced
         addBookPublisherChoice.valueProperty().addListener((v, oldValue, newValue) -> {
             if(newValue != null){
                 addBookPublishers.getItems().clear();
@@ -508,12 +548,20 @@ public class AdminMainController implements Initializable {
         });
     }
 
+    /**
+     * Handles Adding book
+     * Before adding, every book is checked if its contains correct value
+     * If everything is okay, new book is added
+     * If something is missing/wrong, warning pops up and doesnt continue to adding new book
+     * @throws SQLException
+     */
     public void handleAddBook() throws SQLException {
         DecimalFormat df = new DecimalFormat("#.##");
-        int counter = 0;
+        int counter = 0;        //used to count correctly filled fields, must be 8 to create book
         double newPrice = 0;
         try{
             newPrice = Double.parseDouble(df.format(Double.parseDouble(addBookPrice.getText())));
+            //new price must be 4 digits
             if((int)newPrice <= 9999){
                 wrongPrice.setVisible(false);
                 counter++;
@@ -534,6 +582,7 @@ public class AdminMainController implements Initializable {
         }
 
         String newTitle = null;
+        //Title cant be empty string or spaces
         if(addBookTitle.getText().isEmpty() || addBookTitle.getText().trim().length() == 0){
             wrongTitle.setVisible(true);
         } else{
@@ -585,8 +634,7 @@ public class AdminMainController implements Initializable {
             newGenres = addBookGenres.getItems();
             counter++;
         }
-
-        //System.out.println(counter);
+        //if everything is filled correctly continues to create book
         if(counter == 8){
             Book book = new Book(newTitle, newPrice, newStock, newPublisher,
                                  newPublicationDate, newSynopsis, newGenres, newAuthors);
@@ -626,7 +674,10 @@ public class AdminMainController implements Initializable {
         wrongStock.setVisible(false);
     }
 
-    //Author search in add book
+    /**
+     * Used when creating book
+     * Searches Author based on input string and inputs them to combobox of found authors
+     */
     public void handleABAuthorSearch() {
         addBookAuthorChoice.getItems().clear();
         String Name = addBookSAuthorT.getText();
@@ -636,6 +687,7 @@ public class AdminMainController implements Initializable {
         } else{
             wrongAuthor.setVisible(false);
             addBookAuthorChoice.getItems().addAll(searchedAuthors);
+            //only want to show name of author and not object Author
             addBookAuthorChoice.setConverter(new StringConverter<Author>() {
                 @Override
                 public String toString(Author object) {
@@ -649,7 +701,10 @@ public class AdminMainController implements Initializable {
             });
         }
     }
-    //Publisher search in add book
+    /**
+     * Used when creating book
+     * Searches Publishers based on input string and inputs them to combobox of found publishers
+     */
     public void handleABPublisherSearch() {
         addBookPublisherChoice.getItems().clear();
         String Name = addBookSPublisherT.getText();
@@ -672,7 +727,10 @@ public class AdminMainController implements Initializable {
             });
         }
     }
-    //Genre search in add book
+    /**
+     * Used when creating book
+     * Searches Genres based on input string and inputs them to combobox of found genres
+     */
     public void handleABGenreSearch() {
         addBookGenreChoice.getItems().clear();
         String Name = addBookSGenreT.getText();
@@ -700,6 +758,9 @@ public class AdminMainController implements Initializable {
         addBookClear();
     }
 
+    /**
+     * When creating book, creates new author based on input
+     */
     public void handleAddNewAuthor() {
         if(!addBookSAuthorT.getText().isEmpty()){
             String newAuthorName = addBookSAuthorT.getText();
@@ -710,7 +771,9 @@ public class AdminMainController implements Initializable {
 
         }
     }
-
+    /**
+     * When creating book, creates new publisher based on input
+     */
     public void handleAddNewPublisher() {
         if(!addBookSPublisherT.getText().isEmpty()){
             String newPublisherName = addBookSPublisherT.getText();
@@ -721,7 +784,9 @@ public class AdminMainController implements Initializable {
             wrongPublisher.setVisible(false);
         }
     }
-
+    /**
+     * When creating book, creates new genre based on input
+     */
     public void handleAddNewGenre() {
         if(!addBookSGenreT.getText().isEmpty()){
             String newGenreName = addBookSGenreT.getText();
@@ -729,7 +794,6 @@ public class AdminMainController implements Initializable {
             genresController.addGenre(newGenre);
             addBookGenres.getItems().add(newGenre);
             wrongGenre.setVisible(false);
-
         }
     }
 }
