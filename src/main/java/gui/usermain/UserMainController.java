@@ -2,6 +2,7 @@ package gui.usermain;
 
 import application.FxmlView;
 import application.StageManager;
+import com.itextpdf.text.DocumentException;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
@@ -13,6 +14,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -27,7 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import utils.LanguageResource;
+import utils.PdfGenerator;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
@@ -377,4 +381,10 @@ public class UserMainController implements Initializable {
         stage.close();
     }
 
+    public void handleGetPDF(ActionEvent event) throws FileNotFoundException, DocumentException {
+        Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
+        if (order != null){
+            PdfGenerator.generateOrderPDF(order);
+        }
+    }
 }
