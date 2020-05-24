@@ -38,7 +38,7 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                 </GridPane>
-                                <JFXTextArea fx:id="synopsisText" editable="false" focusTraversable="false" layoutX="18.0" layoutY="340.0" mouseTransparent="true" prefHeight="196.0" prefWidth="211.0" />
+                                <JFXTextArea fx:id="synopsisText" editable="false" focusTraversable="false" layoutX="18.0" layoutY="374.0" mouseTransparent="true" prefHeight="162.0" prefWidth="211.0" />
                                 <JFXButton fx:id="changeBookButton" alignment="CENTER" layoutX="54.0" layoutY="567.0" onAction="#handleChangeBook" prefHeight="44.0" prefWidth="140.0" text="%change_button" />
                                 <JFXButton fx:id="deleteBookButton" alignment="CENTER" layoutX="54.0" layoutY="630.0" onAction="#handleDeleteBook" prefHeight="44.0" prefWidth="140.0" text="%delete_button" />
                         <Pagination fx:id="paginationBooks" layoutX="247.0" prefHeight="720.0" prefWidth="1253.0" />
@@ -57,6 +57,7 @@
                         <JFXTextField fx:id="setPageBooksTextField" layoutX="355.0" layoutY="644.0" prefHeight="44.0" prefWidth="68.0" />
                         <JFXComboBox fx:id="orderByBooksComboBox" layoutX="30.0" layoutY="275.0" onAction="#handleBookOrderChange" prefHeight="25.0" prefWidth="188.0" />
                         <Label alignment="CENTER" layoutX="20.0" layoutY="245.0" prefHeight="30.0" prefWidth="208.0" text="%order_by_label" />
+                        <Label alignment="CENTER" layoutX="51.0" layoutY="330.0" prefHeight="30.0" prefWidth="147.0" text="%book_synopsis_label" />
                             </children></AnchorPane>
                     </content>
                 </Tab>
