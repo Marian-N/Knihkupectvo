@@ -368,7 +368,19 @@ public class AdminMainController implements Initializable {
         orderIDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         orderPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         orderDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        orderStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        orderStatusColumn.setCellValueFactory(param -> {
+            String status = param.getValue().getStatus();
+            if("nevybavená".equals(status)){
+                status = lr.getResources().getString("order_pending_status");
+            } else if("vybavená".equals(status)){
+                status = lr.getResources().getString("order_completed_status");
+            } else if("zamietnutá".equals(status)){
+                status = lr.getResources().getString("order_rejected_status");
+            } else if("zrušená".equals(status)){
+                status = lr.getResources().getString("order_canceled_status");
+            }
+            return new SimpleStringProperty(status);
+        });
         orderCustomerColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getCustomer().getFirstName() + " " +
                 param.getValue().getCustomer().getLastName()));
         orderCustomerIDColumn.setCellValueFactory(param ->
@@ -398,9 +410,8 @@ public class AdminMainController implements Initializable {
     public void createOrderStatusComboBox(){
 
         orderStatusChangeComboBox.getItems().setAll(
-                "vybavená",
-                "zamietnutá"
-                //"nevybavená"
+                lr.getResources().getString("order_completed_status"),//"vybavená",
+                lr.getResources().getString("order_rejected_status")//"zamietnutá"
         );
 
     }
@@ -409,7 +420,12 @@ public class AdminMainController implements Initializable {
         Order order = orderOverviewTable.getSelectionModel().getSelectedItem();
         if (order != null && !orderStatusChangeComboBox.getValue().equals(" ")){
             if(order.getStatus().equals("nevybavená")){
-                ordersController.changeStatus(order, orderStatusChangeComboBox.getValue());
+                if(orderStatusChangeComboBox.getValue().equals(lr.getResources().getString("order_completed_status"))){
+                    ordersController.changeStatus(order, "vybavená");
+                }
+                else if(orderStatusChangeComboBox.getValue().equals(lr.getResources().getString("order_rejected_status"))){
+                    ordersController.changeStatus(order, "zamietnutá");
+                }
                 orderOverviewTable.refresh();
                 bookOverviewTable.refresh();
             }

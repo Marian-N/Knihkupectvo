@@ -322,7 +322,19 @@ public class UserMainController implements Initializable {
         orderIDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         orderPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         orderDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        orderStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        orderStatusColumn.setCellValueFactory(param -> {
+            String status = param.getValue().getStatus();
+            if("nevybavená".equals(status)){
+                status = lr.getResources().getString("order_pending_status");
+            } else if("vybavená".equals(status)){
+                status = lr.getResources().getString("order_completed_status");
+            } else if("zamietnutá".equals(status)){
+                status = lr.getResources().getString("order_rejected_status");
+            } else if("zrušená".equals(status)){
+                status = lr.getResources().getString("order_canceled_status");
+            }
+            return new SimpleStringProperty(status);
+        });
     }
 
     public void createOrderDetailTable(){
