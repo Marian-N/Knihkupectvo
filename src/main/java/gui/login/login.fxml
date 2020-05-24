@@ -8,13 +8,13 @@
 
 <AnchorPane fx:id="loginScene" prefHeight="500.0" prefWidth="900.0" stylesheets="@login-style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.login.LoginController">
     <children>
-        <JFXTextField fx:id="nameLogin" labelFloat="true" layoutX="344.0" layoutY="195.0" prefHeight="36.0" prefWidth="212.0" promptText="Name" />
-        <JFXPasswordField fx:id="passwordLogin" labelFloat="true" layoutX="345.0" layoutY="261.0" prefHeight="36.0" prefWidth="212.0" promptText="Password" />
-        <JFXButton fx:id="loginButton" layoutX="389.0" layoutY="324.0" onAction="#handleLogin" prefHeight="36.0" prefWidth="123.0" text="Login Š Ť š ť" textFill="WHITE" />
+        <JFXTextField fx:id="nameLogin" labelFloat="true" layoutX="344.0" layoutY="195.0" prefHeight="36.0" prefWidth="212.0" promptText="%user_name" />
+        <JFXPasswordField fx:id="passwordLogin" labelFloat="true" layoutX="345.0" layoutY="261.0" prefHeight="36.0" prefWidth="212.0" promptText="%user_password" />
+        <JFXButton fx:id="loginButton" layoutX="389.0" layoutY="324.0" onAction="#handleLogin" prefHeight="36.0" prefWidth="123.0" text="%login_button" textFill="WHITE" />
         <Label alignment="CENTER" layoutX="289.0" layoutY="122.0" prefHeight="30.0" prefWidth="322.0" text="%login_welcome_label" />
         <Label fx:id="wrongInfo" layoutX="376.0" layoutY="368.0" styleClass="wrong-info-label" text="Wrong Name or Password" visible="false" />
-      <JFXButton fx:id="createUserButton" layoutX="389.0" layoutY="394.0" onAction="#handleCreateUser" prefHeight="36.0" prefWidth="123.0" text="Create User" />
-      <JFXButton fx:id="languageSlovakButton" layoutX="14.0" layoutY="461.0" onAction="#handleSlovakLanguage" prefHeight="27.0" prefWidth="88.0" text="Slovak" />
-      <JFXButton fx:id="languageEnglishButton" layoutX="14.0" layoutY="430.0" onAction="#handleEnglishLanguage" prefHeight="27.0" prefWidth="88.0" text="English" />
+      <JFXButton fx:id="createUserButton" layoutX="389.0" layoutY="394.0" onAction="#handleCreateUser" prefHeight="36.0" prefWidth="123.0" text="%create_user_button" />
+      <JFXButton fx:id="languageSlovakButton" layoutX="14.0" layoutY="461.0" onAction="#handleSlovakLanguage" prefHeight="27.0" prefWidth="88.0" text="%language_slovak_button" />
+      <JFXButton fx:id="languageEnglishButton" layoutX="14.0" layoutY="430.0" onAction="#handleEnglishLanguage" prefHeight="27.0" prefWidth="88.0" text="%language_english_button" />
     </children>
 </AnchorPane>

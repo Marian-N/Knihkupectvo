@@ -22,8 +22,6 @@ public final class LanguageResource {
         return resourcesProperty().get();
     }
 
-
-
     public final void setResources(ResourceBundle resources) {
         resourcesProperty().set(resources);
     }

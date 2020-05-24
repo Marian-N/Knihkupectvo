@@ -24,13 +24,12 @@
     <children>
         <JFXTabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <tabs>
-                <Tab id="booksTab" text="Books">
+                <Tab id="booksTab" text="%books_tab">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <JFXTextField fx:id="searchBookText" layoutX="12.0" layoutY="62.0" prefHeight="40.0" prefWidth="219.0" promptText="Search" />
-                                <JFXButton fx:id="searchBookButton" layoutX="75.0" layoutY="128.0" onAction="#handleSearchBook" prefHeight="40.0" prefWidth="100.0" text="Search" />
-                               <!--><Label fx:id="searchBookLabel" layoutX="93.0" layoutY="131.0" prefHeight="40.0" prefWidth="63.0" text="Search" />-->
+                                <JFXTextField fx:id="searchBookText" layoutX="12.0" layoutY="62.0" prefHeight="40.0" prefWidth="219.0" promptText="%search_prompt" />
+                                <JFXButton fx:id="searchBookButton" alignment="CENTER" layoutX="52.0" layoutY="124.0" onAction="#handleSearchBook" prefHeight="44.0" prefWidth="140.0" text="%search_button" />
                                 <GridPane layoutX="254.0" prefHeight="629.0" prefWidth="1241.0" translateX="1.0" translateY="1.0" translateZ="1.0">
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -40,51 +39,51 @@
                                     </rowConstraints>
                                 </GridPane>
                                 <JFXTextArea fx:id="synopsisText" editable="false" focusTraversable="false" layoutX="18.0" layoutY="340.0" mouseTransparent="true" prefHeight="196.0" prefWidth="211.0" />
-                                <JFXButton fx:id="changeBookButton" layoutX="72.0" layoutY="567.0" onAction="#handleChangeBook" prefHeight="40.0" prefWidth="100.0" text="Change" />
-                                <JFXButton fx:id="deleteBookButton" layoutX="72.0" layoutY="634.0" onAction="#handleDeleteBook" prefHeight="40.0" prefWidth="100.0" text="Delete" />
+                                <JFXButton fx:id="changeBookButton" alignment="CENTER" layoutX="54.0" layoutY="567.0" onAction="#handleChangeBook" prefHeight="44.0" prefWidth="140.0" text="%change_button" />
+                                <JFXButton fx:id="deleteBookButton" alignment="CENTER" layoutX="54.0" layoutY="630.0" onAction="#handleDeleteBook" prefHeight="44.0" prefWidth="140.0" text="%delete_button" />
                         <Pagination fx:id="paginationBooks" layoutX="247.0" prefHeight="720.0" prefWidth="1253.0" />
                                   <TableView fx:id="bookOverviewTable" layoutX="253.0" layoutY="1.0" onMouseClicked="#handleBookSelected" prefHeight="638.0" prefWidth="1245.0">
                                       <columns>
-                                          <TableColumn fx:id="bookNameColumn" prefWidth="292.0" sortable="false" styleClass="name-table" text="Book name" />
-                                          <TableColumn fx:id="genreColumn" minWidth="0.0" prefWidth="262.0" sortable="false" text="Genre" />
-                                          <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="264.0" sortable="false" text="Author" />
-                                          <TableColumn fx:id="publisherColumn" prefWidth="136.0" sortable="false" text="Publisher" />
-                                          <TableColumn fx:id="priceColumn" prefWidth="79.0" sortable="false" text="Price" />
-                                          <TableColumn fx:id="yearColumn" minWidth="0.0" prefWidth="129.0" sortable="false" text="Date" />
-                                          <TableColumn fx:id="stockColumn" prefWidth="76.0" text="Stock" />
+                                          <TableColumn fx:id="bookNameColumn" prefWidth="292.0" sortable="false" styleClass="name-table" text="%book_title_label" />
+                                          <TableColumn fx:id="genreColumn" minWidth="0.0" prefWidth="262.0" sortable="false" text="%book_genre_label" />
+                                          <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="264.0" sortable="false" text="%book_author_label" />
+                                          <TableColumn fx:id="publisherColumn" prefWidth="136.0" sortable="false" text="%book_publisher_label" />
+                                          <TableColumn fx:id="priceColumn" prefWidth="79.0" sortable="false" text="%book_price_label" />
+                                          <TableColumn fx:id="yearColumn" minWidth="0.0" prefWidth="129.0" sortable="false" text="%book_date_label" />
+                                          <TableColumn fx:id="stockColumn" prefWidth="76.0" text="%book_stock_label" />
                                       </columns>
                                   </TableView>
-                        <JFXButton fx:id="setPageBooksButton" layoutX="444.0" layoutY="644.0" onAction="#handleGoToPage" text="Go to page" />
+                        <JFXButton fx:id="setPageBooksButton" layoutX="444.0" layoutY="644.0" onAction="#handleGoToPage" text="%go_to_page_button" />
                         <JFXTextField fx:id="setPageBooksTextField" layoutX="355.0" layoutY="644.0" prefHeight="44.0" prefWidth="68.0" />
                         <JFXComboBox fx:id="orderByBooksComboBox" layoutX="30.0" layoutY="275.0" onAction="#handleBookOrderChange" prefHeight="25.0" prefWidth="188.0" />
-                        <Label layoutX="80.0" layoutY="245.0" text="Order by:" />
+                        <Label alignment="CENTER" layoutX="20.0" layoutY="245.0" prefHeight="30.0" prefWidth="208.0" text="%order_by_label" />
                             </children></AnchorPane>
                     </content>
                 </Tab>
-                <Tab id="addBookTab" text="Add book">
+                <Tab id="addBookTab" text="%add_book_tab">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <JFXTextField fx:id="addBookTitle" layoutX="164.0" layoutY="78.0" prefWidth="300.0" />
                         <JFXTextField fx:id="addBookStock" layoutX="1134.0" layoutY="78.0" prefWidth="150.0" />
-                        <JFXComboBox fx:id="addBookAuthorChoice" layoutX="684.0" layoutY="183.0" prefHeight="50.0" prefWidth="300.0" />
-                        <JFXComboBox fx:id="addBookPublisherChoice" layoutX="684.0" layoutY="295.0" prefHeight="50.0" prefWidth="300.0" />
-                        <Label layoutX="114.0" layoutY="85.0" text="Title:" />
-                        <Label layoutX="625.0" layoutY="85.0" text="Price:" />
-                        <Label layoutX="996.0" layoutY="85.0" text="Stock quantity:" />
-                        <Label layoutX="611.0" layoutY="569.0" text="Publication date:" />
-                        <JFXTextArea fx:id="addBookSynopsis" layoutX="94.0" layoutY="530.0" prefHeight="116.0" prefWidth="415.0" />
-                        <Label layoutX="90.0" layoutY="195.0" text="Author:" />
-                        <Label layoutX="71.0" layoutY="305.0" text="Publisher:" />
+                        <JFXComboBox fx:id="addBookAuthorChoice" layoutX="718.0" layoutY="183.0" prefHeight="50.0" prefWidth="300.0" />
+                        <JFXComboBox fx:id="addBookPublisherChoice" layoutX="718.0" layoutY="295.0" prefHeight="50.0" prefWidth="300.0" />
+                        <Label layoutX="50.0" layoutY="85.0" text="%title_label" AnchorPane.rightAnchor="1349.0" />
+                        <Label layoutX="559.0" layoutY="85.0" text="%price_label" AnchorPane.rightAnchor="831.0" />
+                        <Label layoutX="930.0" layoutY="85.0" text="%stock_quantity_label" AnchorPane.rightAnchor="376.0" />
+                        <Label layoutX="546.0" layoutY="569.0" text="%publication_date_label" AnchorPane.rightAnchor="741.0" />
+                        <JFXTextArea fx:id="addBookSynopsis" layoutX="95.0" layoutY="548.0" prefHeight="116.0" prefWidth="415.0" />
+                        <Label layoutX="14.0" layoutY="195.0" text="%author_label" AnchorPane.rightAnchor="1349.0" />
+                        <Label layoutX="14.0" layoutY="305.0" text="%publisher_label" AnchorPane.rightAnchor="1349.0" />
                         <JFXTextField fx:id="addBookPrice" layoutX="684.0" layoutY="78.0" prefWidth="150.0" />
-                        <Label layoutX="263.0" layoutY="493.0" text="Synopsis" />
-                        <JFXButton fx:id="addBookButton" layoutX="1134.0" layoutY="544.0" onAction="#handleAddBook" prefHeight="80.0" prefWidth="120.0" text="Add Book" />
-                        <JFXComboBox fx:id="addBookGenreChoice" layoutX="684.0" layoutY="405.0" prefHeight="50.0" prefWidth="300.0" />
-                        <Label layoutX="94.0" layoutY="415.0" text="Genre:" />
+                        <Label layoutX="232.0" layoutY="513.0" text="%synopsis_label" />
+                        <JFXButton fx:id="addBookButton" layoutX="1117.0" layoutY="544.0" onAction="#handleAddBook" prefHeight="80.0" prefWidth="184.0" text="%add_book_button" AnchorPane.leftAnchor="1117.0" />
+                        <JFXComboBox fx:id="addBookGenreChoice" layoutX="718.0" layoutY="405.0" prefHeight="50.0" prefWidth="300.0" />
+                        <Label layoutX="18.0" layoutY="415.0" text="%genre_label" AnchorPane.rightAnchor="1349.0" />
                         <JFXListView fx:id="addBookAuthors" layoutX="1059.0" layoutY="188.0" prefHeight="77.0" prefWidth="300.0" />
                         <JFXListView fx:id="addBookPublishers" layoutX="1059.0" layoutY="298.0" prefHeight="77.0" prefWidth="300.0" />
                         <JFXListView fx:id="addBookGenres" layoutX="1059.0" layoutY="408.0" prefHeight="77.0" prefWidth="300.0" />
-                        <JFXDatePicker fx:id="addBookPDate" layoutX="775.0" layoutY="562.0" prefWidth="297.0" promptText="month/day/year" />
+                        <JFXDatePicker fx:id="addBookPDate" layoutX="775.0" layoutY="562.0" prefWidth="297.0" promptText="%date_prompt" />
                         <Text fx:id="wrongTitle" fill="RED" layoutX="464.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-wrong-mark" text="!" visible="false" />
                         <Text fx:id="wrongPrice" fill="RED" layoutX="834.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-wrong-mark" text="!" visible="false" />
                         <Text fx:id="wrongDate" fill="RED" layoutX="1072.0" layoutY="596.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-wrong-mark" text="!" visible="false" />
@@ -93,20 +92,20 @@
                         <Text fx:id="wrongPublisher" fill="RED" layoutX="164.0" layoutY="332.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-wrong-mark" text="!" visible="false" />
                         <Text fx:id="wrongGenre" fill="RED" layoutX="164.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-wrong-mark" text="!" visible="false" />
                         <Text fx:id="wrongSynopsis" fill="RED" layoutX="350.0" layoutY="520.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-wrong-mark" text="!" visible="false" />
-                        <JFXTextField fx:id="addBookSAuthorT" layoutX="191.0" layoutY="188.0" prefHeight="44.0" prefWidth="272.0" promptText="Name Surname" />
-                        <JFXTextField fx:id="addBookSPublisherT" layoutX="191.0" layoutY="298.0" prefHeight="44.0" prefWidth="272.0" promptText="Publisher name" />
-                        <JFXTextField fx:id="addBookSGenreT" layoutX="191.0" layoutY="408.0" prefHeight="44.0" prefWidth="272.0" promptText="Genre name" />
-                        <JFXButton fx:id="addBookSAuthorB" layoutX="483.0" layoutY="188.0" onAction="#handleABAuthorSearch" text="search author" />
-                        <JFXButton fx:id="addBookSPublisherB" layoutX="483.0" layoutY="298.0" onAction="#handleABPublisherSearch" text="search publisher" />
-                        <JFXButton fx:id="addBookSGenreB" layoutX="483.0" layoutY="408.0" onAction="#handleABGenreSearch" prefHeight="44.0" prefWidth="145.0" text="search genre" />
-                        <JFXButton fx:id="addBookCancel" layoutX="1298.0" layoutY="544.0" onAction="#handleCancelAddBook" prefHeight="80.0" prefWidth="100.0" text="Cancel" />
-                        <JFXButton fx:id="addNewAuthorButton" layoutX="191.0" layoutY="236.0" onAction="#handleAddNewAuthor" styleClass="add-new-button" text="Add new Author" />
-                        <JFXButton fx:id="addNewPublisherButton" layoutX="191.0" layoutY="346.0" onAction="#handleAddNewPublisher" styleClass="add-new-button" text="Add new Publisher" />
-                        <JFXButton fx:id="addNewGenreButton" layoutX="191.0" layoutY="456.0" onAction="#handleAddNewGenre" styleClass="add-new-button" text="Add new Genre" />
+                        <JFXTextField fx:id="addBookSAuthorT" layoutX="191.0" layoutY="188.0" prefHeight="44.0" prefWidth="272.0" promptText="%author_prompt" />
+                        <JFXTextField fx:id="addBookSPublisherT" layoutX="191.0" layoutY="298.0" prefHeight="44.0" prefWidth="272.0" promptText="%publisher_prompt" />
+                        <JFXTextField fx:id="addBookSGenreT" layoutX="191.0" layoutY="408.0" prefHeight="44.0" prefWidth="272.0" promptText="%genre_prompt" />
+                        <JFXButton fx:id="addBookSAuthorB" layoutX="473.0" layoutY="188.0" onAction="#handleABAuthorSearch" text="%search_author_button" AnchorPane.leftAnchor="473.0" />
+                        <JFXButton fx:id="addBookSPublisherB" layoutX="473.0" layoutY="298.0" onAction="#handleABPublisherSearch" text="%search_publisher_button" AnchorPane.leftAnchor="473.0" />
+                        <JFXButton fx:id="addBookSGenreB" layoutX="473.0" layoutY="408.0" onAction="#handleABGenreSearch" text="%search_genre_button" AnchorPane.leftAnchor="473.0" />
+                        <JFXButton fx:id="addBookCancel" layoutX="1323.0" layoutY="544.0" onAction="#handleCancelAddBook" prefHeight="80.0" prefWidth="116.0" text="%cancel_button" AnchorPane.leftAnchor="1323.0" />
+                        <JFXButton fx:id="addNewAuthorButton" layoutX="191.0" layoutY="236.0" onAction="#handleAddNewAuthor" styleClass="add-new-button" text="%add_author_button" />
+                        <JFXButton fx:id="addNewPublisherButton" layoutX="191.0" layoutY="346.0" onAction="#handleAddNewPublisher" styleClass="add-new-button" text="%add_publisher_button" />
+                        <JFXButton fx:id="addNewGenreButton" layoutX="191.0" layoutY="456.0" onAction="#handleAddNewGenre" styleClass="add-new-button" text="%add_genre_button" />
                      </children></AnchorPane>
                     </content>
                 </Tab>
-                <Tab id="ordersTab" onSelectionChanged="#handleOrdersSetup" text="Orders">
+                <Tab id="ordersTab" onSelectionChanged="#handleOrdersSetup" text="%orders_tab">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -114,29 +113,29 @@
                            <children>
                               <TableView fx:id="orderOverviewTable" layoutX="602.0" layoutY="-1.0" onMouseClicked="#handleOrderSelected" prefHeight="722.0" prefWidth="898.0">
                                 <columns>
-                                    <TableColumn fx:id="orderCustomerIDColumn" prefWidth="102.0" text="Customer ID" />
-                                  <TableColumn fx:id="orderCustomerColumn" prefWidth="223.0" text="Customer Name" />
-                                  <TableColumn fx:id="orderIDColumn" prefWidth="110.0" text="Order ID" />
-                                    <TableColumn fx:id="orderPriceColumn" minWidth="0.0" prefWidth="134.0" text="Price" />
-                                    <TableColumn fx:id="orderDateColumn" prefWidth="129.0" text="Date" />
-                                    <TableColumn fx:id="orderStatusColumn" prefWidth="193.0" text="Status" />
+                                    <TableColumn fx:id="orderCustomerIDColumn" prefWidth="102.0" text="%order_customer_id_column" />
+                                  <TableColumn fx:id="orderCustomerColumn" prefWidth="223.0" text="%customer_name_column" />
+                                  <TableColumn fx:id="orderIDColumn" prefWidth="110.0" text="%order_id_column" />
+                                    <TableColumn fx:id="orderPriceColumn" minWidth="0.0" prefWidth="134.0" text="%order_price_column" />
+                                    <TableColumn fx:id="orderDateColumn" prefWidth="129.0" text="%order_date_column" />
+                                    <TableColumn fx:id="orderStatusColumn" prefWidth="193.0" text="%order_status_column" />
                                 </columns>
                               </TableView>
                               <TableView fx:id="orderDetailTable" layoutX="56.0" layoutY="257.0" prefHeight="345.0" prefWidth="485.0">
                                 <columns>
-                                  <TableColumn fx:id="orderDetailBookColumn" prefWidth="271.0" text="Book" />
-                                  <TableColumn fx:id="orderDetailQuantityColumn" prefWidth="111.0" text="Quantity" />
-                                    <TableColumn fx:id="orderDetailPriceColumn" prefWidth="99.0" text="Price" />
+                                  <TableColumn fx:id="orderDetailBookColumn" prefWidth="271.0" text="%book_label" />
+                                  <TableColumn fx:id="orderDetailQuantityColumn" prefWidth="111.0" text="%quantity_label" />
+                                    <TableColumn fx:id="orderDetailPriceColumn" prefWidth="99.0" text="%book_price_label" />
                                 </columns>
                               </TableView>
-                              <Label layoutX="246.0" layoutY="227.0" text="Order detail" />
-                              <Label layoutX="55.0" layoutY="138.0" text="Customer ID:" />
+                              <Label alignment="CENTER" layoutX="167.0" layoutY="209.0" prefHeight="30.0" prefWidth="264.0" text="%order_detail_label" />
+                              <Label layoutX="25.0" layoutY="138.0" text="%customer_id_label" AnchorPane.rightAnchor="1301.0" />
                               <JFXTextField fx:id="searchCustomerTextField" layoutX="211.0" layoutY="131.0" prefHeight="25.0" prefWidth="71.0" />
-                              <JFXButton fx:id="searchCustomerButton" layoutX="327.0" layoutY="131.0" onAction="#handleLoadOrders" text="Search" />
-                              <JFXComboBox fx:id="orderStatusChangeComboBox" layoutX="269.0" layoutY="609.0" onAction="#handleOrderStatusChange" prefHeight="31.0" prefWidth="165.0" />
-                              <Label layoutX="55.0" layoutY="609.0" text="Change order status" />
-                              <Label layoutX="55.0" layoutY="71.0" text="Best customers: " />
-                              <TextField fx:id="bestCustomersTextField" editable="false" layoutX="195.0" layoutY="64.0" mouseTransparent="true" prefHeight="44.0" prefWidth="355.0" styleClass="text-field-book-change" />
+                              <JFXButton fx:id="searchCustomerButton" layoutX="327.0" layoutY="131.0" onAction="#handleLoadOrders" text="%search_button" />
+                              <JFXComboBox fx:id="orderStatusChangeComboBox" layoutX="282.0" layoutY="610.0" onAction="#handleOrderStatusChange" prefHeight="31.0" prefWidth="165.0" />
+                              <Label layoutX="14.0" layoutY="610.0" text="%change_order_status_label" AnchorPane.rightAnchor="1238.0" />
+                              <Label layoutX="25.0" layoutY="71.0" text="%best_customers_label" AnchorPane.rightAnchor="1271.0" />
+                              <TextField fx:id="bestCustomersTextField" editable="false" layoutX="248.0" layoutY="64.0" mouseTransparent="true" prefHeight="44.0" prefWidth="302.0" styleClass="text-field-book-change" />
                            </children>
                         </AnchorPane>
                      </children></AnchorPane>
@@ -147,10 +146,10 @@
             <children>
             <AnchorPane prefHeight="0.0" prefWidth="200.0">
                <children>
-                  <JFXButton fx:id="logoutButton" layoutX="100.0" onAction="#handleLogout" prefHeight="77.0" prefWidth="99.0" text="Logout" />
+                  <JFXButton fx:id="logoutButton" layoutX="43.0" onAction="#handleLogout" prefHeight="77.0" prefWidth="160.0" text="%logout_button" />
                </children>
             </AnchorPane>
-                <JFXButton fx:id="exitButton" mnemonicParsing="false" onAction="#handleExit" prefHeight="77.0" prefWidth="88.0" text="Exit" />
+                <JFXButton fx:id="exitButton" mnemonicParsing="false" onAction="#handleExit" prefHeight="77.0" prefWidth="160.0" text="%exit_button" />
             </children></HBox>
     </children>
 </AnchorPane>
