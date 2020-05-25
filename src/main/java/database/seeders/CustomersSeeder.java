@@ -29,8 +29,8 @@ public class CustomersSeeder {
             statement.setString(5, faker.address().zipCode());
             statement.setString(6, faker.address().streetAddress());
             statement.setInt(7, 0);
-            statement.setString(8, password); //use this for faster generation without salting
-            //statement.setString(8, Encoder.encode("password")); //use this for salting
+            //statement.setString(8, password); //use this for faster generation without salting
+            statement.setString(8, Encoder.encode("password")); //use this for salting
             statement.addBatch();
             inserted++;
             total++;
